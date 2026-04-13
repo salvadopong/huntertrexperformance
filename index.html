@@ -503,12 +503,12 @@
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFShadowMap;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.2;
+            renderer.toneMappingExposure = 1.8;
             renderer.outputColorSpace = THREE.SRGBColorSpace;
 
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a1520);
-            scene.fog = new THREE.FogExp2(0x0a1520, 0.0018);
+            scene.background = new THREE.Color(0x1a2a3a);
+            scene.fog = new THREE.FogExp2(0x1a2a3a, 0.0012);
 
             camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.1, 2000);
             controls = new PointerLockControls(camera, document.body);
@@ -524,8 +524,8 @@
             composer.addPass(bloomPass);
             composer.addPass(smaaPass);
 
-            // Optimized Lighting
-            const sun = new THREE.DirectionalLight(0xffeedd, 2.8);
+            // 3X BRIGHTER LIGHTING
+            const sun = new THREE.DirectionalLight(0xffeedd, 6.0);
             sun.position.set(80, 180, 40);
             sun.castShadow = true;
             sun.shadow.mapSize.set(2048, 2048);
@@ -538,24 +538,28 @@
             sun.shadow.bias = -0.0005;
             scene.add(sun);
             
-            const fillLight1 = new THREE.PointLight(0x6688aa, 2.0);
+            const fillLight1 = new THREE.PointLight(0x88aacc, 4.5);
             fillLight1.position.set(-50, 30, -50);
             scene.add(fillLight1);
             
-            const fillLight2 = new THREE.PointLight(0xaa8866, 1.8);
+            const fillLight2 = new THREE.PointLight(0xccaa88, 4.0);
             fillLight2.position.set(50, 20, 50);
             scene.add(fillLight2);
             
-            const ambient = new THREE.AmbientLight(0x405070, 1.2);
+            const fillLight3 = new THREE.PointLight(0xaaccff, 3.5);
+            fillLight3.position.set(0, 40, 0);
+            scene.add(fillLight3);
+            
+            const ambient = new THREE.AmbientLight(0x6080a0, 2.5);
             scene.add(ambient);
             
-            const hemiLight = new THREE.HemisphereLight(0x6688aa, 0x443322, 1.2);
+            const hemiLight = new THREE.HemisphereLight(0x88aacc, 0x665544, 2.8);
             scene.add(hemiLight);
 
             // Simple environment map
             const envTexture = new THREE.CanvasTexture(generateEnvMap());
             scene.environment = envTexture;
-            scene.environmentIntensity = 0.5;
+            scene.environmentIntensity = 0.8;
 
             createWorld();
             spawnWave();
@@ -612,9 +616,9 @@
             canvas.height = 64;
             const ctx = canvas.getContext('2d');
             const grad = ctx.createLinearGradient(0, 0, 64, 64);
-            grad.addColorStop(0, '#88aacc');
-            grad.addColorStop(0.5, '#446688');
-            grad.addColorStop(1, '#223344');
+            grad.addColorStop(0, '#aaccdd');
+            grad.addColorStop(0.5, '#6688aa');
+            grad.addColorStop(1, '#334466');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, 64, 64);
             return canvas;
@@ -631,22 +635,26 @@
             geo.computeVertexNormals();
             
             const mat = new THREE.MeshStandardMaterial({ 
-                color: 0x1a2a15, 
-                roughness: 0.7,
-                metalness: 0.05,
-                envMapIntensity: 0.4
+                color: 0x2a3a25, 
+                roughness: 0.6,
+                metalness: 0.08,
+                envMapIntensity: 0.6
             });
             const ground = new THREE.Mesh(geo, mat);
             ground.receiveShadow = true;
             scene.add(ground);
 
+            // GRASS SHINE 2X MORE
             const grassGeo = new THREE.PlaneGeometry(0.15, 0.5);
             grassGeo.translate(0, 0.25, 0);
             const grassMat = new THREE.MeshStandardMaterial({ 
-                color: 0x1a3510, 
+                color: 0x2a4a1a, 
                 side: THREE.DoubleSide,
-                roughness: 0.8,
-                envMapIntensity: 0.3
+                roughness: 0.4,
+                metalness: 0.15,
+                emissive: new THREE.Color(0x1a3a0a),
+                emissiveIntensity: 0.3,
+                envMapIntensity: 1.0
             });
             const instanced = new THREE.InstancedMesh(grassGeo, grassMat, 50000);
             const dummy = new THREE.Object3D();
