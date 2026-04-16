@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HUNTER TREX - ULTIMATE FIX</title>
+    <title>HUNTER TREX - DEATH FIX</title>
     <style>
         body {
             margin: 0;
@@ -379,7 +379,7 @@
     <div id="start-menu" class="menu">
         <div class="glory-panel">
             <h1>HUNTER TREX</h1>
-            <div class="subtitle">ULTIMATE FIX</div>
+            <div class="subtitle">DEATH FIX</div>
             <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(200,180,100,0.3), transparent); margin: 25px 0;"></div>
             <div style="display: flex; gap: 20px; justify-content: center;">
                 <button class="btn" id="play-btn">BEGIN HUNT</button>
@@ -466,7 +466,7 @@
             rushedSMG: { id: 'rushedSMG', name: 'Rushed SMG', mag: 80, rate: 38, reload: 1300, dmg: 10, dmgH: 25, zoom: 55, auto: true },
             twinMagAR: { id: 'twinMagAR', name: 'Twin Mag AR', mag: 40, mag2: 30, rate: 88, reload: 1250, dmg: 35, dmgH: 60, zoom: 45, auto: true, twinMag: true },
             semiSniper: { id: 'semiSniper', name: 'Semi-Auto Sniper', mag: 10, rate: 400, reload: 3000, dmg: 75, dmgH: 190, zoom: 12, auto: false, scope: true },
-            hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 40, rate: 40, reload: 720, dmg: 15, dmgH: 25, zoom: 50, auto: true },
+            hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 40, rate: 40, reload: 1080, dmg: 15, dmgH: 25, zoom: 50, auto: true },
             syringe: { id: 'syringe', name: 'Syringe', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 50 }
         };
 
@@ -517,6 +517,7 @@
 
         const gunGroup = new THREE.Group();
         const zombies = [];
+        const deadZombies = [];
         const raycaster = new THREE.Raycaster();
         
         const originalWeapons = JSON.parse(JSON.stringify(WEAPONS));
@@ -801,9 +802,11 @@
         }
 
         function spawnWave() {
-            // Clear existing zombies
+            // Clear existing zombies and dead zombies
             zombies.forEach(z => scene.remove(z.g));
+            deadZombies.forEach(z => scene.remove(z.g));
             zombies.length = 0;
+            deadZombies.length = 0;
             
             const baseCount = 30;
             const count = baseCount + (level - 1) * 10;
@@ -927,7 +930,8 @@
                 damage: zData.damage,
                 lastA: 0,
                 leftArm: lA,
-                rightArm: rA
+                rightArm: rA,
+                isDead: false
             };
             g.children.forEach(child => { if (child.isMesh) child.userData.p = obj; });
             
@@ -1166,27 +1170,37 @@
             const hits = raycaster.intersectObjects(scene.children, true);
             if (hits.length > 0) {
                 const h = hits[0];
-                if (h.object.userData.p) {
-                    const z = h.object.userData.p;
+                const zombieObj = h.object.userData.p;
+                
+                // Only process if zombie exists and is NOT dead
+                if (zombieObj && !zombieObj.isDead) {
                     const isHeadshot = h.object.userData.isH;
                     
                     const totalDmg = (isHeadshot ? weapon.dmgH : weapon.dmg) + damageBonus;
                     
-                    z.hp -= totalDmg;
+                    zombieObj.hp -= totalDmg;
                     score += 10;
                     popDmg(totalDmg, h.point, isHeadshot);
                     
-                    // Blood and gore effect on hit
                     createBloodGoreEffect(h.point);
                     
-                    if (z.hp <= 0) {
-                        // Ragdoll death - fall to ground
-                        ragdollDeath(z);
+                    if (zombieObj.hp <= 0) {
+                        // Mark as dead immediately
+                        zombieObj.isDead = true;
                         
-                        zombies.splice(zombies.indexOf(z), 1);
-                        zombiesRemaining--;
-                        score += 100;
-                        document.getElementById('zombies-remaining').innerText = zombiesRemaining;
+                        // Remove from active zombies array
+                        const index = zombies.indexOf(zombieObj);
+                        if (index > -1) {
+                            zombies.splice(index, 1);
+                            deadZombies.push(zombieObj);
+                            zombiesRemaining--;
+                            score += 100;
+                            document.getElementById('zombies-remaining').innerText = zombiesRemaining;
+                        }
+                        
+                        // Ragdoll death
+                        ragdollDeath(zombieObj);
+                        
                         if (zombiesRemaining <= 0) levelUp();
                     }
                     updateUI();
@@ -1207,34 +1221,17 @@
         }
 
         function createBloodGoreEffect(position) {
-            // Blood pool
             const blood = new THREE.Mesh(new THREE.CircleGeometry(0.3, 6), new THREE.MeshStandardMaterial({ color: 0xaa0000, transparent: true, opacity: 0.8 }));
             blood.rotation.x = -Math.PI/2;
             blood.position.set(position.x, getH(position.x, position.z) + 0.05, position.z);
             scene.add(blood);
             
-            // Gore chunks
             for (let i = 0; i < 3; i++) {
                 const gore = new THREE.Mesh(new THREE.SphereGeometry(0.05 + Math.random()*0.05, 4), new THREE.MeshStandardMaterial({ color: 0x880000 }));
                 gore.position.set(position.x + (Math.random()-0.5)*0.5, getH(position.x, position.z) + 0.1 + Math.random()*0.3, position.z + (Math.random()-0.5)*0.5);
                 scene.add(gore);
                 setTimeout(() => scene.remove(gore), 5000);
             }
-            
-            // Blood drops falling
-            const bloodDrop = new THREE.Mesh(new THREE.SphereGeometry(0.03, 3), new THREE.MeshStandardMaterial({ color: 0xff0000 }));
-            bloodDrop.position.set(position.x, position.y - 0.2, position.z);
-            scene.add(bloodDrop);
-            
-            let dropY = position.y - 0.2;
-            const dropInterval = setInterval(() => {
-                dropY -= 0.05;
-                bloodDrop.position.y = dropY;
-                if (dropY < getH(position.x, position.z) + 0.1) {
-                    clearInterval(dropInterval);
-                    scene.remove(bloodDrop);
-                }
-            }, 50);
             
             setTimeout(() => scene.remove(blood), 120000);
         }
@@ -1246,14 +1243,15 @@
             const startTime = Date.now();
             const startY = g.position.y;
             
-            // Turn grey
+            // Turn grey and disable interaction
             g.children.forEach(child => {
                 if (child.isMesh) {
                     child.material = new THREE.MeshStandardMaterial({ color: 0x555555 });
+                    // Remove userData to prevent further hits
+                    delete child.userData.p;
                 }
             });
             
-            // Ragdoll fall animation
             const fallInterval = setInterval(() => {
                 const elapsed = Date.now() - startTime;
                 const progress = Math.min(elapsed / duration, 1);
@@ -1266,6 +1264,8 @@
                     clearInterval(fallInterval);
                     setTimeout(() => {
                         scene.remove(g);
+                        const deadIndex = deadZombies.indexOf(z);
+                        if (deadIndex > -1) deadZombies.splice(deadIndex, 1);
                     }, 1000);
                 }
             }, 16);
@@ -1340,7 +1340,7 @@
             
             let reloadTime = weapon.reload;
             if (weapon.scope) reloadTime *= 1.5;
-            if (weapon.id === 'hyperPistol') reloadTime = weapon.reload * 1.5;
+            if (weapon.id === 'hyperPistol') reloadTime = weapon.reload;
             if (weapon.id === 'twinMagAR' && twinMagState[id].activeMag === 2) reloadTime = weapon.reload / 2;
             
             const startY = gunGroup.position.y;
@@ -1455,7 +1455,7 @@
                 const pPos = controls.getObject().position;
                 for (let i = zombies.length - 1; i >= 0; i--) {
                     const z = zombies[i];
-                    if (!z || !z.g) continue;
+                    if (!z || !z.g || z.isDead) continue;
                     
                     tempVec.copy(pPos).sub(z.g.position);
                     tempVec.y = 0;
