@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HUNTER TREX - DEATH FIX</title>
+    <title>HUNTER TREX - SOUND UPDATE</title>
     <style>
         body {
             margin: 0;
@@ -379,7 +379,7 @@
     <div id="start-menu" class="menu">
         <div class="glory-panel">
             <h1>HUNTER TREX</h1>
-            <div class="subtitle">DEATH FIX</div>
+            <div class="subtitle">SOUND UPDATE</div>
             <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(200,180,100,0.3), transparent); margin: 25px 0;"></div>
             <div style="display: flex; gap: 20px; justify-content: center;">
                 <button class="btn" id="play-btn">BEGIN HUNT</button>
@@ -452,21 +452,103 @@
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 
+        // Audio context for sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Sound effect generators (since we can't load external files easily)
+        function playARSound() {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.value = 150;
+            gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.1);
+        }
+        
+        function playSMGSound() {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'square';
+            osc.frequency.value = 200;
+            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.08);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.08);
+        }
+        
+        function playSniperSound() {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = 80;
+            gain.gain.setValueAtTime(0.5, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.3);
+        }
+        
+        function playPistolSound() {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = 250;
+            gain.gain.setValueAtTime(0.25, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.06);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.06);
+        }
+        
+        function playReloadSound() {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.value = 60;
+            gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.2);
+        }
+        
+        function playHitSound() {
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.type = 'square';
+            osc.frequency.value = 100;
+            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.start();
+            osc.stop(audioContext.currentTime + 0.05);
+        }
+
         // WEAPON DATABASE
         const WEAPONS = {
-            assaultRifle: { id: 'assaultRifle', name: 'Assault Rifle', mag: 35, rate: 133, reload: 1500, dmg: 45, dmgH: 80, zoom: 45, auto: true },
-            smg: { id: 'smg', name: 'SMG', mag: 65, rate: 58, reload: 1200, dmg: 20, dmgH: 45, zoom: 55, auto: true },
-            trexSniper: { id: 'trexSniper', name: 'Trex Sniper', mag: 1, rate: 1000, reload: 2500, dmg: 300, dmgH: 1000, zoom: 10, auto: false, scope: true },
-            pistol: { id: 'pistol', name: 'Pistol', mag: 43, rate: 80, reload: 1200, dmg: 45, dmgH: 75, zoom: 50, auto: true },
-            scopedRevolver: { id: 'scopedRevolver', name: 'Scoped Revolver', mag: 8, rate: 1000, reload: 2200, dmg: 102, dmgH: 203, zoom: 15, auto: false, scope: true },
+            assaultRifle: { id: 'assaultRifle', name: 'Assault Rifle', mag: 35, rate: 133, reload: 1500, dmg: 45, dmgH: 80, zoom: 45, auto: true, sound: 'ar' },
+            smg: { id: 'smg', name: 'SMG', mag: 65, rate: 58, reload: 1200, dmg: 20, dmgH: 45, zoom: 55, auto: true, sound: 'smg' },
+            trexSniper: { id: 'trexSniper', name: 'Trex Sniper', mag: 1, rate: 1000, reload: 2500, dmg: 300, dmgH: 1000, zoom: 10, auto: false, scope: true, sound: 'sniper' },
+            pistol: { id: 'pistol', name: 'Pistol', mag: 43, rate: 80, reload: 1200, dmg: 45, dmgH: 75, zoom: 50, auto: true, sound: 'pistol' },
+            scopedRevolver: { id: 'scopedRevolver', name: 'Scoped Revolver', mag: 8, rate: 1000, reload: 2200, dmg: 102, dmgH: 203, zoom: 15, auto: false, scope: true, sound: 'pistol' },
             medkit: { id: 'medkit', name: 'Medkit', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 10, healPerSec: true },
-            drumSMG: { id: 'drumSMG', name: 'Drum SMG', mag: 90, rate: 55, reload: 1800, dmg: 15, dmgH: 35, zoom: 55, auto: true },
-            heavyAR: { id: 'heavyAR', name: 'Heavy AR', mag: 30, rate: 200, reload: 2000, dmg: 75, dmgH: 110, zoom: 45, auto: true },
-            tripleSniper: { id: 'tripleSniper', name: 'Triple Action', mag: 3, rate: 800, reload: 2800, dmg: 100, dmgH: 300, zoom: 12, auto: false, scope: true },
-            rushedSMG: { id: 'rushedSMG', name: 'Rushed SMG', mag: 80, rate: 38, reload: 1300, dmg: 10, dmgH: 25, zoom: 55, auto: true },
-            twinMagAR: { id: 'twinMagAR', name: 'Twin Mag AR', mag: 40, mag2: 30, rate: 88, reload: 1250, dmg: 35, dmgH: 60, zoom: 45, auto: true, twinMag: true },
-            semiSniper: { id: 'semiSniper', name: 'Semi-Auto Sniper', mag: 10, rate: 400, reload: 3000, dmg: 75, dmgH: 190, zoom: 12, auto: false, scope: true },
-            hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 40, rate: 40, reload: 1080, dmg: 15, dmgH: 25, zoom: 50, auto: true },
+            drumSMG: { id: 'drumSMG', name: 'Drum SMG', mag: 90, rate: 55, reload: 1800, dmg: 15, dmgH: 35, zoom: 55, auto: true, sound: 'smg' },
+            heavyAR: { id: 'heavyAR', name: 'Heavy AR', mag: 30, rate: 200, reload: 2000, dmg: 75, dmgH: 110, zoom: 45, auto: true, sound: 'ar' },
+            tripleSniper: { id: 'tripleSniper', name: 'Triple Action', mag: 3, rate: 800, reload: 2800, dmg: 100, dmgH: 300, zoom: 12, auto: false, scope: true, sound: 'sniper' },
+            rushedSMG: { id: 'rushedSMG', name: 'Rushed SMG', mag: 80, rate: 38, reload: 1300, dmg: 10, dmgH: 25, zoom: 55, auto: true, sound: 'smg' },
+            twinMagAR: { id: 'twinMagAR', name: 'Twin Mag AR', mag: 40, mag2: 30, rate: 88, reload: 1250, dmg: 35, dmgH: 60, zoom: 45, auto: true, twinMag: true, sound: 'ar' },
+            semiSniper: { id: 'semiSniper', name: 'Semi-Auto Sniper', mag: 10, rate: 400, reload: 3000, dmg: 75, dmgH: 190, zoom: 12, auto: false, scope: true, sound: 'sniper' },
+            hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 40, rate: 40, reload: 1080, dmg: 15, dmgH: 25, zoom: 50, auto: true, sound: 'pistol' },
             syringe: { id: 'syringe', name: 'Syringe', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 50 }
         };
 
@@ -530,7 +612,7 @@
 
         init();
 
-        function init() {
+        async function init() {
             renderer = new THREE.WebGLRenderer({ 
                 canvas: document.getElementById('game-canvas'), 
                 antialias: true, 
@@ -593,6 +675,22 @@
             setupControls();
 
             animate();
+        }
+
+        function playWeaponSound(weaponId) {
+            const weapon = WEAPONS[weaponId];
+            if (!weapon || !weapon.sound) return;
+            
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
+            switch(weapon.sound) {
+                case 'ar': playARSound(); break;
+                case 'smg': playSMGSound(); break;
+                case 'sniper': playSniperSound(); break;
+                case 'pistol': playPistolSound(); break;
+            }
         }
 
         function setupUI() {
@@ -802,7 +900,6 @@
         }
 
         function spawnWave() {
-            // Clear existing zombies and dead zombies
             zombies.forEach(z => scene.remove(z.g));
             deadZombies.forEach(z => scene.remove(z.g));
             zombies.length = 0;
@@ -895,7 +992,6 @@
                 g.add(bat);
             }
             
-            // Legs
             const legGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.5, 6);
             const leftLeg = new THREE.Mesh(legGeo, new THREE.MeshStandardMaterial({ color: type === 'regular' ? 0xeeeecc : zData.color }));
             leftLeg.position.set(-0.3, 0.3, 0);
@@ -905,7 +1001,6 @@
             rightLeg.position.set(0.3, 0.3, 0);
             g.add(rightLeg);
             
-            // Arms
             const armGeo = new THREE.BoxGeometry(0.25, 0.9, 0.25);
             const lA = new THREE.Mesh(armGeo, new THREE.MeshStandardMaterial({ color: type === 'regular' ? 0xaa4444 : zData.color }));
             lA.position.set(-0.7, 1.4, 0.3);
@@ -1163,6 +1258,9 @@
             ammo[id]--;
             updateUI();
             
+            // Play weapon sound
+            playWeaponSound(id);
+            
             gunGroup.position.z = 0.05;
             setTimeout(() => gunGroup.position.z = 0, 50);
 
@@ -1172,7 +1270,6 @@
                 const h = hits[0];
                 const zombieObj = h.object.userData.p;
                 
-                // Only process if zombie exists and is NOT dead
                 if (zombieObj && !zombieObj.isDead) {
                     const isHeadshot = h.object.userData.isH;
                     
@@ -1183,12 +1280,11 @@
                     popDmg(totalDmg, h.point, isHeadshot);
                     
                     createBloodGoreEffect(h.point);
+                    playHitSound();
                     
                     if (zombieObj.hp <= 0) {
-                        // Mark as dead immediately
                         zombieObj.isDead = true;
                         
-                        // Remove from active zombies array
                         const index = zombies.indexOf(zombieObj);
                         if (index > -1) {
                             zombies.splice(index, 1);
@@ -1198,7 +1294,6 @@
                             document.getElementById('zombies-remaining').innerText = zombiesRemaining;
                         }
                         
-                        // Ragdoll death
                         ragdollDeath(zombieObj);
                         
                         if (zombiesRemaining <= 0) levelUp();
@@ -1208,7 +1303,7 @@
             }
             
             if (weapon.twinMag && ammo[id] === 0) {
-                if (twinMagState[id].activeMag === 1) {
+                if (twinMagState[id] && twinMagState[id].activeMag === 1) {
                     twinMagState[id].activeMag = 2;
                     ammo[id] = weapon.mag2;
                     updateUI();
@@ -1243,11 +1338,9 @@
             const startTime = Date.now();
             const startY = g.position.y;
             
-            // Turn grey and disable interaction
             g.children.forEach(child => {
                 if (child.isMesh) {
                     child.material = new THREE.MeshStandardMaterial({ color: 0x555555 });
-                    // Remove userData to prevent further hits
                     delete child.userData.p;
                 }
             });
@@ -1338,10 +1431,15 @@
             isReloadAnimating = true;
             document.getElementById('ammo-text').innerText = '...';
             
+            // Play reload sound
+            playReloadSound();
+            
             let reloadTime = weapon.reload;
             if (weapon.scope) reloadTime *= 1.5;
             if (weapon.id === 'hyperPistol') reloadTime = weapon.reload;
-            if (weapon.id === 'twinMagAR' && twinMagState[id].activeMag === 2) reloadTime = weapon.reload / 2;
+            if (weapon.id === 'twinMagAR' && twinMagState[id] && twinMagState[id].activeMag === 2) {
+                reloadTime = weapon.reload / 2;
+            }
             
             const startY = gunGroup.position.y;
             const animInterval = setInterval(() => {
@@ -1355,6 +1453,7 @@
                 gunGroup.rotation.z = 0;
                 
                 if (weapon.twinMag) {
+                    if (!twinMagState[id]) twinMagState[id] = { activeMag: 1 };
                     if (twinMagState[id].activeMag === 2) {
                         twinMagState[id].activeMag = 1;
                         ammo[id] = weapon.mag + magBonus;
@@ -1474,6 +1573,7 @@
                     } else if (now - z.lastA > 800) {
                         hp -= (12 + level * 2) * (z.damage || 1);
                         z.lastA = now;
+                        playHitSound();
                         
                         const bloodTrail = new THREE.Mesh(new THREE.CircleGeometry(0.2, 4), new THREE.MeshStandardMaterial({ color: 0xaa0000 }));
                         bloodTrail.rotation.x = -Math.PI/2;
