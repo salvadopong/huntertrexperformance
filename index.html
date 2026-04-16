@@ -172,12 +172,12 @@
         }
 
         #fps-counter {
-            position: absolute; top: 12px; right: 16px;
-            color: #0f0; font-family: monospace; font-size: 12px;
+            position: absolute; top: 75px; left: 25px;
+            color: #0f0; font-family: monospace; font-size: 11px;
             background: rgba(0,0,0,0.35);
             backdrop-filter: blur(6px);
-            padding: 5px 10px; 
-            border-radius: 16px;
+            padding: 4px 8px; 
+            border-radius: 12px;
             pointer-events: none; 
             z-index: 200;
         }
@@ -214,7 +214,7 @@
             display: flex; align-items: center; justify-content: center;
             color: white; transition: all 0.15s; pointer-events: auto;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px;
         }
         .slot.active { 
             border: 1px solid #ffd700; 
@@ -329,19 +329,6 @@
             z-index: 200;
         }
 
-        #death-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, rgba(100,0,0,0.35) 0%, rgba(0,0,0,0.9) 100%);
-            backdrop-filter: blur(6px);
-            pointer-events: none;
-            z-index: 300;
-            display: none;
-        }
-
         #zombie-counter {
             position: absolute;
             top: 95px;
@@ -373,7 +360,6 @@
     <canvas id="game-canvas"></canvas>
     <div id="damage-nums"></div>
     <div id="level-up-notif">WAVE CLEARED</div>
-    <div id="death-overlay"></div>
     
     <div id="crosshair">
         <div class="left"></div>
@@ -445,16 +431,16 @@
         </div>
 
         <div id="ammo-container" class="stat-box">
-            <div id="weapon-name" style="font-size: 8px; opacity: 0.5;">PISTOL</div>
-            <div id="ammo-text">43</div>
+            <div id="weapon-name" style="font-size: 8px; opacity: 0.5;">ASSAULT RIFLE</div>
+            <div id="ammo-text">35</div>
         </div>
 
         <div id="inventory">
-            <div class="slot active" id="slot-0">1</div>
-            <div class="slot" id="slot-1">2</div>
-            <div class="slot" id="slot-2">3</div>
-            <div class="slot" id="slot-3">4</div>
-            <div class="slot" id="slot-4">5</div>
+            <div class="slot active" id="slot-0">AR</div>
+            <div class="slot" id="slot-1">SMG</div>
+            <div class="slot" id="slot-2">SYR</div>
+            <div class="slot" id="slot-3">SNP</div>
+            <div class="slot" id="slot-4">MED</div>
         </div>
     </div>
 
@@ -466,18 +452,21 @@
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 
-        // WEAPON DATABASE
+        // WEAPON DATABASE - ALL WEAPONS INCLUDING OG
         const WEAPONS = {
-            pistol: { id: 'pistol', name: 'Pistol', mag: 43, rate: 80, reload: 1200, dmg: 45, dmgH: 75, zoom: 50, auto: false, semi: true },
-            scopedRevolver: { id: 'scopedRevolver', name: 'Scoped Revolver', mag: 8, rate: 1000, reload: 2200, dmg: 102, dmgH: 203, zoom: 15, auto: false, semi: false, scope: true },
-            medkit: { id: 'medkit', name: 'Medkit', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 5, healPerSec: true },
+            assaultRifle: { id: 'assaultRifle', name: 'Assault Rifle', mag: 35, rate: 133, reload: 1500, dmg: 45, dmgH: 80, zoom: 45, auto: true },
+            smg: { id: 'smg', name: 'SMG', mag: 65, rate: 58, reload: 1200, dmg: 20, dmgH: 45, zoom: 55, auto: true },
+            trexSniper: { id: 'trexSniper', name: 'Trex Sniper', mag: 1, rate: 1000, reload: 2500, dmg: 300, dmgH: 1000, zoom: 10, auto: false, scope: true },
+            pistol: { id: 'pistol', name: 'Pistol', mag: 43, rate: 80, reload: 1200, dmg: 45, dmgH: 75, zoom: 50, auto: true },
+            scopedRevolver: { id: 'scopedRevolver', name: 'Scoped Revolver', mag: 8, rate: 1000, reload: 2200, dmg: 102, dmgH: 203, zoom: 15, auto: false, scope: true },
+            medkit: { id: 'medkit', name: 'Medkit', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 10, healPerSec: true },
             drumSMG: { id: 'drumSMG', name: 'Drum SMG', mag: 90, rate: 55, reload: 1800, dmg: 15, dmgH: 35, zoom: 55, auto: true },
             heavyAR: { id: 'heavyAR', name: 'Heavy AR', mag: 30, rate: 200, reload: 2000, dmg: 75, dmgH: 110, zoom: 45, auto: true },
             tripleSniper: { id: 'tripleSniper', name: 'Triple Action', mag: 3, rate: 800, reload: 2800, dmg: 100, dmgH: 300, zoom: 12, auto: false, scope: true },
-            rushedSMG: { id: 'rushedSMG', name: 'Rushed SMG', mag: 60, rate: 30, reload: 1300, dmg: 10, dmgH: 25, zoom: 55, auto: true },
-            twinMagAR: { id: 'twinMagAR', name: 'Twin Mag AR', mag: 40, mag2: 30, rate: 66, reload: 2500, dmg: 35, dmgH: 60, zoom: 45, auto: true, twinMag: true },
-            semiSniper: { id: 'semiSniper', name: 'Semi-Auto Sniper', mag: 10, rate: 400, reload: 3000, dmg: 75, dmgH: 190, zoom: 12, auto: false, semi: true, scope: true },
-            hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 40, rate: 40, reload: 480, dmg: 15, dmgH: 25, zoom: 50, auto: false, semi: true },
+            rushedSMG: { id: 'rushedSMG', name: 'Rushed SMG', mag: 80, rate: 38, reload: 1300, dmg: 10, dmgH: 25, zoom: 55, auto: true },
+            twinMagAR: { id: 'twinMagAR', name: 'Twin Mag AR', mag: 40, mag2: 30, rate: 88, reload: 1250, dmg: 35, dmgH: 60, zoom: 45, auto: true, twinMag: true },
+            semiSniper: { id: 'semiSniper', name: 'Semi-Auto Sniper', mag: 10, rate: 400, reload: 3000, dmg: 75, dmgH: 190, zoom: 12, auto: false, scope: true },
+            hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 40, rate: 40, reload: 480, dmg: 15, dmgH: 25, zoom: 50, auto: true },
             syringe: { id: 'syringe', name: 'Syringe', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 50 }
         };
 
@@ -508,14 +497,19 @@
         let isRunning = false;
         let hp = 300;
         let activeSlot = 0;
-        let loadout = ['pistol', 'drumSMG', 'syringe', 'scopedRevolver', 'medkit'];
+        let loadout = ['assaultRifle', 'smg', 'syringe', 'trexSniper', 'medkit'];
         let ammo = {};
         let reloading = false;
         let lastFire = 0;
         let isAiming = false;
-        let twinMagState = { activeMag: 1 };
+        let twinMagState = {};
         let healing = false;
         let healInterval = null;
+        let usedHeals = { syringe: false, medkit: false };
+        
+        // Blood and gore effects
+        let bloodTrails = [];
+        let deadBodies = [];
 
         let level = 1;
         let score = 0;
@@ -533,6 +527,8 @@
 
         let walkBob = 0;
         let zombieAnimTime = 0;
+        let reloadAnimProgress = 0;
+        let isReloadAnimating = false;
 
         const tempVec = new THREE.Vector3();
 
@@ -580,9 +576,15 @@
             sun.shadow.camera.bottom = -150;
             scene.add(sun);
             
-            scene.add(new THREE.PointLight(0x88aacc, 4.5, 0, 0, 0).position.set(-50, 30, -50));
-            scene.add(new THREE.PointLight(0xccaa88, 4.0, 0, 0, 0).position.set(50, 20, 50));
-            scene.add(new THREE.PointLight(0xaaccff, 3.5, 0, 0, 0).position.set(0, 40, 0));
+            const fill1 = new THREE.PointLight(0x88aacc, 4.5);
+            fill1.position.set(-50, 30, -50);
+            scene.add(fill1);
+            const fill2 = new THREE.PointLight(0xccaa88, 4.0);
+            fill2.position.set(50, 20, 50);
+            scene.add(fill2);
+            const fill3 = new THREE.PointLight(0xaaccff, 3.5);
+            fill3.position.set(0, 40, 0);
+            scene.add(fill3);
             scene.add(new THREE.AmbientLight(0x6080a0, 2.5));
             scene.add(new THREE.HemisphereLight(0x88aacc, 0x665544, 2.8));
 
@@ -642,7 +644,7 @@
                     <div class="weapon-name">${weapon.name}</div>
                     <div class="weapon-stats">
                         ${weapon.dmg ? `💥 ${weapon.dmg}/${weapon.dmgH}` : '💊 Heal'}<br>
-                        📦 ${weapon.mag} | 🔫 ${weapon.auto ? 'Auto' : weapon.semi ? 'Semi' : 'Single'}
+                        📦 ${weapon.mag} | ${weapon.auto ? 'Auto' : 'Single'}
                     </div>
                 `;
                 card.addEventListener('click', () => {
@@ -662,7 +664,7 @@
             for (let i = 0; i < 5; i++) {
                 const slot = document.getElementById(`slot-${i}`);
                 const weapon = WEAPONS[loadout[i]];
-                slot.innerHTML = weapon ? weapon.name.substring(0, 2) : (i + 1);
+                slot.innerHTML = weapon ? weapon.name.substring(0, 3).toUpperCase() : (i + 1);
             }
         }
 
@@ -795,13 +797,17 @@
         function initializeAmmo() {
             loadout.forEach(id => {
                 const w = WEAPONS[id];
-                if (w) ammo[id] = w.mag;
+                if (w) {
+                    ammo[id] = w.mag;
+                    if (w.twinMag) twinMagState[id] = { activeMag: 1 };
+                }
             });
+            usedHeals = { syringe: false, medkit: false };
         }
 
         function spawnWave() {
-            const baseCount = 25;
-            const count = baseCount + (level - 1) * 3;
+            const baseCount = 30;
+            const count = baseCount + (level - 1) * 10;
             zombiesRemaining = count;
             
             document.getElementById('zombie-count').innerText = count;
@@ -810,7 +816,7 @@
             const types = Object.keys(ZOMBIE_TYPES);
             
             for (let i = 0; i < count; i++) {
-                const type = types[Math.floor(Math.random() * Math.min(types.length, 1 + Math.floor(level / 2)))];
+                const type = types[Math.floor(Math.random() * types.length)];
                 const zData = ZOMBIE_TYPES[type];
                 const angle = Math.random() * Math.PI * 2;
                 const dist = 60 + Math.random() * 140;
@@ -822,8 +828,8 @@
                 const body = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 1.2, 6), bodyMat);
                 body.position.y = 1.2;
                 body.castShadow = body.receiveShadow = true;
+                g.add(body);
                 
-                // Create zombie based on type
                 if (type !== 'headless') {
                     const headMat = new THREE.MeshStandardMaterial({ color: zData.color, roughness: 0.6 });
                     const head = new THREE.Mesh(new THREE.SphereGeometry(0.5, 8, 8), headMat);
@@ -832,14 +838,16 @@
                     head.userData.isH = true;
                     g.add(head);
                     
-                    // Brain exposed (regular zombie)
                     if (type === 'regular' || type === 'bat' || type === 'redbull' || type === 'queen') {
-                        const brain = new THREE.Mesh(new THREE.SphereGeometry(0.15, 6), new THREE.MeshStandardMaterial({ color: 0xffaaaa, emissive: new THREE.Color(0x552222), emissiveIntensity: 0.5 }));
-                        brain.position.set(0.2, 2.3, 0.4);
+                        const brain = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8), new THREE.MeshStandardMaterial({ color: 0xff8888, roughness: 0.3, emissive: new THREE.Color(0x552222), emissiveIntensity: 0.5 }));
+                        brain.position.set(-0.25, 2.3, 0.4);
                         g.add(brain);
+                        
+                        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.1, 6), new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: new THREE.Color(0x440000), emissiveIntensity: 0.8 }));
+                        eye.position.set(0.25, 2.3, 0.45);
+                        g.add(eye);
                     }
                     
-                    // Miner helmet
                     if (type === 'miner') {
                         const helmet = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.15, 8), new THREE.MeshStandardMaterial({ color: 0xffaa00 }));
                         helmet.position.y = 2.5;
@@ -849,29 +857,29 @@
                         g.add(light);
                     }
                     
-                    // Crown for queen
                     if (type === 'queen') {
                         const crown = new THREE.Mesh(new THREE.ConeGeometry(0.4, 0.2, 8), new THREE.MeshStandardMaterial({ color: 0xffd700, emissive: new THREE.Color(0x553300), emissiveIntensity: 0.5 }));
-                        crown.position.y = 2.6;
+                        crown.position.y = 2.65;
                         g.add(crown);
                     }
                     
-                    // Red Bull logo
                     if (type === 'redbull') {
                         const logo = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.3, 0.1), new THREE.MeshStandardMaterial({ color: 0xcc0000 }));
                         logo.position.set(0, 1.5, 0.55);
                         g.add(logo);
                     }
+                } else {
+                    const bloodSquirt = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0xaa0000, emissive: new THREE.Color(0x440000), emissiveIntensity: 0.8 }));
+                    bloodSquirt.position.y = 2.0;
+                    g.add(bloodSquirt);
                 }
                 
-                // Iron armor for metal plated
                 if (type === 'metalPlated') {
                     const armor = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.4, 0.8), new THREE.MeshStandardMaterial({ color: 0x778899, metalness: 0.7, roughness: 0.4 }));
                     armor.position.y = 1.3;
                     g.add(armor);
                 }
                 
-                // Bat for bat zombie
                 if (type === 'bat') {
                     const bat = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.0, 6), new THREE.MeshStandardMaterial({ color: 0x8B4513 }));
                     bat.rotation.z = 0.5;
@@ -879,16 +887,19 @@
                     g.add(bat);
                 }
                 
-                // Bone leg for regular zombie
-                if (type === 'regular' || type === 'bat' || type === 'redbull') {
-                    const bone = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.5, 6), new THREE.MeshStandardMaterial({ color: 0xeeeecc }));
-                    bone.position.set(-0.3, 0.3, 0);
-                    g.add(bone);
-                }
+                // Legs
+                const legGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.5, 6);
+                const leftLeg = new THREE.Mesh(legGeo, new THREE.MeshStandardMaterial({ color: type === 'regular' ? 0xeeeecc : zData.color }));
+                leftLeg.position.set(-0.3, 0.3, 0);
+                g.add(leftLeg);
+                
+                const rightLeg = new THREE.Mesh(legGeo, new THREE.MeshStandardMaterial({ color: zData.color }));
+                rightLeg.position.set(0.3, 0.3, 0);
+                g.add(rightLeg);
                 
                 // Arms
                 const armGeo = new THREE.BoxGeometry(0.25, 0.9, 0.25);
-                const lA = new THREE.Mesh(armGeo, bodyMat);
+                const lA = new THREE.Mesh(armGeo, new THREE.MeshStandardMaterial({ color: type === 'regular' ? 0xaa4444 : zData.color }));
                 lA.position.set(-0.7, 1.4, 0.3);
                 lA.rotation.x = 0.8;
                 lA.rotation.z = 0.2;
@@ -902,7 +913,6 @@
                 rA.castShadow = true;
                 g.add(rA);
                 
-                g.add(body);
                 g.position.set(x, getH(x,z), z);
                 scene.add(g);
                 
@@ -928,45 +938,137 @@
             const gunMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.8, roughness: 0.3 });
             
             if (weapon.heal) {
-                // Medkit/Syringe model
-                const kit = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.2, 0.4), new THREE.MeshStandardMaterial({ color: weapon.id === 'medkit' ? 0x44aaff : 0xccccdd }));
-                kit.position.set(0.25, -0.25, -0.5);
-                gunGroup.add(kit);
-                if (weapon.id === 'medkit') {
-                    const cross = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.05, 0.02), new THREE.MeshStandardMaterial({ color: 0xff4444 }));
-                    cross.position.set(0.25, -0.25, -0.3);
+                if (id === 'syringe') {
+                    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.7, 8), new THREE.MeshStandardMaterial({ color: 0xccccdd, transparent: true, opacity: 0.7 }));
+                    barrel.rotation.x = Math.PI/2;
+                    barrel.position.set(0.25, -0.25, -0.6);
+                    gunGroup.add(barrel);
+                    
+                    const needle = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.15, 6), new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.9 }));
+                    needle.rotation.x = Math.PI/2;
+                    needle.position.set(0.25, -0.25, -0.25);
+                    gunGroup.add(needle);
+                    
+                    const liquid = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0x44ff88, emissive: new THREE.Color(0x116633), emissiveIntensity: 0.5 }));
+                    liquid.rotation.x = Math.PI/2;
+                    liquid.position.set(0.25, -0.25, -0.5);
+                    gunGroup.add(liquid);
+                } else {
+                    const kit = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.25, 0.2), new THREE.MeshStandardMaterial({ color: 0x44aaff }));
+                    kit.position.set(0.25, -0.25, -0.5);
+                    gunGroup.add(kit);
+                    
+                    const cross = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.04, 0.02), new THREE.MeshStandardMaterial({ color: 0xff4444 }));
+                    cross.position.set(0.25, -0.25, -0.4);
                     gunGroup.add(cross);
-                    const cross2 = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.15, 0.02), new THREE.MeshStandardMaterial({ color: 0xff4444 }));
-                    cross2.position.set(0.25, -0.25, -0.3);
+                    const cross2 = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.18, 0.02), new THREE.MeshStandardMaterial({ color: 0xff4444 }));
+                    cross2.position.set(0.25, -0.25, -0.4);
                     gunGroup.add(cross2);
                 }
             } else {
-                const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.18, 0.7), gunMat);
-                receiver.position.set(0.3, -0.32, -0.5);
-                gunGroup.add(receiver);
-                
-                const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.9, 10), gunMat);
-                barrel.rotation.x = Math.PI/2;
-                barrel.position.set(0.3, -0.3, -0.9);
-                gunGroup.add(barrel);
-                
-                if (weapon.scope) {
-                    const scope = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.2, 8), gunMat);
+                // Different shapes for different weapons
+                if (id.includes('pistol') || id === 'hyperPistol') {
+                    const slide = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.5), gunMat);
+                    slide.position.set(0.25, -0.28, -0.5);
+                    gunGroup.add(slide);
+                    
+                    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.4, 8), gunMat);
+                    barrel.rotation.x = Math.PI/2;
+                    barrel.position.set(0.25, -0.28, -0.7);
+                    gunGroup.add(barrel);
+                    
+                    const grip = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.2, 0.15), new THREE.MeshStandardMaterial({ color: 0x4a3020 }));
+                    grip.position.set(0.25, -0.4, -0.4);
+                    gunGroup.add(grip);
+                } else if (id === 'scopedRevolver') {
+                    const cylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.6, 8), gunMat);
+                    cylinder.rotation.z = Math.PI/2;
+                    cylinder.position.set(0.25, -0.28, -0.5);
+                    gunGroup.add(cylinder);
+                    
+                    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.5, 8), gunMat);
+                    barrel.rotation.x = Math.PI/2;
+                    barrel.position.set(0.25, -0.28, -0.8);
+                    gunGroup.add(barrel);
+                    
+                    const scope = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.2, 8), gunMat);
                     scope.rotation.z = Math.PI/2;
-                    scope.position.set(0.3, -0.15, -0.45);
+                    scope.position.set(0.25, -0.18, -0.5);
                     gunGroup.add(scope);
-                }
-                
-                if (weapon.twinMag) {
-                    const mag1 = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.2, 0.12), new THREE.MeshStandardMaterial({ color: 0x222222 }));
-                    mag1.position.set(0.3, -0.38, -0.45);
-                    gunGroup.add(mag1);
-                    const mag2 = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.2, 0.12), new THREE.MeshStandardMaterial({ color: 0x333333 }));
-                    mag2.position.set(0.4, -0.38, -0.45);
-                    gunGroup.add(mag2);
-                } else {
-                    const mag = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.25, 0.12), new THREE.MeshStandardMaterial({ color: 0x222222 }));
-                    mag.position.set(0.3, -0.42, -0.45);
+                    
+                    const grip = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.18, 0.15), new THREE.MeshStandardMaterial({ color: 0x5a4030 }));
+                    grip.position.set(0.25, -0.38, -0.35);
+                    gunGroup.add(grip);
+                } else if (id.includes('SMG')) {
+                    const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.14, 0.55), gunMat);
+                    receiver.position.set(0.25, -0.3, -0.5);
+                    gunGroup.add(receiver);
+                    
+                    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.6, 8), gunMat);
+                    barrel.rotation.x = Math.PI/2;
+                    barrel.position.set(0.25, -0.28, -0.8);
+                    gunGroup.add(barrel);
+                    
+                    const stock = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.3), new THREE.MeshStandardMaterial({ color: 0x4a3020 }));
+                    stock.position.set(0.25, -0.28, -0.2);
+                    gunGroup.add(stock);
+                    
+                    const mag = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.1), new THREE.MeshStandardMaterial({ color: 0x111111 }));
+                    mag.position.set(0.25, -0.4, -0.5);
+                    gunGroup.add(mag);
+                } else if (id.includes('AR') || id.includes('assault')) {
+                    const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.16, 0.7), gunMat);
+                    receiver.position.set(0.3, -0.32, -0.55);
+                    gunGroup.add(receiver);
+                    
+                    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.85, 10), gunMat);
+                    barrel.rotation.x = Math.PI/2;
+                    barrel.position.set(0.3, -0.3, -0.95);
+                    gunGroup.add(barrel);
+                    
+                    const stock = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.4), new THREE.MeshStandardMaterial({ color: 0x5a4030 }));
+                    stock.position.set(0.3, -0.3, -0.2);
+                    gunGroup.add(stock);
+                    
+                    if (id === 'twinMagAR') {
+                        const mag1 = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.2, 0.12), new THREE.MeshStandardMaterial({ color: 0x222222 }));
+                        mag1.position.set(0.3, -0.4, -0.5);
+                        gunGroup.add(mag1);
+                        const mag2 = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.2, 0.12), new THREE.MeshStandardMaterial({ color: 0x333333 }));
+                        mag2.position.set(0.4, -0.4, -0.5);
+                        gunGroup.add(mag2);
+                    } else {
+                        const mag = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.22, 0.12), new THREE.MeshStandardMaterial({ color: 0x222222 }));
+                        mag.position.set(0.3, -0.42, -0.5);
+                        gunGroup.add(mag);
+                    }
+                    
+                    if (id === 'heavyAR') {
+                        const grip = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.15, 0.1), new THREE.MeshStandardMaterial({ color: 0x333333 }));
+                        grip.position.set(0.3, -0.42, -0.3);
+                        gunGroup.add(grip);
+                    }
+                } else if (id.includes('Sniper') || id === 'trexSniper') {
+                    const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.14, 0.9), gunMat);
+                    receiver.position.set(0.3, -0.32, -0.6);
+                    gunGroup.add(receiver);
+                    
+                    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 1.1, 12), gunMat);
+                    barrel.rotation.x = Math.PI/2;
+                    barrel.position.set(0.3, -0.3, -1.1);
+                    gunGroup.add(barrel);
+                    
+                    const stock = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 0.5), new THREE.MeshStandardMaterial({ color: 0x5a4030 }));
+                    stock.position.set(0.3, -0.3, -0.15);
+                    gunGroup.add(stock);
+                    
+                    const scope = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.25, 10), gunMat);
+                    scope.rotation.z = Math.PI/2;
+                    scope.position.set(0.3, -0.15, -0.55);
+                    gunGroup.add(scope);
+                    
+                    const mag = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.18, 0.1), new THREE.MeshStandardMaterial({ color: 0x222222 }));
+                    mag.position.set(0.3, -0.38, -0.65);
                     gunGroup.add(mag);
                 }
             }
@@ -985,9 +1087,8 @@
             
             const weapon = WEAPONS[id];
             document.getElementById('weapon-name').innerText = weapon.name;
-            document.getElementById('ammo-text').innerText = weapon.heal ? '∞' : ammo[id];
+            document.getElementById('ammo-text').innerText = weapon.heal ? (usedHeals[id] ? '0' : '1') : ammo[id];
             
-            // Stop healing when switching
             if (healing) {
                 clearInterval(healInterval);
                 healing = false;
@@ -1006,22 +1107,21 @@
             if (weapon.scope) {
                 document.getElementById('sniper-scope').style.display = a ? 'flex' : 'none';
                 gunGroup.visible = !a;
-            } else {
-                gunGroup.position.x = a ? -0.35 : 0;
-                gunGroup.position.y = a ? 0.05 : 0;
             }
         }
 
         function fire() {
-            if (reloading) return;
+            if (reloading || isReloadAnimating) return;
             
             const id = loadout[activeSlot];
             const weapon = WEAPONS[id];
             
             if (weapon.heal) {
+                if (usedHeals[id]) return;
                 if (weapon.healPerSec) {
                     if (!healing) {
                         healing = true;
+                        usedHeals[id] = true;
                         healInterval = setInterval(() => {
                             if (hp < 300) {
                                 hp = Math.min(300, hp + weapon.heal);
@@ -1036,10 +1136,13 @@
                         ammo[id] = 0;
                         updateUI();
                     }
-                } else if (ammo[id] > 0 && hp < 300) {
-                    hp = Math.min(300, hp + weapon.heal);
-                    ammo[id]--;
-                    updateUI();
+                } else {
+                    if (hp < 300) {
+                        hp = Math.min(300, hp + weapon.heal);
+                        usedHeals[id] = true;
+                        ammo[id] = 0;
+                        updateUI();
+                    }
                 }
                 return;
             }
@@ -1051,6 +1154,10 @@
             lastFire = now;
             ammo[id]--;
             updateUI();
+            
+            // Recoil animation
+            gunGroup.position.z = 0.05;
+            setTimeout(() => gunGroup.position.z = 0, 50);
 
             raycaster.setFromCamera(new THREE.Vector2(0,0), camera);
             const hits = raycaster.intersectObjects(scene.children, true);
@@ -1066,8 +1173,18 @@
                     score += 10;
                     popDmg(totalDmg, h.point, isHeadshot);
                     
+                    // Blood effect on hit
+                    createBloodEffect(h.point);
+                    
                     if (z.hp <= 0) {
-                        scene.remove(z.g);
+                        // Death effect
+                        z.g.children.forEach(child => { if (child.isMesh) child.material = new THREE.MeshStandardMaterial({ color: 0x555555 }); });
+                        z.g.position.y = 0.5;
+                        
+                        setTimeout(() => {
+                            scene.remove(z.g);
+                        }, 5000);
+                        
                         zombies.splice(zombies.indexOf(z), 1);
                         zombiesRemaining--;
                         score += 100;
@@ -1078,10 +1195,9 @@
                 }
             }
             
-            // Twin mag handling
             if (weapon.twinMag && ammo[id] === 0) {
-                if (twinMagState.activeMag === 1) {
-                    twinMagState.activeMag = 2;
+                if (twinMagState[id].activeMag === 1) {
+                    twinMagState[id].activeMag = 2;
                     ammo[id] = weapon.mag2;
                     updateUI();
                 } else {
@@ -1092,28 +1208,38 @@
             }
         }
 
+        function createBloodEffect(position) {
+            const blood = new THREE.Mesh(new THREE.SphereGeometry(0.15, 4), new THREE.MeshStandardMaterial({ color: 0xaa0000 }));
+            blood.position.copy(position);
+            blood.position.y = getH(position.x, position.z) + 0.1;
+            scene.add(blood);
+            
+            setTimeout(() => scene.remove(blood), 120000);
+        }
+
         function levelUp() {
             level++;
             damageBonus += 2;
-            if (loadout[activeSlot] !== 'scopedRevolver' && !WEAPONS[loadout[activeSlot]].scope) {
+            if (!WEAPONS[loadout[activeSlot]]?.scope) {
                 magBonus += 5;
             }
             
             hp = 300;
             
-            // Reset ammo and medkits
+            // Reset all weapons and heals
             loadout.forEach(id => {
                 const w = WEAPONS[id];
-                if (w && !w.heal) {
-                    ammo[id] = (w.mag + (id.includes('scoped') || id.includes('Sniper') ? 0 : magBonus));
-                } else if (w && w.id === 'syringe') {
-                    ammo[id] = 1;
-                } else if (w && w.id === 'medkit') {
-                    ammo[id] = 1;
+                if (w) {
+                    if (w.heal) {
+                        ammo[id] = 1;
+                    } else {
+                        ammo[id] = w.mag + (w.scope ? 0 : magBonus);
+                    }
+                    if (w.twinMag) twinMagState[id] = { activeMag: 1 };
                 }
             });
             
-            twinMagState = { activeMag: 1 };
+            usedHeals = { syringe: false, medkit: false };
             
             if (healing) {
                 clearInterval(healInterval);
@@ -1129,7 +1255,8 @@
             
             setTimeout(() => { 
                 notif.style.opacity = '0'; 
-                spawnWave(); 
+                spawnWave();
+                updateUI();
             }, 1800);
             updateUI();
         }
@@ -1155,21 +1282,38 @@
             if (weapon.heal) return;
             
             reloading = true;
+            isReloadAnimating = true;
             document.getElementById('ammo-text').innerText = '...';
             
             let reloadTime = weapon.reload;
             if (weapon.scope) reloadTime *= 1.5;
             if (weapon.id === 'hyperPistol') reloadTime = weapon.reload / 2.5;
-            if (weapon.twinMag && twinMagState.activeMag === 2) reloadTime = weapon.reload * 2;
+            if (weapon.id === 'twinMagAR' && twinMagState[id].activeMag === 2) reloadTime = weapon.reload / 2;
+            
+            // Reload animation
+            const startY = gunGroup.position.y;
+            const animInterval = setInterval(() => {
+                gunGroup.position.y = startY - 0.05 + Math.sin(Date.now() * 0.02) * 0.03;
+                gunGroup.rotation.z = Math.sin(Date.now() * 0.03) * 0.1;
+            }, 16);
             
             setTimeout(() => {
+                clearInterval(animInterval);
+                gunGroup.position.y = startY;
+                gunGroup.rotation.z = 0;
+                
                 if (weapon.twinMag) {
-                    twinMagState.activeMag = 1;
-                    ammo[id] = weapon.mag + (id.includes('scoped') ? 0 : magBonus);
+                    if (twinMagState[id].activeMag === 2) {
+                        twinMagState[id].activeMag = 1;
+                        ammo[id] = weapon.mag + magBonus;
+                    } else {
+                        ammo[id] = weapon.mag + magBonus;
+                    }
                 } else {
-                    ammo[id] = weapon.mag + (id.includes('scoped') || id.includes('Sniper') ? 0 : magBonus);
+                    ammo[id] = weapon.mag + (weapon.scope ? 0 : magBonus);
                 }
                 reloading = false;
+                isReloadAnimating = false;
                 updateUI();
             }, reloadTime);
         }
@@ -1181,7 +1325,7 @@
             if (!weapon.heal) {
                 document.getElementById('ammo-text').innerText = ammo[id] || 0;
             } else {
-                document.getElementById('ammo-text').innerText = ammo[id] || 0;
+                document.getElementById('ammo-text').innerText = usedHeals[id] ? '0' : '1';
             }
             
             document.getElementById('health-text').innerText = Math.ceil(hp);
@@ -1192,13 +1336,12 @@
             
             if (hp <= 0) { 
                 isRunning = false;
-                document.getElementById('death-overlay').style.display = 'block';
                 if(score > highScore) {
                     highScore = score;
                     localStorage.setItem('trex_highscore', score);
                 }
                 document.getElementById('final-stats').innerHTML = `LEVEL ${level} | SCORE ${score}`;
-                setTimeout(() => document.getElementById('death-menu').style.display = 'flex', 1200);
+                document.getElementById('death-menu').style.display = 'flex';
                 controls.unlock();
                 if (healing) clearInterval(healInterval);
             }
@@ -1221,13 +1364,11 @@
                 const id = loadout[activeSlot];
                 const weapon = WEAPONS[id];
                 
-                if (isFiring) {
-                    if (weapon.auto || weapon.semi) {
+                if (isFiring && !reloading && !isReloadAnimating) {
+                    if (weapon.auto) {
                         fire();
-                        if (weapon.semi) isFiring = false;
-                    } else if (!weapon.auto && !weapon.semi && now - lastFire > weapon.rate) {
+                    } else if (!weapon.auto && now - lastFire > weapon.rate) {
                         fire();
-                        isFiring = false;
                     }
                 }
 
@@ -1278,7 +1419,15 @@
                         z.g.position.y = getH(z.g.position.x, z.g.position.z);
                     } else if (now - z.lastA > 800) {
                         hp -= (12 + level * 2) * (z.damage || 1);
-                        z.lastA = now; 
+                        z.lastA = now;
+                        
+                        // Player blood trail
+                        const bloodTrail = new THREE.Mesh(new THREE.CircleGeometry(0.2, 4), new THREE.MeshStandardMaterial({ color: 0xaa0000 }));
+                        bloodTrail.rotation.x = -Math.PI/2;
+                        bloodTrail.position.set(pPos.x, getH(pPos.x, pPos.z) + 0.05, pPos.z);
+                        scene.add(bloodTrail);
+                        setTimeout(() => scene.remove(bloodTrail), 120000);
+                        
                         updateUI();
                     }
                 }
@@ -1289,9 +1438,8 @@
                 
                 const bobY = Math.sin(walkBob) * 0.01;
                 
-                if (!isAiming || (weapon && weapon.scope)) {
+                if (!isReloadAnimating) {
                     gunGroup.position.y = -0.25 + bobY;
-                    gunGroup.position.x = 0.3;
                 }
             }
             composer.render();
