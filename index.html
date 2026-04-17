@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HUNTER TREX - SOUND UPDATE</title>
+    <title>HUNTER TREX - ULTIMATE EDITION</title>
     <style>
         body {
             margin: 0;
@@ -21,26 +21,31 @@
         
         .menu {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(15px) saturate(150%);
-            -webkit-backdrop-filter: blur(15px) saturate(150%);
+            background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(20,10,30,0.95) 100%);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
             display: flex; flex-direction: column;
             justify-content: center; align-items: center; color: white; z-index: 100;
             text-align: center;
             overflow-y: auto;
         }
         .glory-panel {
-            background: rgba(15,15,25,0.35);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid rgba(200,180,100,0.2);
-            padding: 30px;
-            border-radius: 40px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(200,180,100,0.08) inset;
-            max-width: 900px;
+            background: rgba(10,5,20,0.5);
+            backdrop-filter: blur(35px) saturate(200%);
+            -webkit-backdrop-filter: blur(35px) saturate(200%);
+            border: 2px solid rgba(255,215,0,0.3);
+            padding: 40px 60px;
+            border-radius: 60px;
+            box-shadow: 0 0 100px rgba(255,215,0,0.2), 0 20px 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(255,215,0,0.1);
+            max-width: 1000px;
             position: relative;
             overflow: hidden;
             margin: 20px;
+            animation: panelGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes panelGlow {
+            0% { box-shadow: 0 0 80px rgba(255,215,0,0.15), 0 20px 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(255,215,0,0.05); border-color: rgba(255,215,0,0.2); }
+            100% { box-shadow: 0 0 120px rgba(255,215,0,0.3), 0 20px 60px rgba(0,0,0,0.8), inset 0 0 50px rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.5); }
         }
         .glory-panel::before {
             content: '';
@@ -49,8 +54,18 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at 30% 30%, rgba(200,180,100,0.06) 0%, transparent 70%);
-            animation: rotate 30s linear infinite;
+            background: radial-gradient(circle at 30% 30%, rgba(255,215,0,0.1) 0%, transparent 50%);
+            animation: rotate 25s linear infinite;
+            pointer-events: none;
+        }
+        .glory-panel::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,215,0,0.05) 50%, transparent 100%);
             pointer-events: none;
         }
         @keyframes rotate {
@@ -58,47 +73,264 @@
             100% { transform: rotate(360deg); }
         }
         h1 { 
-            font-size: 70px; 
-            background: linear-gradient(to bottom, #ffd700 0%, #ffaa00 50%, #cc8800 100%);
+            font-size: 90px; 
+            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 30%, #ffd700 60%, #ff8800 100%);
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin: 0; letter-spacing: 10px; font-weight: 900;
+            margin: 0; letter-spacing: 15px; font-weight: 900;
             text-transform: uppercase;
-            text-shadow: 0 0 30px rgba(255,215,0,0.25);
+            text-shadow: 0 0 50px rgba(255,215,0,0.5);
             position: relative;
             z-index: 2;
+            animation: titleShine 4s ease-in-out infinite;
+        }
+        @keyframes titleShine {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         .subtitle {
-            font-size: 14px;
-            letter-spacing: 5px;
-            color: #ccc;
+            font-size: 18px;
+            letter-spacing: 8px;
+            color: #ffd700;
             text-transform: uppercase;
-            margin-top: 5px;
+            margin-top: 10px;
             position: relative;
             z-index: 2;
+            text-shadow: 0 0 20px rgba(255,215,0,0.5);
         }
         .btn {
-            margin: 10px; padding: 15px 40px; font-size: 18px; font-weight: bold; 
+            margin: 15px; padding: 18px 60px; font-size: 22px; font-weight: bold; 
             color: #fff; 
-            background: rgba(200,180,100,0.12);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(200,180,100,0.35); 
+            background: linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,140,0,0.1) 100%);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,215,0,0.4); 
             cursor: pointer; 
-            transition: all 0.2s ease; 
-            border-radius: 40px;
+            transition: all 0.3s ease; 
+            border-radius: 50px;
             text-transform: uppercase; 
-            letter-spacing: 4px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            letter-spacing: 5px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,215,0,0.1) inset;
             position: relative;
             z-index: 2;
         }
         .btn:hover { 
-            background: rgba(255,215,0,0.18); 
-            transform: scale(1.03); 
-            box-shadow: 0 6px 24px rgba(255,215,0,0.25);
-            border-color: rgba(255,215,0,0.6);
+            background: linear-gradient(135deg, rgba(255,215,0,0.3) 0%, rgba(255,140,0,0.2) 100%);
+            transform: scale(1.05); 
+            box-shadow: 0 12px 48px rgba(255,215,0,0.3), 0 0 0 2px rgba(255,215,0,0.3) inset;
+            border-color: rgba(255,215,0,0.8);
+            letter-spacing: 8px;
+        }
+        .feature-list {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin: 30px 0;
+            position: relative;
+            z-index: 2;
+        }
+        .feature {
+            text-align: center;
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,215,0,0.1);
+        }
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+        }
+        .feature-text {
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: #ffd700;
+            text-transform: uppercase;
+        }
+
+        #fps-counter {
+            position: absolute; top: 75px; left: 25px;
+            color: #0f0; font-family: monospace; font-size: 11px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(8px);
+            padding: 5px 10px; 
+            border-radius: 15px;
+            pointer-events: none; 
+            z-index: 200;
+            border: 1px solid rgba(0,255,0,0.2);
+        }
+
+        .stat-box {
+            position: absolute; 
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px) saturate(180%);
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            border: 1px solid rgba(255,215,0,0.2); 
+            border-radius: 20px;
+            padding: 15px 20px; 
+            color: white;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        #health-container { bottom: 25px; left: 25px; width: 260px; }
+        #health-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        #health-bar-fill { width: 100%; height: 100%; background: linear-gradient(90deg, #ff4444, #ffaa00, #ff4444); background-size: 200% 100%; animation: healthPulse 2s ease infinite; transition: width 0.2s; }
+        @keyframes healthPulse { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+        #ammo-container { bottom: 25px; right: 25px; text-align: right; min-width: 150px; }
+        #ammo-text { font-size: 46px; font-weight: 900; line-height: 1; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+
+        #score-board { top: 25px; left: 25px; min-width: 170px; }
+        .score-val { font-size: 22px; font-weight: 900; color: #ffd700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+
+        #inventory {
+            position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px;
+        }
+        .slot {
+            width: 55px; height: 55px; 
+            background: rgba(20,20,35,0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,215,0,0.25); 
+            border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; transition: all 0.2s; pointer-events: auto;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+        .slot.active { 
+            border: 2px solid #ffd700; 
+            background: rgba(255,215,0,0.15);
+            transform: translateY(-6px); 
+            box-shadow: 0 8px 24px rgba(255,215,0,0.2);
+        }
+
+        #crosshair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+            pointer-events: none;
+            z-index: 100;
+        }
+        #crosshair::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 1.5px;
+            width: 1.5px;
+            height: 5px;
+            background: rgba(255,255,255,0.8);
+        }
+        #crosshair::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 1.5px;
+            width: 1.5px;
+            height: 5px;
+            background: rgba(255,255,255,0.8);
+        }
+        #crosshair .left {
+            position: absolute;
+            top: 1.5px;
+            left: -8px;
+            width: 5px;
+            height: 1.5px;
+            background: rgba(255,255,255,0.8);
+        }
+        #crosshair .right {
+            position: absolute;
+            top: 1.5px;
+            right: -8px;
+            width: 5px;
+            height: 1.5px;
+            background: rgba(255,255,255,0.8);
+        }
+
+        #damage-nums { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        .dmg-popup {
+            position: absolute; color: #fff; font-weight: 900; font-size: 32px;
+            text-shadow: 0 0 20px rgba(255,200,0,0.8), 0 0 40px rgba(255,100,0,0.5); 
+            animation: dmgAnim 0.7s ease-out forwards;
+        }
+        .dmg-popup.headshot {
+            color: #ffd700;
+            text-shadow: 0 0 30px #ffaa00, 0 0 60px #ff8800, 0 0 100px #ff4400;
+            font-size: 44px;
+            animation: headshotAnim 0.9s ease-out forwards;
+        }
+        @keyframes dmgAnim {
+            0% { opacity: 0; transform: translateY(0) scale(0.4); }
+            20% { opacity: 1; transform: translateY(-35px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-120px) scale(1); }
+        }
+        @keyframes headshotAnim {
+            0% { opacity: 0; transform: translateY(0) scale(0.5) rotate(-8deg); }
+            15% { opacity: 1; transform: translateY(-45px) scale(1.6) rotate(4deg); }
+            100% { opacity: 0; transform: translateY(-160px) scale(1) rotate(0deg); }
+        }
+
+        #sniper-scope {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            display: none; align-items: center; justify-content: center;
+            background: transparent; z-index: 50; pointer-events: none;
+        }
+        #scope-lens {
+            width: 80vh; height: 80vh; border: 4px solid rgba(0,0,0,0.8); border-radius: 50%;
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 0 2000px #000, inset 0 0 40px rgba(0,0,0,0.9);
+        }
+        .scope-line-h { position: absolute; top: 50%; left: 0; width: 100%; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 8px #fff; }
+        .scope-line-v { position: absolute; left: 50%; top: 0; width: 1.5px; height: 100%; background: rgba(255,255,255,0.9); box-shadow: 0 0 8px #fff; }
+
+        #level-up-notif {
+            position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);
+            color: #ffd700; font-size: 70px; font-weight: 900; letter-spacing: 12px;
+            opacity: 0; pointer-events: none; 
+            text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 80px rgba(255,165,0,0.5);
+            z-index: 150; transition: opacity 0.4s;
+        }
+
+        #stats-panel {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            color: #ffd700;
+            font-size: 13px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(12px);
+            padding: 12px 18px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,215,0,0.2);
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        #zombie-counter {
+            position: absolute;
+            top: 100px;
+            right: 25px;
+            color: #ff4444;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 0 20px rgba(255,0,0,0.6);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(12px);
+            padding: 10px 16px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,0,0,0.2);
+            pointer-events: none;
+            z-index: 200;
         }
 
         #customize-menu {
@@ -108,21 +340,21 @@
         .weapon-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 12px;
             max-height: 400px;
             overflow-y: auto;
-            padding: 10px;
+            padding: 15px;
             margin: 20px 0;
         }
         
         .weapon-card {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(200,180,100,0.2);
-            border-radius: 12px;
-            padding: 10px;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 15px;
+            padding: 12px;
             cursor: pointer;
             transition: all 0.2s;
-            backdrop-filter: blur(5px);
         }
         
         .weapon-card:hover {
@@ -137,14 +369,14 @@
         }
         
         .weapon-name {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             color: #ffd700;
         }
         
         .weapon-stats {
             font-size: 9px;
-            color: #aaa;
+            color: #ccc;
         }
         
         .slot-selector {
@@ -155,194 +387,20 @@
         }
         
         .slot-btn {
-            width: 60px;
-            height: 60px;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(200,180,100,0.3);
-            border-radius: 12px;
+            width: 65px;
+            height: 65px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 15px;
             color: white;
-            font-size: 20px;
+            font-size: 22px;
             cursor: pointer;
-            backdrop-filter: blur(5px);
         }
         
         .slot-btn.active {
             border: 2px solid #ffd700;
             background: rgba(255,215,0,0.2);
-        }
-
-        #fps-counter {
-            position: absolute; top: 75px; left: 25px;
-            color: #0f0; font-family: monospace; font-size: 11px;
-            background: rgba(0,0,0,0.35);
-            backdrop-filter: blur(6px);
-            padding: 4px 8px; 
-            border-radius: 12px;
-            pointer-events: none; 
-            z-index: 200;
-        }
-
-        .stat-box {
-            position: absolute; 
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(12px) saturate(160%);
-            border: 1px solid rgba(200,180,100,0.15); 
-            border-radius: 16px;
-            padding: 14px 18px; 
-            color: white;
-        }
-        #health-container { bottom: 25px; left: 25px; width: 240px; }
-        #health-bar-bg { width: 100%; height: 5px; background: rgba(255,255,255,0.06); border-radius: 3px; margin-top: 6px; overflow: hidden; }
-        #health-bar-fill { width: 100%; height: 100%; background: linear-gradient(90deg, #ff4444, #ffaa00); transition: width 0.2s; }
-
-        #ammo-container { bottom: 25px; right: 25px; text-align: right; min-width: 140px; }
-        #ammo-text { font-size: 42px; font-weight: 900; line-height: 1; }
-
-        #score-board { top: 25px; left: 25px; min-width: 160px; }
-        .score-val { font-size: 20px; font-weight: 900; color: #ffd700; }
-
-        #inventory {
-            position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 8px;
-        }
-        .slot {
-            width: 50px; height: 50px; 
-            background: rgba(15,15,25,0.45);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(200,180,100,0.2); 
-            border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            color: white; transition: all 0.15s; pointer-events: auto;
-            font-weight: bold;
-            font-size: 12px;
-        }
-        .slot.active { 
-            border: 1px solid #ffd700; 
-            background: rgba(255,215,0,0.12);
-            transform: translateY(-5px); 
-        }
-
-        #crosshair {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 3px;
-            height: 3px;
-            background: rgba(255,255,255,0.95);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(255,255,255,0.5);
-            pointer-events: none;
-            z-index: 100;
-        }
-        #crosshair::before {
-            content: '';
-            position: absolute;
-            top: -6px;
-            left: 1px;
-            width: 1.5px;
-            height: 4px;
-            background: rgba(255,255,255,0.8);
-        }
-        #crosshair::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 1px;
-            width: 1.5px;
-            height: 4px;
-            background: rgba(255,255,255,0.8);
-        }
-        #crosshair .left {
-            position: absolute;
-            top: 1px;
-            left: -6px;
-            width: 4px;
-            height: 1.5px;
-            background: rgba(255,255,255,0.8);
-        }
-        #crosshair .right {
-            position: absolute;
-            top: 1px;
-            right: -6px;
-            width: 4px;
-            height: 1.5px;
-            background: rgba(255,255,255,0.8);
-        }
-
-        #damage-nums { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-        .dmg-popup {
-            position: absolute; color: #fff; font-weight: 900; font-size: 30px;
-            text-shadow: 0 0 16px rgba(255,200,0,0.7), 0 0 32px rgba(255,100,0,0.4); 
-            animation: dmgAnim 0.6s ease-out forwards;
-        }
-        .dmg-popup.headshot {
-            color: #ffd700;
-            text-shadow: 0 0 24px #ffaa00, 0 0 48px #ff8800, 0 0 80px #ff4400;
-            font-size: 40px;
-            animation: headshotAnim 0.8s ease-out forwards;
-        }
-        @keyframes dmgAnim {
-            0% { opacity: 0; transform: translateY(0) scale(0.4); }
-            20% { opacity: 1; transform: translateY(-30px) scale(1.15); }
-            100% { opacity: 0; transform: translateY(-100px) scale(1); }
-        }
-        @keyframes headshotAnim {
-            0% { opacity: 0; transform: translateY(0) scale(0.5) rotate(-6deg); }
-            15% { opacity: 1; transform: translateY(-40px) scale(1.5) rotate(3deg); }
-            100% { opacity: 0; transform: translateY(-150px) scale(1) rotate(0deg); }
-        }
-
-        #sniper-scope {
-            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-            display: none; align-items: center; justify-content: center;
-            background: transparent; z-index: 50; pointer-events: none;
-        }
-        #scope-lens {
-            width: 80vh; height: 80vh; border: 3px solid rgba(0,0,0,0.7); border-radius: 50%;
-            position: relative; overflow: hidden;
-            box-shadow: 0 0 0 2000px #000, inset 0 0 30px rgba(0,0,0,0.8);
-        }
-        .scope-line-h { position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: rgba(255,255,255,0.85); }
-        .scope-line-v { position: absolute; left: 50%; top: 0; width: 1px; height: 100%; background: rgba(255,255,255,0.85); }
-
-        #level-up-notif {
-            position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);
-            color: #ffd700; font-size: 60px; font-weight: 900; letter-spacing: 10px;
-            opacity: 0; pointer-events: none; 
-            text-shadow: 0 0 30px rgba(255,215,0,0.7);
-            z-index: 150; transition: opacity 0.3s;
-        }
-
-        #stats-panel {
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            color: #ffd700;
-            font-size: 12px;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            padding: 10px 16px;
-            border-radius: 14px;
-            border: 1px solid rgba(200,180,100,0.15);
-            pointer-events: none;
-            z-index: 200;
-        }
-
-        #zombie-counter {
-            position: absolute;
-            top: 95px;
-            right: 25px;
-            color: #ff4444;
-            font-size: 13px;
-            font-weight: bold;
-            background: rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            padding: 8px 14px;
-            border-radius: 14px;
-            border: 1px solid rgba(255,0,0,0.15);
-            pointer-events: none;
-            z-index: 200;
         }
     </style>
     <script type="importmap">
@@ -379,9 +437,27 @@
     <div id="start-menu" class="menu">
         <div class="glory-panel">
             <h1>HUNTER TREX</h1>
-            <div class="subtitle">SOUND UPDATE</div>
-            <div style="height: 1px; background: linear-gradient(to right, transparent, rgba(200,180,100,0.3), transparent); margin: 25px 0;"></div>
-            <div style="display: flex; gap: 20px; justify-content: center;">
+            <div class="subtitle">ULTIMATE EDITION</div>
+            <div style="height: 2px; background: linear-gradient(to right, transparent, rgba(255,215,0,0.6), transparent); margin: 30px 0;"></div>
+            <div class="feature-list">
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-text">PRECISION</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">DYNAMIC</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💀</div>
+                    <div class="feature-text">ENDLESS</div>
+                </div>
+            </div>
+            <p style="color: #ddd; font-size: 16px; letter-spacing: 3px; margin: 20px 0;">
+                <span style="color: #ffd700;">+2 DMG & +5 MAG PER LEVEL</span>
+            </p>
+            <div style="height: 2px; background: linear-gradient(to right, transparent, rgba(255,215,0,0.3), transparent); margin: 25px 0;"></div>
+            <div style="display: flex; gap: 25px; justify-content: center;">
                 <button class="btn" id="play-btn">BEGIN HUNT</button>
                 <button class="btn" id="customize-btn">CUSTOMIZE</button>
             </div>
@@ -406,7 +482,7 @@
     <div id="death-menu" class="menu" style="display: none;">
         <div class="glory-panel">
             <h1>FALLEN</h1>
-            <p id="final-stats" style="font-size: 16px; color: #ffd700;"></p>
+            <p id="final-stats" style="font-size: 18px; color: #ffd700;"></p>
             <button class="btn" onclick="location.reload()">RISE AGAIN</button>
         </div>
     </div>
@@ -420,37 +496,41 @@
         </div>
 
         <div id="score-board" class="stat-box">
-            <div style="font-size: 8px; opacity: 0.5;">LEVEL <span id="lvl-display">1</span></div>
+            <div style="font-size: 9px; opacity: 0.6; letter-spacing: 1px;">LEVEL <span id="lvl-display">1</span></div>
             <div class="score-val" id="score-display">00000</div>
         </div>
         
         <div id="health-container" class="stat-box">
-            <div style="font-size: 8px; opacity: 0.5;">VITALITY</div>
-            <div id="health-text" style="font-size: 22px; font-weight: 900;">300</div>
+            <div style="font-size: 9px; letter-spacing: 2px; opacity: 0.6;">VITALITY</div>
+            <div id="health-text" style="font-size: 24px; font-weight: 900;">300</div>
             <div id="health-bar-bg"><div id="health-bar-fill"></div></div>
         </div>
 
         <div id="ammo-container" class="stat-box">
-            <div id="weapon-name" style="font-size: 8px; opacity: 0.5;">ASSAULT RIFLE</div>
+            <div id="weapon-name" style="font-size: 9px; letter-spacing: 2px; opacity: 0.6;">ASSAULT RIFLE</div>
             <div id="ammo-text">35</div>
         </div>
 
         <div id="inventory">
-            <div class="slot active" id="slot-0">AR</div>
-            <div class="slot" id="slot-1">SMG</div>
-            <div class="slot" id="slot-2">SYR</div>
-            <div class="slot" id="slot-3">SNP</div>
-            <div class="slot" id="slot-4">MED</div>
+            <div class="slot active" id="slot-0">1</div>
+            <div class="slot" id="slot-1">2</div>
+            <div class="slot" id="slot-2">3</div>
+            <div class="slot" id="slot-3">4</div>
+            <div class="slot" id="slot-4">5</div>
         </div>
     </div>
 
     <!-- Audio Elements -->
-    <audio id="sound-ar" preload="auto"><source src="ar.mp3" type="audio/mp3"></audio>
-    <audio id="sound-smg" preload="auto"><source src="smg.mp3" type="audio/mp3"></audio>
-    <audio id="sound-sniper" preload="auto"><source src="sniper.mp3" type="audio/mp3"></audio>
-    <audio id="sound-pistol" preload="auto"><source src="pistol.mp3" type="audio/mp3"></audio>
-    <audio id="sound-reload" preload="auto"><source src="reload.mp3" type="audio/mp3"></audio>
-    <audio id="sound-hit" preload="auto"><source src="hit.mp3" type="audio/mp3"></audio>
+    <audio id="sound-eas" preload="auto"><source src="eas.mp3" type="audio/mp3"></audio>
+    <audio id="sound-crowd" preload="auto" loop><source src="crowd.mp3" type="audio/mp3"></audio>
+    <audio id="sound-police" preload="auto" loop><source src="police.mp3" type="audio/mp3"></audio>
+    <audio id="sound-easround" preload="auto"><source src="easround.mp3" type="audio/mp3"></audio>
+    <audio id="sound-ar" preload="auto"><source src="ar.mp4" type="audio/mp4"></audio>
+    <audio id="sound-smg" preload="auto"><source src="smg.mp4" type="audio/mp4"></audio>
+    <audio id="sound-sniper" preload="auto"><source src="sniper.mp4" type="audio/mp4"></audio>
+    <audio id="sound-pistol" preload="auto"><source src="pistol.mp4" type="audio/mp4"></audio>
+    <audio id="sound-reload" preload="auto"><source src="reload.mp4" type="audio/mp4"></audio>
+    <audio id="sound-hit" preload="auto"><source src="hit.mp4" type="audio/mp4"></audio>
 
     <script type="module">
         import * as THREE from 'three';
@@ -462,6 +542,10 @@
 
         // Sound effects
         const sounds = {
+            eas: document.getElementById('sound-eas'),
+            crowd: document.getElementById('sound-crowd'),
+            police: document.getElementById('sound-police'),
+            easround: document.getElementById('sound-easround'),
             ar: document.getElementById('sound-ar'),
             smg: document.getElementById('sound-smg'),
             sniper: document.getElementById('sound-sniper'),
@@ -476,8 +560,15 @@
                 sounds[sound].play().catch(e => {});
             }
         }
+        
+        function stopSound(sound) {
+            if (sounds[sound]) {
+                sounds[sound].pause();
+                sounds[sound].currentTime = 0;
+            }
+        }
 
-        // WEAPON DATABASE
+        // WEAPON DATABASE - Snipers NOT automatic
         const WEAPONS = {
             assaultRifle: { id: 'assaultRifle', name: 'Assault Rifle', mag: 35, rate: 133, reload: 1500, dmg: 45, dmgH: 80, zoom: 45, auto: true, sound: 'ar' },
             smg: { id: 'smg', name: 'SMG', mag: 65, rate: 58, reload: 1200, dmg: 20, dmgH: 45, zoom: 55, auto: true, sound: 'smg' },
@@ -491,7 +582,7 @@
             rushedSMG: { id: 'rushedSMG', name: 'Rushed SMG', mag: 80, rate: 38, reload: 1300, dmg: 10, dmgH: 25, zoom: 55, auto: true, sound: 'smg' },
             twinMagAR: { id: 'twinMagAR', name: 'Twin Mag AR', mag: 40, mag2: 30, rate: 88, reload: 1875, dmg: 35, dmgH: 60, zoom: 45, auto: true, twinMag: true, sound: 'ar' },
             semiSniper: { id: 'semiSniper', name: 'Semi-Auto Sniper', mag: 10, rate: 400, reload: 3000, dmg: 75, dmgH: 190, zoom: 12, auto: false, scope: true, sound: 'sniper' },
-            hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 30, rate: 40, reload: 720, dmg: 15, dmgH: 25, zoom: 50, auto: true, sound: 'pistol' },
+            hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 30, rate: 40, reload: 1080, dmg: 15, dmgH: 25, zoom: 50, auto: true, sound: 'pistol' },
             syringe: { id: 'syringe', name: 'Syringe', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 50 }
         };
 
@@ -531,6 +622,8 @@
         let healing = false;
         let healInterval = null;
         let usedHeals = { syringe: false, medkit: false };
+        
+        let backgroundMusicPlaying = false;
 
         let level = 1;
         let score = 0;
@@ -623,6 +716,17 @@
         function setupUI() {
             document.getElementById('play-btn').addEventListener('click', () => {
                 document.getElementById('start-menu').style.display = 'none';
+                
+                // Play eas.mp3 and then crowd/police
+                playSound('eas');
+                sounds.eas.onended = () => {
+                    if (!backgroundMusicPlaying) {
+                        backgroundMusicPlaying = true;
+                        playSound('crowd');
+                        playSound('police');
+                    }
+                };
+                
                 controls.lock();
             });
             
@@ -651,7 +755,12 @@
                 isRunning = true;
                 updateUI();
             });
-            controls.addEventListener('unlock', () => isRunning = false);
+            controls.addEventListener('unlock', () => {
+                isRunning = false;
+                stopSound('crowd');
+                stopSound('police');
+                backgroundMusicPlaying = false;
+            });
         }
 
         function renderWeaponGrid() {
@@ -684,8 +793,7 @@
         function updateSlotDisplay() {
             for (let i = 0; i < 5; i++) {
                 const slot = document.getElementById(`slot-${i}`);
-                const weapon = WEAPONS[loadout[i]];
-                slot.innerHTML = weapon ? weapon.name.substring(0, 3).toUpperCase() : (i + 1);
+                slot.innerHTML = i + 1;
             }
         }
 
@@ -1185,7 +1293,6 @@
             ammo[id]--;
             updateUI();
             
-            // Play weapon sound
             if (weapon.sound) playSound(weapon.sound);
             
             gunGroup.position.z = 0.05;
@@ -1299,6 +1406,9 @@
                 magBonus += 5;
             }
             
+            // Play easround.mp3
+            playSound('easround');
+            
             hp = 300;
             
             loadout.forEach(id => {
@@ -1364,6 +1474,7 @@
             
             let reloadTime = weapon.reload;
             if (weapon.scope) reloadTime *= 1.5;
+            if (weapon.id === 'hyperPistol') reloadTime = reloadTime * 1.5;
             if (weapon.id === 'twinMagAR') {
                 const state = twinMagState[id];
                 if (state && state.activeMag === 2) {
@@ -1419,6 +1530,9 @@
             
             if (hp <= 0) { 
                 isRunning = false;
+                stopSound('crowd');
+                stopSound('police');
+                backgroundMusicPlaying = false;
                 if(score > highScore) {
                     highScore = score;
                     localStorage.setItem('trex_highscore', score);
@@ -1452,6 +1566,7 @@
                         fire();
                     } else if (!weapon.auto && now - lastFire > weapon.rate) {
                         fire();
+                        isFiring = false;
                     }
                 }
 
