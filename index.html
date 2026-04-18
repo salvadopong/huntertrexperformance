@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HUNTER TREX - ULTIMATE EDITION</title>
     <style>
         body {
@@ -122,6 +122,15 @@
             box-shadow: 0 12px 48px rgba(255,215,0,0.3), 0 0 0 2px rgba(255,215,0,0.3) inset;
             border-color: rgba(255,215,0,0.8);
             letter-spacing: 8px;
+        }
+        .btn.save-btn {
+            background: linear-gradient(135deg, rgba(100,200,100,0.15) 0%, rgba(50,150,50,0.1) 100%);
+            border-color: rgba(100,200,100,0.4);
+        }
+        .btn.save-btn:hover {
+            background: linear-gradient(135deg, rgba(100,200,100,0.3) 0%, rgba(50,150,50,0.2) 100%);
+            box-shadow: 0 12px 48px rgba(100,200,100,0.3);
+            border-color: rgba(100,200,100,0.8);
         }
         .feature-list {
             display: flex;
@@ -333,6 +342,10 @@
             z-index: 200;
         }
 
+        #customize-menu {
+            display: none;
+        }
+        
         .weapon-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -409,37 +422,128 @@
     </script>
 </head>
 <body>
+
     <div id="fps-counter">FPS: 0</div>
     <canvas id="game-canvas"></canvas>
     <div id="damage-nums"></div>
     <div id="level-up-notif">WAVE CLEARED</div>
-    <div id="crosshair"><div class="left"></div><div class="right"></div></div>
-    <div id="stats-panel"><div>⚔️ +<span id="dmg-bonus">0</span> DMG</div><div>📦 +<span id="mag-bonus">0</span> MAG</div><div>🧟 <span id="zombie-count">0</span> WAVE</div></div>
-    <div id="zombie-counter">🧟 <span id="zombies-remaining">0</span> LEFT</div>
-
-    <div id="start-menu" class="menu"><div class="glory-panel"><h1>HUNTER TREX</h1><div class="subtitle">ULTIMATE EDITION</div><div style="height:2px; background:linear-gradient(to right, transparent, rgba(255,215,0,0.6), transparent); margin:30px 0;"></div><div class="feature-list"><div class="feature"><div class="feature-icon">🎯</div><div class="feature-text">PRECISION</div></div><div class="feature"><div class="feature-icon">⚡</div><div class="feature-text">DYNAMIC</div></div><div class="feature"><div class="feature-icon">💀</div><div class="feature-text">ENDLESS</div></div></div><p style="color:#ddd; font-size:16px; letter-spacing:3px; margin:20px 0;"><span style="color:#ffd700;">+4 DMG & +5 MAG PER LEVEL</span></p><div style="height:2px; background:linear-gradient(to right, transparent, rgba(255,215,0,0.3), transparent); margin:25px 0;"></div><div style="display:flex; gap:25px; justify-content:center;"><button class="btn" id="play-btn">BEGIN HUNT</button><button class="btn" id="customize-btn">CUSTOMIZE</button></div></div></div>
-    <div id="customize-menu" class="menu"><div class="glory-panel"><h1>CUSTOMIZE</h1><div class="slot-selector"><button class="slot-btn active" data-slot="0">1</button><button class="slot-btn" data-slot="1">2</button><button class="slot-btn" data-slot="2">3</button><button class="slot-btn" data-slot="3">4</button><button class="slot-btn" data-slot="4">5</button></div><div id="weapon-grid" class="weapon-grid"></div><button class="btn" id="save-loadout-btn">SAVE LOADOUT</button><button class="btn" id="back-btn">BACK</button></div></div>
-    <div id="death-menu" class="menu" style="display:none;"><div class="glory-panel"><h1>FALLEN</h1><p id="final-stats" style="font-size:18px; color:#ffd700;"></p><button class="btn" onclick="location.reload()">RISE AGAIN</button></div></div>
-
-    <div id="ui-layer">
-        <div id="sniper-scope"><div id="scope-lens"><div class="scope-line-h"></div><div class="scope-line-v"></div></div></div>
-        <div id="score-board" class="stat-box"><div style="font-size:9px; opacity:0.6; letter-spacing:1px;">LEVEL <span id="lvl-display">1</span></div><div class="score-val" id="score-display">00000</div></div>
-        <div id="health-container" class="stat-box"><div style="font-size:9px; letter-spacing:2px; opacity:0.6;">VITALITY</div><div id="health-text" style="font-size:24px; font-weight:900;">300</div><div id="health-bar-bg"><div id="health-bar-fill"></div></div></div>
-        <div id="ammo-container" class="stat-box"><div id="weapon-name" style="font-size:9px; letter-spacing:2px; opacity:0.6;">ASSAULT RIFLE</div><div id="ammo-text">35</div></div>
-        <div id="inventory"><div class="slot active" id="slot-0">1</div><div class="slot" id="slot-1">2</div><div class="slot" id="slot-2">3</div><div class="slot" id="slot-3">4</div><div class="slot" id="slot-4">5</div></div>
+    
+    <div id="crosshair">
+        <div class="left"></div>
+        <div class="right"></div>
     </div>
 
+    <div id="stats-panel">
+        <div>⚔️ +<span id="dmg-bonus">0</span> DMG</div>
+        <div>📦 +<span id="mag-bonus">0</span> MAG</div>
+        <div>🧟 <span id="zombie-count">0</span> WAVE</div>
+    </div>
+
+    <div id="zombie-counter">
+        🧟 <span id="zombies-remaining">0</span> LEFT
+    </div>
+
+    <div id="start-menu" class="menu">
+        <div class="glory-panel">
+            <h1>HUNTER TREX</h1>
+            <div class="subtitle">ULTIMATE EDITION</div>
+            <div style="height: 2px; background: linear-gradient(to right, transparent, rgba(255,215,0,0.6), transparent); margin: 30px 0;"></div>
+            <div class="feature-list">
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-text">PRECISION</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">DYNAMIC</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💀</div>
+                    <div class="feature-text">ENDLESS</div>
+                </div>
+            </div>
+            <p style="color: #ddd; font-size: 16px; letter-spacing: 3px; margin: 20px 0;">
+                <span style="color: #ffd700;">+2 DMG & +5 MAG PER LEVEL</span>
+            </p>
+            <div style="height: 2px; background: linear-gradient(to right, transparent, rgba(255,215,0,0.3), transparent); margin: 25px 0;"></div>
+            <div style="display: flex; gap: 25px; justify-content: center;">
+                <button class="btn" id="play-btn">BEGIN HUNT</button>
+                <button class="btn" id="customize-btn">CUSTOMIZE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="customize-menu" class="menu">
+        <div class="glory-panel">
+            <h1>CUSTOMIZE</h1>
+            <div class="slot-selector">
+                <button class="slot-btn active" data-slot="0">1</button>
+                <button class="slot-btn" data-slot="1">2</button>
+                <button class="slot-btn" data-slot="2">3</button>
+                <button class="slot-btn" data-slot="3">4</button>
+                <button class="slot-btn" data-slot="4">5</button>
+            </div>
+            <div id="weapon-grid" class="weapon-grid"></div>
+            <div style="display: flex; gap: 20px; justify-content: center;">
+                <button class="btn save-btn" id="save-btn">SAVE LOADOUT</button>
+                <button class="btn" id="back-btn">BACK</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="death-menu" class="menu" style="display: none;">
+        <div class="glory-panel">
+            <h1>FALLEN</h1>
+            <p id="final-stats" style="font-size: 18px; color: #ffd700;"></p>
+            <button class="btn" onclick="location.reload()">RISE AGAIN</button>
+        </div>
+    </div>
+
+    <div id="ui-layer">
+        <div id="sniper-scope">
+            <div id="scope-lens">
+                <div class="scope-line-h"></div>
+                <div class="scope-line-v"></div>
+            </div>
+        </div>
+
+        <div id="score-board" class="stat-box">
+            <div style="font-size: 9px; opacity: 0.6; letter-spacing: 1px;">LEVEL <span id="lvl-display">1</span></div>
+            <div class="score-val" id="score-display">00000</div>
+        </div>
+        
+        <div id="health-container" class="stat-box">
+            <div style="font-size: 9px; letter-spacing: 2px; opacity: 0.6;">VITALITY</div>
+            <div id="health-text" style="font-size: 24px; font-weight: 900;">300</div>
+            <div id="health-bar-bg"><div id="health-bar-fill"></div></div>
+        </div>
+
+        <div id="ammo-container" class="stat-box">
+            <div id="weapon-name" style="font-size: 9px; letter-spacing: 2px; opacity: 0.6;">ASSAULT RIFLE</div>
+            <div id="ammo-text">35</div>
+        </div>
+
+        <div id="inventory">
+            <div class="slot active" id="slot-0">1</div>
+            <div class="slot" id="slot-1">2</div>
+            <div class="slot" id="slot-2">3</div>
+            <div class="slot" id="slot-3">4</div>
+            <div class="slot" id="slot-4">5</div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
     <audio id="sound-eas" preload="auto"><source src="eas.mp3" type="audio/mp3"></audio>
     <audio id="sound-crowd" preload="auto" loop><source src="crowd.mp3" type="audio/mp3"></audio>
     <audio id="sound-police" preload="auto" loop><source src="police.mp3" type="audio/mp3"></audio>
     <audio id="sound-easround" preload="auto"><source src="easround.mp3" type="audio/mp3"></audio>
-    <audio id="sound-ar" preload="auto"><source src="ar.mp3" type="audio/mp3"></audio>
-    <audio id="sound-smg" preload="auto"><source src="smg.mp3" type="audio/mp3"></audio>
-    <audio id="sound-sniper" preload="auto"><source src="sniper.mp3" type="audio/mp3"></audio>
-    <audio id="sound-pistol" preload="auto"><source src="pistol.mp3" type="audio/mp3"></audio>
-    <audio id="sound-reload" preload="auto"><source src="reload.mp3" type="audio/mp3"></audio>
-    <audio id="sound-hit" preload="auto"><source src="hit.mp3" type="audio/mp3"></audio>
-    <audio id="sound-energy" preload="auto"><source src="ar.mp3" type="audio/mp3"></audio>
+    <audio id="sound-ar" preload="auto"><source src="ar.mp4" type="audio/mp4"></audio>
+    <audio id="sound-smg" preload="auto"><source src="smg.mp4" type="audio/mp4"></audio>
+    <audio id="sound-sniper" preload="auto"><source src="sniper.mp4" type="audio/mp4"></audio>
+    <audio id="sound-pistol" preload="auto"><source src="pistol.mp4" type="audio/mp4"></audio>
+    <audio id="sound-energy" preload="auto"><source src="energy.mp4" type="audio/mp4"></audio>
+    <audio id="sound-reload" preload="auto"><source src="reload.mp4" type="audio/mp4"></audio>
+    <audio id="sound-hit" preload="auto"><source src="hit.mp4" type="audio/mp4"></audio>
 
     <script type="module">
         import * as THREE from 'three';
@@ -449,244 +553,1208 @@
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 
-        const sounds = { eas:document.getElementById('sound-eas'), crowd:document.getElementById('sound-crowd'), police:document.getElementById('sound-police'), easround:document.getElementById('sound-easround'), ar:document.getElementById('sound-ar'), smg:document.getElementById('sound-smg'), sniper:document.getElementById('sound-sniper'), pistol:document.getElementById('sound-pistol'), reload:document.getElementById('sound-reload'), hit:document.getElementById('sound-hit'), energy:document.getElementById('sound-energy') };
-        function playSound(s){ if(sounds[s]){ sounds[s].currentTime=0; sounds[s].play().catch(e=>{}); } }
-        function stopSound(s){ if(sounds[s]){ sounds[s].pause(); sounds[s].currentTime=0; } }
+        // Sound effects
+        const sounds = {
+            eas: document.getElementById('sound-eas'),
+            crowd: document.getElementById('sound-crowd'),
+            police: document.getElementById('sound-police'),
+            easround: document.getElementById('sound-easround'),
+            ar: document.getElementById('sound-ar'),
+            smg: document.getElementById('sound-smg'),
+            sniper: document.getElementById('sound-sniper'),
+            pistol: document.getElementById('sound-pistol'),
+            energy: document.getElementById('sound-energy'),
+            reload: document.getElementById('sound-reload'),
+            hit: document.getElementById('sound-hit')
+        };
+        
+        function playSound(sound) {
+            if (sounds[sound]) {
+                sounds[sound].currentTime = 0;
+                sounds[sound].play().catch(e => {});
+            }
+        }
+        
+        function stopSound(sound) {
+            if (sounds[sound]) {
+                sounds[sound].pause();
+                sounds[sound].currentTime = 0;
+            }
+        }
 
+        // WEAPON DATABASE - Energy Rifle added
         const WEAPONS = {
-            assaultRifle: { id:'assaultRifle', name:'Assault Rifle', mag:35, rate:133, reload:1500, dmg:45, dmgH:80, zoom:45, auto:true, sound:'ar' },
-            smg: { id:'smg', name:'SMG', mag:65, rate:58, reload:1200, dmg:20, dmgH:45, zoom:55, auto:true, sound:'smg' },
-            trexSniper: { id:'trexSniper', name:'Trex Sniper', mag:1, rate:1000, reload:2500, dmg:300, dmgH:1000, zoom:10, auto:false, scope:true, sound:'sniper' },
-            pistol: { id:'pistol', name:'Pistol', mag:43, rate:80, reload:1200, dmg:45, dmgH:75, zoom:50, auto:true, sound:'pistol' },
-            scopedRevolver: { id:'scopedRevolver', name:'Scoped Revolver', mag:8, rate:1000, reload:2200, dmg:102, dmgH:203, zoom:15, auto:false, scope:true, sound:'pistol' },
-            medkit: { id:'medkit', name:'Medkit', mag:1, rate:0, reload:0, dmg:0, dmgH:0, zoom:75, auto:false, heal:10, healPerSec:true },
-            drumSMG: { id:'drumSMG', name:'Drum SMG', mag:90, rate:55, reload:2880, dmg:15, dmgH:35, zoom:55, auto:true, sound:'smg' },
-            heavyAR: { id:'heavyAR', name:'Heavy AR', mag:30, rate:200, reload:2000, dmg:75, dmgH:110, zoom:45, auto:true, sound:'ar' },
-            tripleSniper: { id:'tripleSniper', name:'Triple Action', mag:3, rate:800, reload:2800, dmg:100, dmgH:300, zoom:12, auto:false, scope:true, sound:'sniper', customScope:true },
-            rushedSMG: { id:'rushedSMG', name:'Rushed SMG', mag:80, rate:25, reload:1130, dmg:10, dmgH:25, zoom:55, auto:true, sound:'smg' },
-            twinMagAR: { id:'twinMagAR', name:'Twin Mag AR', mag:40, mag2:30, rate:88, reload:1875, dmg:35, dmgH:60, zoom:45, auto:true, twinMag:true, sound:'ar' },
-            semiSniper: { id:'semiSniper', name:'Semi-Auto Sniper', mag:10, rate:400, reload:3000, dmg:75, dmgH:190, zoom:12, auto:false, scope:true, sound:'sniper' },
-            hyperPistol: { id:'hyperPistol', name:'Hyper Pistol', mag:30, rate:40, reload:720, dmg:15, dmgH:25, zoom:50, auto:true, sound:'pistol' },
-            syringe: { id:'syringe', name:'Syringe', mag:1, rate:0, reload:0, dmg:0, dmgH:0, zoom:75, auto:false, heal:50 },
-            energyRifle: { id:'energyRifle', name:'Energy Rifle', mag:10, rate:320, reload:2100, dmg:125, dmgH:205, zoom:35, auto:false, sound:'energy' }
+            assaultRifle: { id: 'assaultRifle', name: 'Assault Rifle', mag: 35, rate: 133, reload: 1500, dmg: 45, dmgH: 80, zoom: 45, auto: true, sound: 'ar' },
+            smg: { id: 'smg', name: 'SMG', mag: 65, rate: 58, reload: 1200, dmg: 20, dmgH: 45, zoom: 55, auto: true, sound: 'smg' },
+            trexSniper: { id: 'trexSniper', name: 'Trex Sniper', mag: 1, rate: 1000, reload: 2500, dmg: 300, dmgH: 1000, zoom: 10, auto: false, scope: true, sound: 'sniper' },
+            pistol: { id: 'pistol', name: 'Pistol', mag: 43, rate: 80, reload: 1200, dmg: 45, dmgH: 75, zoom: 50, auto: true, sound: 'pistol' },
+            scopedRevolver: { id: 'scopedRevolver', name: 'Scoped Revolver', mag: 8, rate: 1000, reload: 2200, dmg: 102, dmgH: 203, zoom: 15, auto: false, scope: true, sound: 'pistol' },
+            medkit: { id: 'medkit', name: 'Medkit', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 10, healPerSec: true },
+            drumSMG: { id: 'drumSMG', name: 'Drum SMG', mag: 90, rate: 55, reload: 2880, dmg: 15, dmgH: 35, zoom: 55, auto: true, sound: 'smg' },
+            heavyAR: { id: 'heavyAR', name: 'Heavy AR', mag: 30, rate: 200, reload: 2000, dmg: 75, dmgH: 110, zoom: 45, auto: true, sound: 'ar' },
+            tripleSniper: { id: 'tripleSniper', name: 'Triple Action', mag: 3, rate: 800, reload: 2800, dmg: 100, dmgH: 300, zoom: 12, auto: false, scope: true, sound: 'sniper' },
+            rushedSMG: { id: 'rushedSMG', name: 'Rushed SMG', mag: 80, rate: 25, reload: 1130, dmg: 10, dmgH: 25, zoom: 55, auto: true, sound: 'smg' },
+            twinMagAR: { id: 'twinMagAR', name: 'Twin Mag AR', mag: 40, mag2: 30, rate: 88, reload: 1875, dmg: 35, dmgH: 60, zoom: 45, auto: true, twinMag: true, sound: 'ar' },
+            semiSniper: { id: 'semiSniper', name: 'Semi-Auto Sniper', mag: 10, rate: 400, reload: 3000, dmg: 75, dmgH: 190, zoom: 12, auto: false, scope: true, sound: 'sniper' },
+            hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 30, rate: 40, reload: 600, dmg: 15, dmgH: 25, zoom: 50, auto: true, sound: 'pistol' },
+            energyRifle: { id: 'energyRifle', name: 'Energy Rifle', mag: 10, rate: 300, reload: 2200, dmg: 125, dmgH: 205, zoom: 50, auto: false, sound: 'energy' },
+            syringe: { id: 'syringe', name: 'Syringe', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 50 }
         };
 
-        const ZOMBIE_TYPES = { regular:{ hp:200, speed:1.5, damage:1, color:0x2a3a1a }, headless:{ hp:150, speed:1.5, damage:1, color:0x1a2a0a }, miner:{ hp:300, speed:1.3, damage:1, color:0x3a4a2a }, bat:{ hp:200, speed:1.5, damage:2, color:0x4a3a2a }, metalPlated:{ hp:400, speed:1.0, damage:2, color:0x556677 }, redbull:{ hp:200, speed:3.0, damage:1, color:0xcc3333 }, queen:{ hp:500, speed:1.2, damage:1.5, color:0xaa8800 } };
-        const CONFIG = { player:{ health:300, walkSpeed:5, height:1.8, gravity:85.0, jumpForce:30 }, worldSize:400 };
+        const ZOMBIE_TYPES = {
+            regular: { hp: 200, speed: 1.5, damage: 1, color: 0x2a3a1a },
+            headless: { hp: 150, speed: 1.5, damage: 1, color: 0x1a2a0a },
+            miner: { hp: 300, speed: 1.3, damage: 1, color: 0x3a4a2a },
+            bat: { hp: 200, speed: 1.5, damage: 2, color: 0x4a3a2a },
+            metalPlated: { hp: 400, speed: 1.0, damage: 2, color: 0x556677 },
+            redbull: { hp: 200, speed: 3.0, damage: 1, color: 0xcc3333 },
+            queen: { hp: 500, speed: 1.2, damage: 1.5, color: 0xaa8800 }
+        };
+
+        // 10 EXCEPTIONAL BACKDROPS
+        const BACKDROPS = [
+            { name: 'Forest', skyColor: 0x1a2a3a, groundColor: 0x2a3a25, fogColor: 0x1a2a3a, fogDensity: 0.0012 },
+            { name: 'Desert', skyColor: 0xccaa88, groundColor: 0xccaa77, fogColor: 0xccaa88, fogDensity: 0.0008 },
+            { name: 'Snow', skyColor: 0xaaccdd, groundColor: 0xdddddd, fogColor: 0xaaccdd, fogDensity: 0.0010 },
+            { name: 'Volcanic', skyColor: 0x442222, groundColor: 0x333333, fogColor: 0x442222, fogDensity: 0.0015 },
+            { name: 'Alien Planet', skyColor: 0x442266, groundColor: 0x553377, fogColor: 0x442266, fogDensity: 0.0013 },
+            { name: 'Cyberpunk City', skyColor: 0x111122, groundColor: 0x222233, fogColor: 0x111122, fogDensity: 0.0010 },
+            { name: 'Haunted Graveyard', skyColor: 0x1a1a22, groundColor: 0x2a2a33, fogColor: 0x1a1a22, fogDensity: 0.0018 },
+            { name: 'Tropical Beach', skyColor: 0x88aacc, groundColor: 0xddcc88, fogColor: 0x88aacc, fogDensity: 0.0009 },
+            { name: 'Candy Land', skyColor: 0xffaacc, groundColor: 0xffddcc, fogColor: 0xffaacc, fogDensity: 0.0011 },
+            { name: 'Underwater', skyColor: 0x224466, groundColor: 0x335577, fogColor: 0x224466, fogDensity: 0.0016 }
+        ];
+
+        const CONFIG = {
+            player: { health: 300, walkSpeed: 5, height: 1.8, gravity: 85.0, jumpForce: 30 },
+            worldSize: 400
+        };
+
+        let scene, camera, renderer, controls, composer;
+        let clock = new THREE.Clock();
+        let fpsCounter = document.getElementById('fps-counter');
+        let frameCount = 0, lastTime = 0;
         
-        let scene, camera, renderer, controls, composer, clock=new THREE.Clock();
-        let fpsCounter=document.getElementById('fps-counter'), frameCount=0, lastTime=0;
-        let velocity=new THREE.Vector3(), direction=new THREE.Vector3(), moveF=false, moveB=false, moveL=false, moveR=false, isFiring=false, canJump=false;
-        let isRunning=false, hp=300, activeSlot=0, loadout=['assaultRifle','smg','syringe','trexSniper','medkit'], ammo={}, reloading=false, lastFire=0, isAiming=false, twinMagState={}, healing=false, healInterval=null, usedHeals={};
-        let level=1, score=0, zombiesRemaining=0, damageBonus=0, magBonus=0;
-        const gunGroup=new THREE.Group(), zombies=[], deadZombies=[], raycaster=new THREE.Raycaster();
-        let walkBob=0, zombieAnimTime=0, isReloadAnimating=false, tempVec=new THREE.Vector3();
-        let currentBackdropIndex=0;
-        const backdrops = [];
+        let velocity = new THREE.Vector3();
+        let direction = new THREE.Vector3();
+        let moveF = false, moveB = false, moveL = false, moveR = false, isFiring = false, canJump = false;
 
-        function createBackdrop(index){
-            const group = new THREE.Group();
-            const groundMat = new THREE.MeshStandardMaterial({ color:0x2a3a25, roughness:0.6 });
-            const groundPlane = new THREE.Mesh(new THREE.PlaneGeometry(800,800), groundMat);
-            groundPlane.rotation.x = -Math.PI/2;
-            groundPlane.receiveShadow = true;
-            group.add(groundPlane);
-            if(index===0){ const water = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0x2288aa, roughness:0.1, metalness:0.9 })); water.rotation.x=-Math.PI/2; water.position.y=0.1; group.add(water); }
-            else if(index===1){ const lava = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0xff4400, emissive:0x442200 })); lava.rotation.x=-Math.PI/2; group.add(lava); }
-            else if(index===2){ const snow = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0xeeeeff, roughness:0.9 })); snow.rotation.x=-Math.PI/2; group.add(snow); }
-            else if(index===3){ const concrete = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0x556677, roughness:0.4 })); concrete.rotation.x=-Math.PI/2; group.add(concrete); }
-            else if(index===4){ const desert = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0xc2b280, roughness:0.7 })); desert.rotation.x=-Math.PI/2; group.add(desert); }
-            else if(index===5){ const cyber = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0x224466, emissive:0x001133 })); cyber.rotation.x=-Math.PI/2; group.add(cyber); }
-            else if(index===6){ const alien = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0x7733aa, roughness:0.3 })); alien.rotation.x=-Math.PI/2; group.add(alien); }
-            else if(index===7){ const blood = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0x441111, roughness:0.5 })); blood.rotation.x=-Math.PI/2; group.add(blood); }
-            else if(index===8){ const gold = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0xccaa44, metalness:0.8 })); gold.rotation.x=-Math.PI/2; group.add(gold); }
-            else{ const dark = new THREE.Mesh(new THREE.PlaneGeometry(800,800), new THREE.MeshStandardMaterial({ color:0x111122, roughness:0.2 })); dark.rotation.x=-Math.PI/2; group.add(dark); }
-            return group;
-        }
-        function switchBackdrop(){
-            if(backdrops.length){ const old=scene.getObjectByName('backdrop'); if(old) scene.remove(old); }
-            const newBack = createBackdrop(currentBackdropIndex);
-            newBack.name='backdrop';
-            scene.add(newBack);
-            currentBackdropIndex = (currentBackdropIndex+1)%10;
+        let isRunning = false;
+        let hp = 300;
+        let activeSlot = 0;
+        let loadout = ['assaultRifle', 'smg', 'syringe', 'trexSniper', 'medkit'];
+        let ammo = {};
+        let reloading = false;
+        let lastFire = 0;
+        let isAiming = false;
+        let twinMagState = {};
+        let healing = false;
+        let healInterval = null;
+        let usedHeals = { syringe: false, medkit: false };
+        
+        let backgroundMusicPlaying = false;
+        let currentBackdrop = 0;
+
+        let level = 1;
+        let score = 0;
+        let highScore = localStorage.getItem('trex_highscore') || 0;
+        let zombiesRemaining = 0;
+        
+        let damageBonus = 0;
+        let magBonus = 0;
+
+        const gunGroup = new THREE.Group();
+        const zombies = [];
+        const deadZombies = [];
+        const raycaster = new THREE.Raycaster();
+        
+        const originalWeapons = JSON.parse(JSON.stringify(WEAPONS));
+
+        let walkBob = 0;
+        let zombieAnimTime = 0;
+        let isReloadAnimating = false;
+
+        const tempVec = new THREE.Vector3();
+        
+        // Load saved loadout
+        const savedLoadout = localStorage.getItem('trex_loadout');
+        if (savedLoadout) {
+            try {
+                loadout = JSON.parse(savedLoadout);
+            } catch(e) {}
         }
 
-        function init(){
-            renderer=new THREE.WebGLRenderer({ canvas:document.getElementById('game-canvas'), antialias:true, powerPreference:"high-performance" });
-            renderer.setSize(window.innerWidth,window.innerHeight); renderer.setPixelRatio(1.2); renderer.shadowMap.enabled=true;
-            scene=new THREE.Scene(); scene.background=new THREE.Color(0x1a2a3a); scene.fog=new THREE.FogExp2(0x1a2a3a,0.0012);
-            camera=new THREE.PerspectiveCamera(85,window.innerWidth/window.innerHeight,0.1,2000);
-            controls=new PointerLockControls(camera,document.body); scene.add(controls.getObject());
-            const renderScene=new RenderPass(scene,camera); const bloomPass=new UnrealBloomPass(new THREE.Vector2(window.innerWidth,window.innerHeight),0.4,0.25,0.7); const smaaPass=new SMAAPass(window.innerWidth,window.innerHeight);
-            composer=new EffectComposer(renderer); composer.addPass(renderScene); composer.addPass(bloomPass); composer.addPass(smaaPass);
-            const sun=new THREE.DirectionalLight(0xffeedd,6.0); sun.position.set(80,180,40); sun.castShadow=true; scene.add(sun);
-            scene.add(new THREE.AmbientLight(0x6080a0,2.5)); scene.add(new THREE.HemisphereLight(0x88aacc,0x665544,2.8));
-            switchBackdrop();
-            spawnWave(); createGun(loadout[activeSlot]); setupUI(); setupControls();
+        init();
+
+        function init() {
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: document.getElementById('game-canvas'), 
+                antialias: true, 
+                powerPreference: "high-performance"
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(1.2);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.8;
+
+            scene = new THREE.Scene();
+            applyBackdrop(0);
+
+            camera = new THREE.PerspectiveCamera(85, window.innerWidth / window.innerHeight, 0.1, 2000);
+            controls = new PointerLockControls(camera, document.body);
+            scene.add(controls.getObject());
+
+            const renderScene = new RenderPass(scene, camera);
+            const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.4, 0.25, 0.7);
+            const smaaPass = new SMAAPass(window.innerWidth, window.innerHeight);
+            
+            composer = new EffectComposer(renderer);
+            composer.addPass(renderScene);
+            composer.addPass(bloomPass);
+            composer.addPass(smaaPass);
+
+            const sun = new THREE.DirectionalLight(0xffeedd, 6.0);
+            sun.position.set(80, 180, 40);
+            sun.castShadow = true;
+            sun.shadow.mapSize.set(2048, 2048);
+            sun.shadow.camera.near = 0.5;
+            sun.shadow.camera.far = 400;
+            sun.shadow.camera.left = -150;
+            sun.shadow.camera.right = 150;
+            sun.shadow.camera.top = 150;
+            sun.shadow.camera.bottom = -150;
+            scene.add(sun);
+            
+            const fill1 = new THREE.PointLight(0x88aacc, 4.5);
+            fill1.position.set(-50, 30, -50);
+            scene.add(fill1);
+            const fill2 = new THREE.PointLight(0xccaa88, 4.0);
+            fill2.position.set(50, 20, 50);
+            scene.add(fill2);
+            const fill3 = new THREE.PointLight(0xaaccff, 3.5);
+            fill3.position.set(0, 40, 0);
+            scene.add(fill3);
+            scene.add(new THREE.AmbientLight(0x6080a0, 2.5));
+            scene.add(new THREE.HemisphereLight(0x88aacc, 0x665544, 2.8));
+
+            createWorld();
+            initializeAmmo();
+            spawnWave();
+            createGun(loadout[activeSlot]);
+
+            setupUI();
+            setupControls();
+
             animate();
         }
-        function setupUI(){
-            document.getElementById('play-btn').addEventListener('click',()=>{ document.getElementById('start-menu').style.display='none'; playSound('eas'); sounds.eas.onended=()=>{ if(!isRunning){ playSound('crowd'); playSound('police'); } }; controls.lock(); });
-            document.getElementById('customize-btn').addEventListener('click',()=>{ document.getElementById('start-menu').style.display='none'; document.getElementById('customize-menu').style.display='flex'; renderWeaponGrid(); });
-            document.getElementById('back-btn').addEventListener('click',()=>{ document.getElementById('customize-menu').style.display='none'; document.getElementById('start-menu').style.display='flex'; });
-            document.getElementById('save-loadout-btn').addEventListener('click',()=>{ localStorage.setItem('trex_loadout',JSON.stringify(loadout)); alert('Loadout saved!'); });
-            const saved = localStorage.getItem('trex_loadout'); if(saved) loadout=JSON.parse(saved);
-            document.querySelectorAll('.slot-btn').forEach((btn,i)=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); activeSlot=i; renderWeaponGrid(); }); });
-            controls.addEventListener('lock',()=>{ document.getElementById('ui-layer').style.display='block'; isRunning=true; updateUI(); });
-            controls.addEventListener('unlock',()=>{ isRunning=false; stopSound('crowd'); stopSound('police'); });
+
+        function applyBackdrop(index) {
+            const backdrop = BACKDROPS[index % BACKDROPS.length];
+            scene.background = new THREE.Color(backdrop.skyColor);
+            scene.fog = new THREE.FogExp2(backdrop.fogColor, backdrop.fogDensity);
         }
-        function renderWeaponGrid(){
-            const grid=document.getElementById('weapon-grid'); grid.innerHTML='';
-            Object.entries(WEAPONS).forEach(([id,weapon])=>{ const card=document.createElement('div'); card.className='weapon-card'+(loadout[activeSlot]===id?' selected':''); card.innerHTML=`<div class="weapon-name">${weapon.name}</div><div class="weapon-stats">${weapon.dmg?`💥 ${weapon.dmg}/${weapon.dmgH}`:'💊 Heal'}<br>📦 ${weapon.mag}</div>`; card.addEventListener('click',()=>{ loadout[activeSlot]=id; if(activeSlot===0)switchWep(0); renderWeaponGrid(); updateSlotDisplay(); }); grid.appendChild(card); });
+
+        function setupUI() {
+            document.getElementById('play-btn').addEventListener('click', () => {
+                document.getElementById('start-menu').style.display = 'none';
+                
+                playSound('eas');
+                sounds.eas.onended = () => {
+                    if (!backgroundMusicPlaying) {
+                        backgroundMusicPlaying = true;
+                        playSound('crowd');
+                        playSound('police');
+                    }
+                };
+                
+                controls.lock();
+            });
+            
+            document.getElementById('customize-btn').addEventListener('click', () => {
+                document.getElementById('start-menu').style.display = 'none';
+                document.getElementById('customize-menu').style.display = 'flex';
+                renderWeaponGrid();
+            });
+            
+            document.getElementById('save-btn').addEventListener('click', () => {
+                localStorage.setItem('trex_loadout', JSON.stringify(loadout));
+                alert('Loadout Saved!');
+            });
+            
+            document.getElementById('back-btn').addEventListener('click', () => {
+                document.getElementById('customize-menu').style.display = 'none';
+                document.getElementById('start-menu').style.display = 'flex';
+            });
+            
+            document.querySelectorAll('.slot-btn').forEach((btn, i) => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeSlot = i;
+                    renderWeaponGrid();
+                });
+            });
+            
+            controls.addEventListener('lock', () => {
+                document.getElementById('ui-layer').style.display = 'block';
+                isRunning = true;
+                updateUI();
+            });
+            controls.addEventListener('unlock', () => {
+                isRunning = false;
+                stopSound('crowd');
+                stopSound('police');
+                backgroundMusicPlaying = false;
+            });
         }
-        function updateSlotDisplay(){ for(let i=0;i<5;i++)document.getElementById(`slot-${i}`).innerHTML=i+1; }
-        function setupControls(){
-            document.addEventListener('keydown',(e)=>{ if(e.code==='KeyW')moveF=true; if(e.code==='KeyS')moveB=true; if(e.code==='KeyA')moveL=true; if(e.code==='KeyD')moveR=true; if(e.code==='Space'&&canJump){velocity.y+=CONFIG.player.jumpForce; canJump=false;} if(e.code==='Digit1')switchWep(0); if(e.code==='Digit2')switchWep(1); if(e.code==='Digit3')switchWep(2); if(e.code==='Digit4')switchWep(3); if(e.code==='Digit5')switchWep(4); if(e.code==='KeyR')reload(); });
-            document.addEventListener('keyup',(e)=>{ if(e.code==='KeyW')moveF=false; if(e.code==='KeyS')moveB=false; if(e.code==='KeyA')moveL=false; if(e.code==='KeyD')moveR=false; });
-            document.addEventListener('mousedown',(e)=>{ if(!isRunning)return; if(e.button===0)isFiring=true; if(e.button===2)setAim(true); });
-            document.addEventListener('mouseup',(e)=>{ if(e.button===0)isFiring=false; if(e.button===2)setAim(false); });
-            document.addEventListener('contextmenu',e=>e.preventDefault()); window.addEventListener('resize',()=>{ camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth,window.innerHeight); composer.setSize(window.innerWidth,window.innerHeight); });
+
+        function renderWeaponGrid() {
+            const grid = document.getElementById('weapon-grid');
+            grid.innerHTML = '';
+            
+            Object.entries(WEAPONS).forEach(([id, weapon]) => {
+                const card = document.createElement('div');
+                card.className = 'weapon-card' + (loadout[activeSlot] === id ? ' selected' : '');
+                card.innerHTML = `
+                    <div class="weapon-name">${weapon.name}</div>
+                    <div class="weapon-stats">
+                        ${weapon.dmg ? `💥 ${weapon.dmg}/${weapon.dmgH}` : '💊 Heal'}<br>
+                        📦 ${weapon.mag} | ${weapon.auto ? 'Auto' : 'Single'}
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    loadout[activeSlot] = id;
+                    if (activeSlot === 0) {
+                        activeSlot = 0;
+                        switchWep(0);
+                    }
+                    renderWeaponGrid();
+                    updateSlotDisplay();
+                });
+                grid.appendChild(card);
+            });
         }
-        function createGun(id){
-            while(gunGroup.children.length)gunGroup.remove(gunGroup.children[0]);
-            const w=WEAPONS[id]; if(!w)return;
-            const mat=new THREE.MeshStandardMaterial({ color:0x1a1a1a, metalness:0.8 });
-            if(id==='energyRifle'){
-                const body=new THREE.Mesh(new THREE.BoxGeometry(0.12,0.16,0.8),new THREE.MeshStandardMaterial({ color:0x33ccff, emissive:0x1166aa }));
-                body.position.set(0.3,-0.32,-0.6); gunGroup.add(body);
-                const coil=new THREE.Mesh(new THREE.TorusGeometry(0.05,0.02,16,32),new THREE.MeshStandardMaterial({ color:0x00ffff, emissive:0x00aaaa }));
-                coil.position.set(0.3,-0.25,-0.9); gunGroup.add(coil);
-            } else if(id==='scopedRevolver'){
-                const cyl=new THREE.Mesh(new THREE.CylinderGeometry(0.06,0.06,0.6,8),mat); cyl.rotation.z=Math.PI/2; cyl.position.set(0.25,-0.28,-0.5); gunGroup.add(cyl);
-                const scopeRing=new THREE.Mesh(new THREE.TorusGeometry(0.045,0.01,8,32),new THREE.MeshStandardMaterial({ color:0xddbb55 })); scopeRing.position.set(0.25,-0.15,-0.55); gunGroup.add(scopeRing);
-            } else if(id==='tripleSniper'){
-                const barrel=new THREE.Mesh(new THREE.CylinderGeometry(0.02,0.02,1.2,12),mat); barrel.rotation.x=Math.PI/2; barrel.position.set(0.3,-0.3,-1.1); gunGroup.add(barrel);
-                const digitalHolo=new THREE.Mesh(new THREE.BoxGeometry(0.1,0.08,0.05),new THREE.MeshStandardMaterial({ color:0xff00ff, emissive:0x440044 })); digitalHolo.position.set(0.3,-0.2,-0.7); gunGroup.add(digitalHolo);
-            } else {
-                const rec=new THREE.Mesh(new THREE.BoxGeometry(0.11,0.16,0.7),mat); rec.position.set(0.3,-0.32,-0.55); gunGroup.add(rec);
-                const barrel=new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.85,10),mat); barrel.rotation.x=Math.PI/2; barrel.position.set(0.3,-0.3,-0.95); gunGroup.add(barrel);
+
+        function updateSlotDisplay() {
+            for (let i = 0; i < 5; i++) {
+                const slot = document.getElementById(`slot-${i}`);
+                slot.innerHTML = i + 1;
             }
+        }
+
+        function setupControls() {
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'KeyW') moveF = true;
+                if (e.code === 'KeyS') moveB = true;
+                if (e.code === 'KeyA') moveL = true;
+                if (e.code === 'KeyD') moveR = true;
+                if (e.code === 'Space' && canJump) { velocity.y += CONFIG.player.jumpForce; canJump = false; }
+                if (e.code === 'Digit1') switchWep(0);
+                if (e.code === 'Digit2') switchWep(1);
+                if (e.code === 'Digit3') switchWep(2);
+                if (e.code === 'Digit4') switchWep(3);
+                if (e.code === 'Digit5') switchWep(4);
+                if (e.code === 'KeyR') reload();
+            });
+            document.addEventListener('keyup', (e) => {
+                if (e.code === 'KeyW') moveF = false;
+                if (e.code === 'KeyS') moveB = false;
+                if (e.code === 'KeyA') moveL = false;
+                if (e.code === 'KeyD') moveR = false;
+            });
+            document.addEventListener('mousedown', (e) => {
+                if (!isRunning) return;
+                if (e.button === 0) isFiring = true;
+                if (e.button === 2) setAim(true);
+            });
+            document.addEventListener('mouseup', (e) => {
+                if (e.button === 0) isFiring = false;
+                if (e.button === 2) setAim(false);
+            });
+            document.addEventListener('contextmenu', e => e.preventDefault());
+            window.addEventListener('resize', onResize);
+        }
+
+        function createWorld() {
+            const backdrop = BACKDROPS[currentBackdrop % BACKDROPS.length];
+            const geo = new THREE.PlaneGeometry(800, 800, 128, 128);
+            geo.rotateX(-Math.PI / 2);
+            const pos = geo.attributes.position.array;
+            for (let i = 0; i < pos.length; i += 3) {
+                pos[i+1] = Math.sin(pos[i]*0.012) * Math.cos(pos[i+2]*0.012) * 6 + Math.sin(pos[i]*0.04) * Math.cos(pos[i+2]*0.04) * 1.5;
+            }
+            geo.computeVertexNormals();
+            
+            const mat = new THREE.MeshStandardMaterial({ color: backdrop.groundColor, roughness: 0.6, metalness: 0.08, envMapIntensity: 0.6 });
+            const ground = new THREE.Mesh(geo, mat);
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            const grassGeo = new THREE.PlaneGeometry(0.15, 0.5);
+            grassGeo.translate(0, 0.25, 0);
+            const grassMat = new THREE.MeshStandardMaterial({ color: 0x2a4a1a, side: THREE.DoubleSide, roughness: 0.4, metalness: 0.15, emissive: new THREE.Color(0x1a3a0a), emissiveIntensity: 0.3, envMapIntensity: 1.0 });
+            const instanced = new THREE.InstancedMesh(grassGeo, grassMat, 50000);
+            const dummy = new THREE.Object3D();
+            let instanceCount = 0;
+            for (let i = 0; i < 50000; i++) {
+                const x = (Math.random() - 0.5) * 760;
+                const z = (Math.random() - 0.5) * 760;
+                if (Math.abs(x) > 390 || Math.abs(z) > 390) continue;
+                dummy.position.set(x, getH(x,z), z);
+                dummy.rotation.y = Math.random() * Math.PI;
+                dummy.scale.setScalar(0.5 + Math.random() * 0.5);
+                dummy.updateMatrix();
+                instanced.setMatrixAt(instanceCount++, dummy.matrix);
+            }
+            instanced.count = instanceCount;
+            instanced.castShadow = true;
+            instanced.receiveShadow = true;
+            scene.add(instanced);
+
+            for(let i=0; i<10; i++) {
+                let x, z;
+                do { x = (Math.random() - 0.5) * 700; z = (Math.random() - 0.5) * 700; }
+                while (Math.abs(x) > 380 || Math.abs(z) > 380);
+                createHouse(x, z);
+            }
+            
+            for(let i=0; i<30; i++) {
+                let x, z;
+                do { x = (Math.random() - 0.5) * 750; z = (Math.random() - 0.5) * 750; }
+                while (Math.abs(x) > 380 || Math.abs(z) > 380);
+                createTree(x, z);
+            }
+        }
+
+        function createTree(x, z) {
+            const group = new THREE.Group();
+            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.5, 10, 5), new THREE.MeshStandardMaterial({ color: 0x5a4530, roughness: 0.8 }));
+            trunk.position.y = 5;
+            trunk.castShadow = trunk.receiveShadow = true;
+            group.add(trunk);
+            
+            const leafMat = new THREE.MeshStandardMaterial({ color: 0x1a4a1a, roughness: 0.5 });
+            const leaves1 = new THREE.Mesh(new THREE.ConeGeometry(4, 7, 5), leafMat);
+            leaves1.position.y = 10;
+            leaves1.castShadow = leaves1.receiveShadow = true;
+            group.add(leaves1);
+            
+            const leaves2 = new THREE.Mesh(new THREE.ConeGeometry(3, 5, 5), leafMat);
+            leaves2.position.y = 14;
+            leaves2.castShadow = leaves2.receiveShadow = true;
+            group.add(leaves2);
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+        }
+
+        function createHouse(x, z) {
+            const h = new THREE.Group();
+            const body = new THREE.Mesh(new THREE.BoxGeometry(10, 8, 12), new THREE.MeshStandardMaterial({ color: 0x3a3a40, roughness: 0.6 }));
+            body.position.y = 4;
+            body.castShadow = body.receiveShadow = true;
+            
+            const roof = new THREE.Mesh(new THREE.ConeGeometry(10, 5, 4), new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.8 }));
+            roof.position.y = 10.5;
+            roof.rotation.y = Math.PI/4;
+            roof.castShadow = roof.receiveShadow = true;
+            
+            h.add(body, roof);
+            h.position.set(x, getH(x,z), z);
+            h.castShadow = h.receiveShadow = true;
+            scene.add(h);
+        }
+
+        function getH(x, z) {
+            return Math.sin(x*0.012) * Math.cos(z*0.012) * 6 + Math.sin(x*0.04) * Math.cos(z*0.04) * 1.5;
+        }
+
+        function initializeAmmo() {
+            loadout.forEach(id => {
+                const w = WEAPONS[id];
+                if (w) {
+                    ammo[id] = w.mag;
+                    if (w.twinMag) twinMagState[id] = { activeMag: 1 };
+                }
+            });
+            usedHeals = { syringe: false, medkit: false };
+        }
+
+        function spawnWave() {
+            zombies.forEach(z => scene.remove(z.g));
+            deadZombies.forEach(z => scene.remove(z.g));
+            zombies.length = 0;
+            deadZombies.length = 0;
+            
+            const baseCount = 30;
+            const count = baseCount + (level - 1) * 10;
+            zombiesRemaining = count;
+            
+            document.getElementById('zombie-count').innerText = count;
+            document.getElementById('zombies-remaining').innerText = count;
+            
+            const types = Object.keys(ZOMBIE_TYPES);
+            
+            for (let i = 0; i < count; i++) {
+                const type = types[Math.floor(Math.random() * types.length)];
+                const zData = ZOMBIE_TYPES[type];
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 60 + Math.random() * 140;
+                const x = Math.cos(angle) * dist, z = Math.sin(angle) * dist;
+                
+                const zombie = createZombie(type, zData, x, z);
+                zombies.push(zombie);
+            }
+        }
+
+        function createZombie(type, zData, x, z) {
+            const g = new THREE.Group();
+            
+            const bodyMat = new THREE.MeshStandardMaterial({ color: zData.color, roughness: 0.7 });
+            const body = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 1.2, 6), bodyMat);
+            body.position.y = 1.2;
+            body.castShadow = body.receiveShadow = true;
+            g.add(body);
+            
+            if (type !== 'headless') {
+                const headMat = new THREE.MeshStandardMaterial({ color: zData.color, roughness: 0.6 });
+                const head = new THREE.Mesh(new THREE.SphereGeometry(0.5, 8, 8), headMat);
+                head.position.y = 2.2;
+                head.castShadow = head.receiveShadow = true;
+                head.userData.isH = true;
+                g.add(head);
+                
+                if (type === 'regular' || type === 'bat' || type === 'redbull' || type === 'queen') {
+                    const brain = new THREE.Mesh(new THREE.SphereGeometry(0.18, 8), new THREE.MeshStandardMaterial({ color: 0xff8888, roughness: 0.3, emissive: new THREE.Color(0x552222), emissiveIntensity: 0.5 }));
+                    brain.position.set(-0.25, 2.3, 0.4);
+                    g.add(brain);
+                    
+                    const eye = new THREE.Mesh(new THREE.SphereGeometry(0.1, 6), new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: new THREE.Color(0x440000), emissiveIntensity: 0.8 }));
+                    eye.position.set(0.25, 2.3, 0.45);
+                    g.add(eye);
+                }
+                
+                if (type === 'miner') {
+                    const helmet = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.15, 8), new THREE.MeshStandardMaterial({ color: 0xffaa00 }));
+                    helmet.position.y = 2.5;
+                    g.add(helmet);
+                    const light = new THREE.Mesh(new THREE.SphereGeometry(0.1, 6), new THREE.MeshStandardMaterial({ color: 0xffff00, emissive: new THREE.Color(0x442200), emissiveIntensity: 1 }));
+                    light.position.set(0, 2.55, 0.4);
+                    g.add(light);
+                }
+                
+                if (type === 'queen') {
+                    // Enhanced 3D Crown
+                    const crownBase = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.05, 8, 20), new THREE.MeshStandardMaterial({ color: 0xffd700, emissive: new THREE.Color(0x553300), emissiveIntensity: 0.3, metalness: 0.8, roughness: 0.3 }));
+                    crownBase.rotation.x = Math.PI/2;
+                    crownBase.position.y = 2.55;
+                    g.add(crownBase);
+                    
+                    for (let j = 0; j < 5; j++) {
+                        const spike = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.25, 6), new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.9, roughness: 0.2 }));
+                        spike.position.y = 2.7;
+                        spike.position.x = Math.sin(j * 1.256) * 0.35;
+                        spike.position.z = Math.cos(j * 1.256) * 0.35;
+                        g.add(spike);
+                    }
+                    
+                    const jewel = new THREE.Mesh(new THREE.SphereGeometry(0.08, 6), new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: new THREE.Color(0x440000), emissiveIntensity: 0.8 }));
+                    jewel.position.y = 2.65;
+                    g.add(jewel);
+                }
+                
+                if (type === 'redbull') {
+                    const logo = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.3, 0.1), new THREE.MeshStandardMaterial({ color: 0xcc0000 }));
+                    logo.position.set(0, 1.5, 0.55);
+                    g.add(logo);
+                }
+            } else {
+                const bloodSquirt = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0xaa0000, emissive: new THREE.Color(0x440000), emissiveIntensity: 0.8 }));
+                bloodSquirt.position.y = 2.0;
+                g.add(bloodSquirt);
+            }
+            
+            if (type === 'metalPlated') {
+                const armor = new THREE.Mesh(new THREE.BoxGeometry(1.3, 1.4, 0.8), new THREE.MeshStandardMaterial({ color: 0x778899, metalness: 0.7, roughness: 0.4 }));
+                armor.position.y = 1.3;
+                g.add(armor);
+            }
+            
+            if (type === 'bat') {
+                const bat = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.0, 6), new THREE.MeshStandardMaterial({ color: 0x8B4513 }));
+                bat.rotation.z = 0.5;
+                bat.position.set(0.7, 1.5, 0.3);
+                g.add(bat);
+            }
+            
+            const legGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.5, 6);
+            const leftLeg = new THREE.Mesh(legGeo, new THREE.MeshStandardMaterial({ color: type === 'regular' ? 0xeeeecc : zData.color }));
+            leftLeg.position.set(-0.3, 0.3, 0);
+            g.add(leftLeg);
+            
+            const rightLeg = new THREE.Mesh(legGeo, new THREE.MeshStandardMaterial({ color: zData.color }));
+            rightLeg.position.set(0.3, 0.3, 0);
+            g.add(rightLeg);
+            
+            const armGeo = new THREE.BoxGeometry(0.25, 0.9, 0.25);
+            const lA = new THREE.Mesh(armGeo, new THREE.MeshStandardMaterial({ color: type === 'regular' ? 0xaa4444 : zData.color }));
+            lA.position.set(-0.7, 1.4, 0.3);
+            lA.rotation.x = 0.8;
+            lA.rotation.z = 0.2;
+            lA.castShadow = true;
+            g.add(lA);
+            
+            const rA = new THREE.Mesh(armGeo, bodyMat);
+            rA.position.set(0.7, 1.4, 0.3);
+            rA.rotation.x = 0.8;
+            rA.rotation.z = -0.2;
+            rA.castShadow = true;
+            g.add(rA);
+            
+            g.position.set(x, getH(x,z), z);
+            scene.add(g);
+            
+            const obj = { 
+                g, type, hp: zData.hp, 
+                s: zData.speed * 3.0,
+                damage: zData.damage,
+                lastA: 0,
+                leftArm: lA,
+                rightArm: rA,
+                isDead: false
+            };
+            g.children.forEach(child => { if (child.isMesh) child.userData.p = obj; });
+            
+            return obj;
+        }
+
+        function createGun(id) {
+            while(gunGroup.children.length > 0) gunGroup.remove(gunGroup.children[0]);
+            
+            const weapon = WEAPONS[id];
+            if (!weapon) return;
+            
+            const gunMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, metalness: 0.8, roughness: 0.3 });
+            
+            if (weapon.heal) {
+                if (id === 'syringe') {
+                    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.7, 8), new THREE.MeshStandardMaterial({ color: 0xccccdd, transparent: true, opacity: 0.7 }));
+                    barrel.rotation.x = Math.PI/2;
+                    barrel.position.set(0.25, -0.25, -0.6);
+                    gunGroup.add(barrel);
+                    
+                    const needle = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.15, 6), new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.9 }));
+                    needle.rotation.x = Math.PI/2;
+                    needle.position.set(0.25, -0.25, -0.25);
+                    gunGroup.add(needle);
+                    
+                    const liquid = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.3, 6), new THREE.MeshStandardMaterial({ color: 0x44ff88, emissive: new THREE.Color(0x116633), emissiveIntensity: 0.5 }));
+                    liquid.rotation.x = Math.PI/2;
+                    liquid.position.set(0.25, -0.25, -0.5);
+                    gunGroup.add(liquid);
+                } else {
+                    const kit = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.25, 0.2), new THREE.MeshStandardMaterial({ color: 0x44aaff }));
+                    kit.position.set(0.25, -0.25, -0.5);
+                    gunGroup.add(kit);
+                    
+                    const cross = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.04, 0.02), new THREE.MeshStandardMaterial({ color: 0xff4444 }));
+                    cross.position.set(0.25, -0.25, -0.4);
+                    gunGroup.add(cross);
+                    const cross2 = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.18, 0.02), new THREE.MeshStandardMaterial({ color: 0xff4444 }));
+                    cross2.position.set(0.25, -0.25, -0.4);
+                    gunGroup.add(cross2);
+                }
+            } else if (id === 'energyRifle') {
+                const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.18, 0.8), new THREE.MeshStandardMaterial({ color: 0x2244aa, metalness: 0.5, roughness: 0.4, emissive: new THREE.Color(0x113366), emissiveIntensity: 0.3 }));
+                receiver.position.set(0.3, -0.32, -0.55);
+                gunGroup.add(receiver);
+                
+                const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.9, 10), new THREE.MeshStandardMaterial({ color: 0x3366cc, metalness: 0.6 }));
+                barrel.rotation.x = Math.PI/2;
+                barrel.position.set(0.3, -0.3, -1.0);
+                gunGroup.add(barrel);
+                
+                const coil = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.015, 8, 16), new THREE.MeshStandardMaterial({ color: 0x44aaff, emissive: new THREE.Color(0x004488), emissiveIntensity: 0.5 }));
+                coil.rotation.y = Math.PI/2;
+                coil.position.set(0.3, -0.25, -0.7);
+                gunGroup.add(coil);
+                
+                const energyCell = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.15, 0.1), new THREE.MeshStandardMaterial({ color: 0x00ff88, emissive: new THREE.Color(0x006644), emissiveIntensity: 0.6, transparent: true, opacity: 0.7 }));
+                energyCell.position.set(0.3, -0.45, -0.5);
+                gunGroup.add(energyCell);
+            } else if (id.includes('pistol') || id === 'hyperPistol') {
+                const slide = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.5), gunMat);
+                slide.position.set(0.25, -0.28, -0.5);
+                gunGroup.add(slide);
+                
+                const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.4, 8), gunMat);
+                barrel.rotation.x = Math.PI/2;
+                barrel.position.set(0.25, -0.28, -0.7);
+                gunGroup.add(barrel);
+                
+                const grip = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.2, 0.15), new THREE.MeshStandardMaterial({ color: 0x4a3020 }));
+                grip.position.set(0.25, -0.4, -0.4);
+                gunGroup.add(grip);
+            } else if (id === 'scopedRevolver') {
+                const cylinder = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.6, 8), gunMat);
+                cylinder.rotation.z = Math.PI/2;
+                cylinder.position.set(0.25, -0.28, -0.5);
+                gunGroup.add(cylinder);
+                
+                const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.5, 8), gunMat);
+                barrel.rotation.x = Math.PI/2;
+                barrel.position.set(0.25, -0.28, -0.8);
+                gunGroup.add(barrel);
+                
+                // Unique scope for Scoped Revolver
+                const scopeBody = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.25, 8), new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.7 }));
+                scopeBody.rotation.z = Math.PI/2;
+                scopeBody.position.set(0.25, -0.16, -0.5);
+                gunGroup.add(scopeBody);
+                
+                const lens = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8), new THREE.MeshStandardMaterial({ color: 0x88aaff, emissive: new THREE.Color(0x224466), emissiveIntensity: 0.3, transparent: true, opacity: 0.6 }));
+                lens.position.set(0.25, -0.16, -0.38);
+                gunGroup.add(lens);
+                
+                const grip = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.18, 0.15), new THREE.MeshStandardMaterial({ color: 0x5a4030 }));
+                grip.position.set(0.25, -0.38, -0.35);
+                gunGroup.add(grip);
+            } else if (id.includes('SMG')) {
+                const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.14, 0.55), gunMat);
+                receiver.position.set(0.25, -0.3, -0.5);
+                gunGroup.add(receiver);
+                
+                const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.6, 8), gunMat);
+                barrel.rotation.x = Math.PI/2;
+                barrel.position.set(0.25, -0.28, -0.8);
+                gunGroup.add(barrel);
+                
+                const stock = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.3), new THREE.MeshStandardMaterial({ color: 0x4a3020 }));
+                stock.position.set(0.25, -0.28, -0.2);
+                gunGroup.add(stock);
+                
+                const mag = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.22, 0.1), new THREE.MeshStandardMaterial({ color: 0x111111 }));
+                mag.position.set(0.25, -0.4, -0.5);
+                gunGroup.add(mag);
+            } else if (id.includes('AR') || id.includes('assault')) {
+                const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.16, 0.7), gunMat);
+                receiver.position.set(0.3, -0.32, -0.55);
+                gunGroup.add(receiver);
+                
+                const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.85, 10), gunMat);
+                barrel.rotation.x = Math.PI/2;
+                barrel.position.set(0.3, -0.3, -0.95);
+                gunGroup.add(barrel);
+                
+                const stock = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.12, 0.4), new THREE.MeshStandardMaterial({ color: 0x5a4030 }));
+                stock.position.set(0.3, -0.3, -0.2);
+                gunGroup.add(stock);
+                
+                if (id === 'twinMagAR') {
+                    const mag1 = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.2, 0.12), new THREE.MeshStandardMaterial({ color: 0x222222 }));
+                    mag1.position.set(0.3, -0.4, -0.5);
+                    gunGroup.add(mag1);
+                    const mag2 = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.2, 0.12), new THREE.MeshStandardMaterial({ color: 0x333333 }));
+                    mag2.position.set(0.4, -0.4, -0.5);
+                    gunGroup.add(mag2);
+                } else {
+                    const mag = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.22, 0.12), new THREE.MeshStandardMaterial({ color: 0x222222 }));
+                    mag.position.set(0.3, -0.42, -0.5);
+                    gunGroup.add(mag);
+                }
+                
+                if (id === 'heavyAR') {
+                    const grip = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.15, 0.1), new THREE.MeshStandardMaterial({ color: 0x333333 }));
+                    grip.position.set(0.3, -0.42, -0.3);
+                    gunGroup.add(grip);
+                }
+            } else if (id.includes('Sniper') || id === 'trexSniper') {
+                const receiver = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.14, 0.9), gunMat);
+                receiver.position.set(0.3, -0.32, -0.6);
+                gunGroup.add(receiver);
+                
+                const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 1.1, 12), gunMat);
+                barrel.rotation.x = Math.PI/2;
+                barrel.position.set(0.3, -0.3, -1.1);
+                gunGroup.add(barrel);
+                
+                const stock = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.1, 0.5), new THREE.MeshStandardMaterial({ color: 0x5a4030 }));
+                stock.position.set(0.3, -0.3, -0.15);
+                gunGroup.add(stock);
+                
+                if (id === 'tripleSniper') {
+                    // Unique scope for Triple Action
+                    const scope = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 0.3), new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.8 }));
+                    scope.position.set(0.3, -0.15, -0.55);
+                    gunGroup.add(scope);
+                    
+                    const lens1 = new THREE.Mesh(new THREE.SphereGeometry(0.025, 6), new THREE.MeshStandardMaterial({ color: 0xff6644, emissive: new THREE.Color(0x442200), emissiveIntensity: 0.3 }));
+                    lens1.position.set(0.3, -0.15, -0.4);
+                    gunGroup.add(lens1);
+                    
+                    const lens2 = new THREE.Mesh(new THREE.SphereGeometry(0.025, 6), new THREE.MeshStandardMaterial({ color: 0xff6644, emissive: new THREE.Color(0x442200), emissiveIntensity: 0.3 }));
+                    lens2.position.set(0.3, -0.15, -0.7);
+                    gunGroup.add(lens2);
+                } else {
+                    const scope = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.045, 0.25, 10), gunMat);
+                    scope.rotation.z = Math.PI/2;
+                    scope.position.set(0.3, -0.15, -0.55);
+                    gunGroup.add(scope);
+                }
+                
+                const mag = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.18, 0.1), new THREE.MeshStandardMaterial({ color: 0x222222 }));
+                mag.position.set(0.3, -0.38, -0.65);
+                gunGroup.add(mag);
+            }
+            
             camera.add(gunGroup);
         }
-        function setAim(a){
-            const w=WEAPONS[loadout[activeSlot]]; if(w.heal)return; isAiming=a;
-            camera.fov=a?w.zoom:85; camera.updateProjectionMatrix();
-            document.getElementById('crosshair').style.opacity=(w.scope&&a)?'0':'1';
-            document.getElementById('sniper-scope').style.display=(w.scope&&a)?'flex':'none';
-            gunGroup.visible=!(w.scope&&a);
+
+        function switchWep(slot) {
+            if (reloading) return;
+            activeSlot = slot;
+            const id = loadout[slot];
+            createGun(id);
+            setAim(false);
+            
+            document.querySelectorAll('.slot').forEach((s, i) => s.classList.toggle('active', i === slot));
+            
+            const weapon = WEAPONS[id];
+            document.getElementById('weapon-name').innerText = weapon.name;
+            document.getElementById('ammo-text').innerText = weapon.heal ? (usedHeals[id] ? '0' : '1') : (ammo[id] || weapon.mag);
+            
+            if (healing) {
+                clearInterval(healInterval);
+                healing = false;
+            }
         }
-        function switchWep(slot){
-            if(reloading)return; activeSlot=slot; const id=loadout[slot]; createGun(id); setAim(false);
-            document.querySelectorAll('.slot').forEach((s,i)=>s.classList.toggle('active',i===slot));
-            const w=WEAPONS[id]; document.getElementById('weapon-name').innerText=w.name;
-            if(w.heal) document.getElementById('ammo-text').innerText=usedHeals[id]?'0':'1';
-            else document.getElementById('ammo-text').innerText=ammo[id]||0;
-            if(healing){ clearInterval(healInterval); healing=false; }
+
+        function setAim(a) {
+            const weapon = WEAPONS[loadout[activeSlot]];
+            if (weapon.heal) return;
+            isAiming = a;
+            camera.fov = a ? weapon.zoom : 85;
+            camera.updateProjectionMatrix();
+            
+            document.getElementById('crosshair').style.opacity = (weapon.scope && a) ? '0' : '1';
+            
+            if (weapon.scope) {
+                document.getElementById('sniper-scope').style.display = a ? 'flex' : 'none';
+                gunGroup.visible = !a;
+            }
         }
-        function fire(){
-            if(reloading||isReloadAnimating)return;
-            const id=loadout[activeSlot]; const w=WEAPONS[id];
-            if(w.heal){ if(usedHeals[id])return; if(w.healPerSec){ if(!healing){ healing=true; usedHeals[id]=true; healInterval=setInterval(()=>{ if(hp<300){ hp=Math.min(300,hp+w.heal); updateUI(); } else{ clearInterval(healInterval); healing=false; ammo[id]=0; updateUI(); } },1000); ammo[id]=0; updateUI(); } } else{ if(hp<300){ hp=Math.min(300,hp+w.heal); usedHeals[id]=true; ammo[id]=0; updateUI(); } } return; }
-            const now=performance.now(); if(now-lastFire<w.rate||ammo[id]<=0)return;
-            lastFire=now; ammo[id]--; updateUI(); if(w.sound)playSound(w.sound);
-            gunGroup.position.z=0.05; setTimeout(()=>gunGroup.position.z=0,50);
-            const flashLight=new THREE.PointLight(0xffaa66,2,5); flashLight.position.set(0.3,-0.3,-0.8); camera.add(flashLight); setTimeout(()=>camera.remove(flashLight),50);
-            raycaster.setFromCamera(new THREE.Vector2(0,0),camera);
-            const hits=raycaster.intersectObjects(scene.children,true);
-            if(hits.length>0){
-                const h=hits[0]; const zObj=h.object.userData.p;
-                if(zObj&&!zObj.isDead){
-                    const isHead=h.object.userData.isH;
-                    const totalDmg=(isHead?w.dmgH:w.dmg)+damageBonus;
-                    zObj.hp-=totalDmg; score+=10; popDmg(totalDmg,h.point,isHead);
-                    if(zObj.hp<=0){ zObj.isDead=true; const idx=zombies.indexOf(zObj); if(idx>-1){ zombies.splice(idx,1); zombiesRemaining--; score+=100; document.getElementById('zombies-remaining').innerText=zombiesRemaining; } ragdollDeath(zObj); if(zombiesRemaining<=0)levelUp(); }
+
+        function fire() {
+            if (reloading || isReloadAnimating) return;
+            
+            const id = loadout[activeSlot];
+            const weapon = WEAPONS[id];
+            
+            if (weapon.heal) {
+                if (usedHeals[id]) return;
+                if (weapon.healPerSec) {
+                    if (!healing) {
+                        healing = true;
+                        usedHeals[id] = true;
+                        healInterval = setInterval(() => {
+                            if (hp < 300) {
+                                hp = Math.min(300, hp + weapon.heal);
+                                updateUI();
+                            } else {
+                                clearInterval(healInterval);
+                                healing = false;
+                                ammo[id] = 0;
+                                updateUI();
+                            }
+                        }, 1000);
+                        ammo[id] = 0;
+                        updateUI();
+                    }
+                } else {
+                    if (hp < 300) {
+                        hp = Math.min(300, hp + weapon.heal);
+                        usedHeals[id] = true;
+                        ammo[id] = 0;
+                        updateUI();
+                    }
+                }
+                return;
+            }
+            
+            const now = performance.now();
+            
+            if (now - lastFire < weapon.rate || ammo[id] <= 0) return;
+
+            lastFire = now;
+            ammo[id]--;
+            updateUI();
+            
+            if (weapon.sound) playSound(weapon.sound);
+            
+            gunGroup.position.z = 0.05;
+            setTimeout(() => gunGroup.position.z = 0, 50);
+
+            raycaster.setFromCamera(new THREE.Vector2(0,0), camera);
+            const hits = raycaster.intersectObjects(scene.children, true);
+            if (hits.length > 0) {
+                const h = hits[0];
+                const zombieObj = h.object.userData.p;
+                
+                if (zombieObj && !zombieObj.isDead) {
+                    const isHeadshot = h.object.userData.isH;
+                    
+                    const totalDmg = (isHeadshot ? weapon.dmgH : weapon.dmg) + damageBonus;
+                    
+                    zombieObj.hp -= totalDmg;
+                    score += 10;
+                    popDmg(totalDmg, h.point, isHeadshot);
+                    
+                    createBloodGoreEffect(h.point);
+                    playSound('hit');
+                    
+                    if (zombieObj.hp <= 0) {
+                        zombieObj.isDead = true;
+                        
+                        const index = zombies.indexOf(zombieObj);
+                        if (index > -1) {
+                            zombies.splice(index, 1);
+                            deadZombies.push(zombieObj);
+                            zombiesRemaining--;
+                            score += 100;
+                            document.getElementById('zombies-remaining').innerText = zombiesRemaining;
+                        }
+                        
+                        ragdollDeath(zombieObj);
+                        
+                        if (zombiesRemaining <= 0) levelUp();
+                    }
                     updateUI();
                 }
             }
-            if(w.twinMag&&ammo[id]===0){ const state=twinMagState[id]; if(state&&state.activeMag===1){ state.activeMag=2; ammo[id]=w.mag2; updateUI(); } else reload(); }
-            else if(ammo[id]===0)reload();
+            
+            if (weapon.twinMag && ammo[id] === 0) {
+                const state = twinMagState[id];
+                if (state && state.activeMag === 1) {
+                    state.activeMag = 2;
+                    ammo[id] = weapon.mag2;
+                    updateUI();
+                } else {
+                    reload();
+                }
+            } else if (ammo[id] === 0) {
+                reload();
+            }
         }
-        function ragdollDeath(z){ /* keep original ragdoll */ const g=z.g; g.children.forEach(c=>{ if(c.isMesh)c.material=new THREE.MeshStandardMaterial({ color:0x555555 }); }); setTimeout(()=>scene.remove(g),1000); }
-        function levelUp(){
-            level++; damageBonus+=4; if(!WEAPONS[loadout[activeSlot]]?.scope)magBonus+=5;
-            playSound('easround'); hp=300;
-            loadout.forEach(id=>{ const w=WEAPONS[id]; if(w){ if(w.heal){ ammo[id]=1; usedHeals[id]=false; } else ammo[id]=w.mag+(w.scope?0:magBonus); if(w.twinMag)twinMagState[id]={ activeMag:1 }; } });
-            usedHeals={}; if(healing){ clearInterval(healInterval); healing=false; }
-            document.getElementById('dmg-bonus').innerText=damageBonus; document.getElementById('mag-bonus').innerText=magBonus;
-            const notif=document.getElementById('level-up-notif'); notif.style.opacity='1'; notif.innerHTML=`WAVE ${level} CLEARED<br><span style="font-size:22px;">+4 DMG | +5 MAG</span>`;
-            setTimeout(()=>{ notif.style.opacity='0'; switchBackdrop(); spawnWave(); updateUI(); },1800);
+
+        function createBloodGoreEffect(position) {
+            const blood = new THREE.Mesh(new THREE.CircleGeometry(0.3, 6), new THREE.MeshStandardMaterial({ color: 0xaa0000, transparent: true, opacity: 0.8 }));
+            blood.rotation.x = -Math.PI/2;
+            blood.position.set(position.x, getH(position.x, position.z) + 0.05, position.z);
+            scene.add(blood);
+            
+            for (let i = 0; i < 3; i++) {
+                const gore = new THREE.Mesh(new THREE.SphereGeometry(0.05 + Math.random()*0.05, 4), new THREE.MeshStandardMaterial({ color: 0x880000 }));
+                gore.position.set(position.x + (Math.random()-0.5)*0.5, getH(position.x, position.z) + 0.1 + Math.random()*0.3, position.z + (Math.random()-0.5)*0.5);
+                scene.add(gore);
+                setTimeout(() => scene.remove(gore), 5000);
+            }
+            
+            setTimeout(() => scene.remove(blood), 120000);
+        }
+
+        function ragdollDeath(z) {
+            const g = z.g;
+            const fallHeight = 0.5;
+            const duration = 1000;
+            const startTime = Date.now();
+            const startY = g.position.y;
+            
+            g.children.forEach(child => {
+                if (child.isMesh) {
+                    child.material = new THREE.MeshStandardMaterial({ color: 0x555555 });
+                    delete child.userData.p;
+                }
+            });
+            
+            const fallInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                g.position.y = startY - (progress * fallHeight);
+                g.rotation.x = progress * 1.5;
+                g.rotation.z = progress * 0.5;
+                
+                if (progress >= 1) {
+                    clearInterval(fallInterval);
+                    setTimeout(() => {
+                        scene.remove(g);
+                        const deadIndex = deadZombies.indexOf(z);
+                        if (deadIndex > -1) deadZombies.splice(deadIndex, 1);
+                    }, 1000);
+                }
+            }, 16);
+        }
+
+        function levelUp() {
+            level++;
+            damageBonus += 2;
+            if (!WEAPONS[loadout[activeSlot]]?.scope) {
+                magBonus += 5;
+            }
+            
+            // Change backdrop
+            currentBackdrop++;
+            applyBackdrop(currentBackdrop);
+            
+            playSound('easround');
+            
+            hp = 300;
+            
+            loadout.forEach(id => {
+                const w = WEAPONS[id];
+                if (w) {
+                    if (w.heal) {
+                        ammo[id] = 1;
+                        usedHeals[id] = false;
+                    } else {
+                        ammo[id] = w.mag + (w.scope ? 0 : magBonus);
+                    }
+                    if (w.twinMag) twinMagState[id] = { activeMag: 1 };
+                }
+            });
+            
+            usedHeals = { syringe: false, medkit: false };
+            
+            if (healing) {
+                clearInterval(healInterval);
+                healing = false;
+            }
+            
+            document.getElementById('dmg-bonus').innerText = damageBonus;
+            document.getElementById('mag-bonus').innerText = magBonus;
+            
+            const notif = document.getElementById('level-up-notif');
+            notif.style.opacity = '1';
+            notif.innerHTML = `WAVE ${level} CLEARED<br><span style="font-size: 22px;">${BACKDROPS[currentBackdrop % BACKDROPS.length].name}</span>`;
+            
+            setTimeout(() => { 
+                notif.style.opacity = '0'; 
+                spawnWave();
+                updateUI();
+            }, 1800);
             updateUI();
         }
-        function reload(){
-            if(reloading)return; const id=loadout[activeSlot]; const w=WEAPONS[id]; if(w.heal)return;
-            reloading=true; isReloadAnimating=true; document.getElementById('ammo-text').innerText='...'; playSound('reload');
-            let rt=w.reload; if(id==='hyperPistol')rt*=0.833; if(id==='drumSMG')rt*=1.6; if(id==='rushedSMG')rt*=0.87;
-            setTimeout(()=>{ ammo[id]=w.mag+(w.scope?0:magBonus); reloading=false; isReloadAnimating=false; updateUI(); },rt);
+
+        function popDmg(d, p, isHeadshot = false) {
+            const v = p.project(camera);
+            const x = (v.x * 0.5 + 0.5) * window.innerWidth;
+            const y = (v.y * -0.5 + 0.5) * window.innerHeight;
+            const el = document.createElement('div');
+            el.className = isHeadshot ? 'dmg-popup headshot' : 'dmg-popup';
+            el.style.left = `${x}px`; 
+            el.style.top = `${y}px`;
+            el.innerText = Math.round(d);
+            if (isHeadshot) el.innerHTML = `💀 ${Math.round(d)}`;
+            document.getElementById('damage-nums').appendChild(el);
+            setTimeout(() => el.remove(), isHeadshot ? 800 : 600);
         }
-        function spawnWave(){
-            zombies.forEach(z=>scene.remove(z.g)); deadZombies.forEach(z=>scene.remove(z.g)); zombies.length=0; deadZombies.length=0;
-            const count=30+(level-1)*10; zombiesRemaining=count;
-            document.getElementById('zombie-count').innerText=count; document.getElementById('zombies-remaining').innerText=count;
-            const types=Object.keys(ZOMBIE_TYPES);
-            for(let i=0;i<count;i++){
-                const type=types[Math.floor(Math.random()*types.length)]; const zData=ZOMBIE_TYPES[type];
-                const angle=Math.random()*Math.PI*2; const dist=60+Math.random()*140; const x=Math.cos(angle)*dist, z=Math.sin(angle)*dist;
-                const zombie=createZombie(type,zData,x,z); zombies.push(zombie);
-            }
-        }
-        function createZombie(type,zData,x,z){
-            const g=new THREE.Group(); const bodyMat=new THREE.MeshStandardMaterial({ color:zData.color, roughness:0.7 });
-            const body=new THREE.Mesh(new THREE.CylinderGeometry(0.6,0.6,1.2,6),bodyMat); body.position.y=1.2; g.add(body);
-            if(type!=='headless'){
-                const head=new THREE.Mesh(new THREE.SphereGeometry(0.5,8,8),bodyMat); head.position.y=2.2; head.userData.isH=true; g.add(head);
-                if(type==='queen'){
-                    const crownBase=new THREE.Mesh(new THREE.CylinderGeometry(0.45,0.5,0.2,8),new THREE.MeshStandardMaterial({ color:0xffd700, metalness:0.9 }));
-                    crownBase.position.y=2.6; g.add(crownBase);
-                    for(let i=0;i<5;i++){ const spike=new THREE.Mesh(new THREE.ConeGeometry(0.08,0.25,4),new THREE.MeshStandardMaterial({ color:0xffaa00 })); spike.position.set(Math.sin(i*1.256)*0.4,2.75,Math.cos(i*1.256)*0.4); g.add(spike); }
+
+        function reload() {
+            if (reloading) return;
+            const id = loadout[activeSlot];
+            const weapon = WEAPONS[id];
+            if (weapon.heal) return;
+            
+            reloading = true;
+            isReloadAnimating = true;
+            document.getElementById('ammo-text').innerText = '...';
+            
+            playSound('reload');
+            
+            let reloadTime = weapon.reload;
+            if (weapon.scope) reloadTime *= 1.5;
+            if (weapon.id === 'hyperPistol') reloadTime = reloadTime * 0.833;
+            if (weapon.id === 'twinMagAR') {
+                const state = twinMagState[id];
+                if (state && state.activeMag === 2) {
+                    reloadTime = reloadTime / 2;
                 }
             }
-            g.position.set(x,0,z); scene.add(g);
-            return { g, type, hp:zData.hp, s:zData.speed*3.0, damage:zData.damage, lastA:0, isDead:false };
+            
+            const startY = gunGroup.position.y;
+            const animInterval = setInterval(() => {
+                gunGroup.position.y = startY - 0.05 + Math.sin(Date.now() * 0.02) * 0.03;
+                gunGroup.rotation.z = Math.sin(Date.now() * 0.03) * 0.1;
+            }, 16);
+            
+            setTimeout(() => {
+                clearInterval(animInterval);
+                gunGroup.position.y = startY;
+                gunGroup.rotation.z = 0;
+                
+                if (weapon.twinMag) {
+                    const state = twinMagState[id];
+                    if (state) {
+                        if (state.activeMag === 2) {
+                            state.activeMag = 1;
+                            ammo[id] = weapon.mag + magBonus;
+                        } else {
+                            ammo[id] = weapon.mag + magBonus;
+                        }
+                    }
+                } else {
+                    ammo[id] = weapon.mag + (weapon.scope ? 0 : magBonus);
+                }
+                reloading = false;
+                isReloadAnimating = false;
+                updateUI();
+            }, reloadTime);
         }
-        function popDmg(d,p,isHead){ const v=p.project(camera); const x=(v.x*0.5+0.5)*window.innerWidth; const y=(v.y*-0.5+0.5)*window.innerHeight; const el=document.createElement('div'); el.className=isHead?'dmg-popup headshot':'dmg-popup'; el.style.left=`${x}px`; el.style.top=`${y}px`; el.innerText=Math.round(d); if(isHead)el.innerHTML=`💀 ${Math.round(d)}`; document.getElementById('damage-nums').appendChild(el); setTimeout(()=>el.remove(),isHead?800:600); }
-        function updateUI(){
-            const id=loadout[activeSlot]; const w=WEAPONS[id];
-            if(!w.heal)document.getElementById('ammo-text').innerText=ammo[id]||0; else document.getElementById('ammo-text').innerText=usedHeals[id]?'0':'1';
-            document.getElementById('health-text').innerText=Math.ceil(hp); document.getElementById('health-bar-fill').style.width=`${(hp/300)*100}%`;
-            document.getElementById('score-display').innerText=score.toString().padStart(5,'0'); document.getElementById('lvl-display').innerText=level; document.getElementById('zombies-remaining').innerText=zombiesRemaining;
-            if(hp<=0){ isRunning=false; stopSound('crowd'); stopSound('police'); document.getElementById('final-stats').innerHTML=`LEVEL ${level} | SCORE ${score}`; document.getElementById('death-menu').style.display='flex'; controls.unlock(); if(healing)clearInterval(healInterval); }
+
+        function updateUI() {
+            const id = loadout[activeSlot];
+            const weapon = WEAPONS[id];
+            
+            if (!weapon.heal) {
+                document.getElementById('ammo-text').innerText = ammo[id] || 0;
+            } else {
+                document.getElementById('ammo-text').innerText = usedHeals[id] ? '0' : '1';
+            }
+            
+            document.getElementById('health-text').innerText = Math.ceil(hp);
+            document.getElementById('health-bar-fill').style.width = `${(hp / 300) * 100}%`;
+            document.getElementById('score-display').innerText = score.toString().padStart(5, '0');
+            document.getElementById('lvl-display').innerText = level;
+            document.getElementById('zombies-remaining').innerText = zombiesRemaining;
+            
+            if (hp <= 0) { 
+                isRunning = false;
+                stopSound('crowd');
+                stopSound('police');
+                backgroundMusicPlaying = false;
+                if(score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('trex_highscore', score);
+                }
+                document.getElementById('final-stats').innerHTML = `LEVEL ${level} | SCORE ${score}`;
+                document.getElementById('death-menu').style.display = 'flex';
+                controls.unlock();
+                if (healing) clearInterval(healInterval);
+            }
         }
-        function initializeAmmo(){
-            loadout.forEach(id=>{ const w=WEAPONS[id]; if(w){ ammo[id]=w.mag+(w.scope?0:magBonus); if(w.twinMag)twinMagState[id]={ activeMag:1 }; } });
-            usedHeals={}; if(healing){ clearInterval(healInterval); healing=false; }
-        }
-        function animate(){
+
+        function animate() {
             requestAnimationFrame(animate);
-            const dt=Math.min(clock.getDelta(),0.1); const now=performance.now(); zombieAnimTime+=dt;
-            frameCount++; if(now>lastTime+1000){ fpsCounter.innerText=`FPS: ${frameCount}`; frameCount=0; lastTime=now; }
-            if(isRunning){
-                const id=loadout[activeSlot]; const w=WEAPONS[id];
-                if(isFiring&&!reloading&&!isReloadAnimating){ if(w.auto)fire(); else if(!w.auto&&now-lastFire>w.rate){ fire(); isFiring=false; } }
-                velocity.x-=velocity.x*10.0*dt; velocity.z-=velocity.z*10.0*dt; velocity.y-=CONFIG.player.gravity*dt;
-                direction.z=Number(moveF)-Number(moveB); direction.x=Number(moveR)-Number(moveL); direction.normalize();
-                const speed=CONFIG.player.walkSpeed; if(moveF||moveB)velocity.z-=direction.z*speed*10*dt; if(moveL||moveR)velocity.x-=direction.x*speed*10*dt;
-                controls.moveRight(-velocity.x*dt); controls.moveForward(-velocity.z*dt); controls.getObject().position.y+=(velocity.y*dt);
-                const pos=controls.getObject().position; const limit=390; if(Math.abs(pos.x)>limit)pos.x=Math.sign(pos.x)*limit; if(Math.abs(pos.z)>limit)pos.z=Math.sign(pos.z)*limit;
-                const groundY=0+CONFIG.player.height; if(pos.y<groundY){ velocity.y=0; controls.getObject().position.y=groundY; canJump=true; }
-                const pPos=controls.getObject().position;
-                for(let i=0;i<zombies.length;i++){ const z=zombies[i]; if(!z||!z.g||z.isDead)continue;
-                    tempVec.copy(pPos).sub(z.g.position); tempVec.y=0; const dist=tempVec.length();
-                    if(dist>1.5){ tempVec.normalize().multiplyScalar(z.s*dt); z.g.position.add(tempVec); z.g.lookAt(pPos.x,z.g.position.y,pPos.z); }
-                    else if(now-z.lastA>800){ hp-=(12+level*2)*(z.damage||1); z.lastA=now; updateUI(); }
+            const dt = Math.min(clock.getDelta(), 0.1);
+            const now = performance.now();
+            zombieAnimTime += dt;
+
+            frameCount++;
+            if (now > lastTime + 1000) {
+                fpsCounter.innerText = `FPS: ${frameCount}`;
+                frameCount = 0; 
+                lastTime = now;
+            }
+
+            if (isRunning) {
+                const id = loadout[activeSlot];
+                const weapon = WEAPONS[id];
+                
+                if (isFiring && !reloading && !isReloadAnimating) {
+                    if (weapon.auto) {
+                        fire();
+                    } else if (!weapon.auto && now - lastFire > weapon.rate) {
+                        fire();
+                        isFiring = false;
+                    }
                 }
-                const isMoving=Math.abs(velocity.x)>0.1||Math.abs(velocity.z)>0.1; if(isMoving&&canJump)walkBob+=dt*6; else walkBob=0;
-                if(!isReloadAnimating)gunGroup.position.y=-0.25+Math.sin(walkBob)*0.01;
+
+                velocity.x -= velocity.x * 10.0 * dt;
+                velocity.z -= velocity.z * 10.0 * dt;
+                velocity.y -= CONFIG.player.gravity * dt;
+
+                direction.z = Number(moveF) - Number(moveB);
+                direction.x = Number(moveR) - Number(moveL);
+                direction.normalize();
+
+                const speed = CONFIG.player.walkSpeed;
+                if (moveF || moveB) velocity.z -= direction.z * speed * 10 * dt;
+                if (moveL || moveR) velocity.x -= direction.x * speed * 10 * dt;
+
+                controls.moveRight(-velocity.x * dt);
+                controls.moveForward(-velocity.z * dt);
+                controls.getObject().position.y += (velocity.y * dt);
+
+                const pos = controls.getObject().position;
+                const limit = 390;
+                if (Math.abs(pos.x) > limit) pos.x = Math.sign(pos.x) * limit;
+                if (Math.abs(pos.z) > limit) pos.z = Math.sign(pos.z) * limit;
+
+                const groundY = getH(pos.x, pos.z) + CONFIG.player.height;
+                if (pos.y < groundY) {
+                    velocity.y = 0;
+                    controls.getObject().position.y = groundY;
+                    canJump = true;
+                }
+
+                const pPos = controls.getObject().position;
+                for (let i = zombies.length - 1; i >= 0; i--) {
+                    const z = zombies[i];
+                    if (!z || !z.g || z.isDead) continue;
+                    
+                    tempVec.copy(pPos).sub(z.g.position);
+                    tempVec.y = 0;
+                    const dist = tempVec.length();
+                    
+                    if (z.leftArm && z.rightArm) {
+                        z.leftArm.rotation.x = 0.8 + Math.sin(zombieAnimTime * 6) * 0.3;
+                        z.rightArm.rotation.x = 0.8 + Math.cos(zombieAnimTime * 6) * 0.3;
+                    }
+                    
+                    if (dist > 1.5) {
+                        tempVec.normalize().multiplyScalar(z.s * dt);
+                        z.g.position.add(tempVec);
+                        z.g.lookAt(pPos.x, z.g.position.y, pPos.z);
+                        z.g.position.y = getH(z.g.position.x, z.g.position.z);
+                    } else if (now - z.lastA > 800) {
+                        hp -= (12 + level * 2) * (z.damage || 1);
+                        z.lastA = now;
+                        
+                        playSound('hit');
+                        
+                        const bloodTrail = new THREE.Mesh(new THREE.CircleGeometry(0.2, 4), new THREE.MeshStandardMaterial({ color: 0xaa0000 }));
+                        bloodTrail.rotation.x = -Math.PI/2;
+                        bloodTrail.position.set(pPos.x, getH(pPos.x, pPos.z) + 0.05, pPos.z);
+                        scene.add(bloodTrail);
+                        setTimeout(() => scene.remove(bloodTrail), 120000);
+                        
+                        updateUI();
+                    }
+                }
+
+                const isMoving = Math.abs(velocity.x) > 0.1 || Math.abs(velocity.z) > 0.1;
+                if (isMoving && canJump) walkBob += dt * 6;
+                else walkBob = 0;
+                
+                const bobY = Math.sin(walkBob) * 0.01;
+                
+                if (!isReloadAnimating) {
+                    gunGroup.position.y = -0.25 + bobY;
+                }
             }
             composer.render();
         }
-        init();
+
+        function onResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        }
+
         updateSlotDisplay();
-        initializeAmmo();
     </script>
 </body>
 </html>
