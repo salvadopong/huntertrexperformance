@@ -21,201 +21,354 @@
         
         .menu {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(20,10,30,0.95) 100%);
-            backdrop-filter: blur(20px) saturate(200%);
-            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            background: radial-gradient(circle at 30% 30%, rgba(20,0,40,0.98) 0%, rgba(0,0,0,0.98) 100%);
+            backdrop-filter: blur(30px) saturate(300%);
+            -webkit-backdrop-filter: blur(30px) saturate(300%);
             display: flex; flex-direction: column;
             justify-content: center; align-items: center; color: white; z-index: 100;
             text-align: center;
-            overflow-y: auto;
-        }
-        .glory-panel {
-            background: rgba(10,5,20,0.5);
-            backdrop-filter: blur(35px) saturate(200%);
-            -webkit-backdrop-filter: blur(35px) saturate(200%);
-            border: 2px solid rgba(255,215,0,0.3);
-            padding: 40px 60px;
-            border-radius: 60px;
-            box-shadow: 0 0 100px rgba(255,215,0,0.2), 0 20px 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(255,215,0,0.1);
-            max-width: 1000px;
-            position: relative;
             overflow: hidden;
-            margin: 20px;
-            animation: panelGlow 3s ease-in-out infinite alternate;
+            position: relative;
         }
-        @keyframes panelGlow {
-            0% { box-shadow: 0 0 80px rgba(255,215,0,0.15), 0 20px 60px rgba(0,0,0,0.8), inset 0 0 30px rgba(255,215,0,0.05); border-color: rgba(255,215,0,0.2); }
-            100% { box-shadow: 0 0 120px rgba(255,215,0,0.3), 0 20px 60px rgba(0,0,0,0.8), inset 0 0 50px rgba(255,215,0,0.15); border-color: rgba(255,215,0,0.5); }
-        }
-        .glory-panel::before {
+        
+        .menu::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle at 30% 30%, rgba(255,215,0,0.1) 0%, transparent 50%);
-            animation: rotate 25s linear infinite;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent 0px,
+                rgba(255,215,0,0.03) 2px,
+                transparent 4px
+            );
+            animation: scanlines 8s linear infinite;
             pointer-events: none;
         }
-        .glory-panel::after {
+        
+        .menu::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(255,215,0,0.05) 50%, transparent 100%);
+            background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(0,0,0,0.4) 100%);
             pointer-events: none;
         }
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        @keyframes scanlines {
+            0% { transform: translateY(-50%); }
+            100% { transform: translateY(0%); }
         }
+        
+        .glory-panel {
+            background: rgba(5,2,15,0.6);
+            backdrop-filter: blur(50px) saturate(300%);
+            -webkit-backdrop-filter: blur(50px) saturate(300%);
+            border: 3px solid;
+            border-image: linear-gradient(135deg, #ffd700, #ff8c00, #ffd700) 1;
+            padding: 50px 80px;
+            border-radius: 80px;
+            box-shadow: 
+                0 0 200px rgba(255,215,0,0.4),
+                0 0 400px rgba(255,140,0,0.2),
+                0 30px 80px rgba(0,0,0,0.9),
+                inset 0 0 80px rgba(255,215,0,0.15),
+                inset 0 2px 4px rgba(255,255,255,0.1);
+            max-width: 1200px;
+            position: relative;
+            overflow: visible;
+            margin: 20px;
+            animation: panelGlow 2s ease-in-out infinite alternate;
+            transform-style: preserve-3d;
+            transform: perspective(1000px) rotateX(2deg);
+        }
+        
+        @keyframes panelGlow {
+            0% { 
+                box-shadow: 
+                    0 0 150px rgba(255,215,0,0.3),
+                    0 0 300px rgba(255,140,0,0.15),
+                    0 30px 80px rgba(0,0,0,0.9),
+                    inset 0 0 60px rgba(255,215,0,0.1);
+                border-color: rgba(255,215,0,0.3);
+            }
+            100% { 
+                box-shadow: 
+                    0 0 250px rgba(255,215,0,0.5),
+                    0 0 500px rgba(255,140,0,0.25),
+                    0 30px 80px rgba(0,0,0,0.9),
+                    inset 0 0 100px rgba(255,215,0,0.2);
+                border-color: rgba(255,215,0,0.6);
+            }
+        }
+        
+        .glory-panel::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255,215,0,0.1) 50%, 
+                transparent 70%);
+            border-radius: 80px;
+            pointer-events: none;
+            animation: shimmer 4s linear infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
         h1 { 
-            font-size: 90px; 
-            background: linear-gradient(135deg, #ffd700 0%, #ffaa00 30%, #ffd700 60%, #ff8800 100%);
-            background-size: 200% 200%;
+            font-size: 120px; 
+            background: linear-gradient(135deg, 
+                #ffd700 0%, 
+                #ffed4e 20%, 
+                #ff8c00 40%, 
+                #ffd700 60%, 
+                #ffed4e 80%, 
+                #ff8c00 100%);
+            background-size: 300% 300%;
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin: 0; letter-spacing: 15px; font-weight: 900;
+            margin: 0; 
+            letter-spacing: 20px; 
+            font-weight: 900;
             text-transform: uppercase;
-            text-shadow: 0 0 50px rgba(255,215,0,0.5);
+            text-shadow: 
+                0 0 100px rgba(255,215,0,0.8),
+                0 0 200px rgba(255,140,0,0.5),
+                0 10px 20px rgba(0,0,0,0.5);
             position: relative;
             z-index: 2;
-            animation: titleShine 4s ease-in-out infinite;
+            animation: titleShine 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px #ffd700);
         }
+        
         @keyframes titleShine {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            0%, 100% { background-position: 0% 50%; filter: drop-shadow(0 0 30px #ffd700); }
+            50% { background-position: 100% 50%; filter: drop-shadow(0 0 50px #ffaa00); }
         }
+        
         .subtitle {
-            font-size: 18px;
-            letter-spacing: 8px;
+            font-size: 24px;
+            letter-spacing: 12px;
             color: #ffd700;
             text-transform: uppercase;
-            margin-top: 10px;
+            margin-top: 15px;
             position: relative;
             z-index: 2;
-            text-shadow: 0 0 20px rgba(255,215,0,0.5);
+            text-shadow: 
+                0 0 30px rgba(255,215,0,0.8),
+                0 0 60px rgba(255,140,0,0.4);
+            animation: subtitlePulse 2s ease-in-out infinite;
         }
+        
+        @keyframes subtitlePulse {
+            0%, 100% { opacity: 0.8; letter-spacing: 12px; }
+            50% { opacity: 1; letter-spacing: 15px; }
+        }
+        
         .btn {
-            margin: 15px; padding: 18px 60px; font-size: 22px; font-weight: bold; 
+            margin: 15px; 
+            padding: 22px 70px; 
+            font-size: 24px; 
+            font-weight: bold; 
             color: #fff; 
-            background: linear-gradient(135deg, rgba(255,215,0,0.15) 0%, rgba(255,140,0,0.1) 100%);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,215,0,0.4); 
+            background: linear-gradient(135deg, 
+                rgba(255,215,0,0.2) 0%, 
+                rgba(255,140,0,0.15) 50%,
+                rgba(255,215,0,0.2) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(255,215,0,0.5); 
             cursor: pointer; 
-            transition: all 0.3s ease; 
-            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            border-radius: 60px;
             text-transform: uppercase; 
-            letter-spacing: 5px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,215,0,0.1) inset;
+            letter-spacing: 8px;
+            box-shadow: 
+                0 10px 40px rgba(0,0,0,0.5), 
+                0 0 0 2px rgba(255,215,0,0.1) inset,
+                0 0 30px rgba(255,215,0,0.2);
             position: relative;
             z-index: 2;
+            overflow: hidden;
         }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,215,0,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
         .btn:hover { 
-            background: linear-gradient(135deg, rgba(255,215,0,0.3) 0%, rgba(255,140,0,0.2) 100%);
-            transform: scale(1.05); 
-            box-shadow: 0 12px 48px rgba(255,215,0,0.3), 0 0 0 2px rgba(255,215,0,0.3) inset;
-            border-color: rgba(255,215,0,0.8);
-            letter-spacing: 8px;
+            background: linear-gradient(135deg, 
+                rgba(255,215,0,0.4) 0%, 
+                rgba(255,140,0,0.3) 50%,
+                rgba(255,215,0,0.4) 100%);
+            transform: scale(1.08) translateY(-3px); 
+            box-shadow: 
+                0 20px 60px rgba(255,215,0,0.4), 
+                0 0 0 3px rgba(255,215,0,0.4) inset,
+                0 0 50px rgba(255,215,0,0.4);
+            border-color: rgba(255,215,0,0.9);
+            letter-spacing: 12px;
         }
+        
         .btn.save-btn {
-            background: linear-gradient(135deg, rgba(100,200,100,0.15) 0%, rgba(50,150,50,0.1) 100%);
-            border-color: rgba(100,200,100,0.4);
+            background: linear-gradient(135deg, 
+                rgba(100,200,100,0.2) 0%, 
+                rgba(50,150,50,0.15) 50%,
+                rgba(100,200,100,0.2) 100%);
+            border-color: rgba(100,200,100,0.5);
         }
+        
         .btn.save-btn:hover {
-            background: linear-gradient(135deg, rgba(100,200,100,0.3) 0%, rgba(50,150,50,0.2) 100%);
-            box-shadow: 0 12px 48px rgba(100,200,100,0.3);
-            border-color: rgba(100,200,100,0.8);
+            background: linear-gradient(135deg, 
+                rgba(100,200,100,0.4) 0%, 
+                rgba(50,150,50,0.3) 50%,
+                rgba(100,200,100,0.4) 100%);
+            box-shadow: 
+                0 20px 60px rgba(100,200,100,0.4),
+                0 0 50px rgba(100,200,100,0.3);
+            border-color: rgba(100,200,100,0.9);
         }
+        
         .feature-list {
             display: flex;
             justify-content: center;
-            gap: 50px;
-            margin: 30px 0;
+            gap: 80px;
+            margin: 40px 0;
             position: relative;
             z-index: 2;
         }
+        
         .feature {
             text-align: center;
-            backdrop-filter: blur(10px);
-            padding: 15px 25px;
-            border-radius: 30px;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,215,0,0.1);
+            backdrop-filter: blur(15px);
+            padding: 25px 35px;
+            border-radius: 40px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,215,0,0.2);
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.3),
+                inset 0 0 20px rgba(255,215,0,0.1);
+            transition: all 0.3s;
+            animation: featureFloat 3s ease-in-out infinite;
         }
+        
+        .feature:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        
+        .feature:nth-child(3) {
+            animation-delay: 1s;
+        }
+        
+        @keyframes featureFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .feature:hover {
+            transform: scale(1.1) translateY(-5px);
+            border-color: rgba(255,215,0,0.5);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.4),
+                inset 0 0 30px rgba(255,215,0,0.2);
+        }
+        
         .feature-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            font-size: 60px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.6));
         }
+        
         .feature-text {
-            font-size: 12px;
-            letter-spacing: 3px;
+            font-size: 16px;
+            letter-spacing: 5px;
             color: #ffd700;
             text-transform: uppercase;
+            font-weight: bold;
         }
 
         #fps-counter {
             position: absolute; top: 75px; left: 25px;
             color: #0f0; font-family: monospace; font-size: 11px;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(8px);
-            padding: 5px 10px; 
-            border-radius: 15px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(15px);
+            padding: 8px 15px; 
+            border-radius: 20px;
             pointer-events: none; 
             z-index: 200;
-            border: 1px solid rgba(0,255,0,0.2);
+            border: 1px solid rgba(0,255,0,0.3);
+            box-shadow: 0 0 20px rgba(0,255,0,0.2);
         }
 
         .stat-box {
             position: absolute; 
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(15px) saturate(180%);
-            -webkit-backdrop-filter: blur(15px) saturate(180%);
-            border: 1px solid rgba(255,215,0,0.2); 
-            border-radius: 20px;
-            padding: 15px 20px; 
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px) saturate(200%);
+            -webkit-backdrop-filter: blur(20px) saturate(200%);
+            border: 1px solid rgba(255,215,0,0.3); 
+            border-radius: 25px;
+            padding: 18px 25px; 
             color: white;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4), inset 0 0 20px rgba(255,215,0,0.1);
         }
-        #health-container { bottom: 25px; left: 25px; width: 260px; }
-        #health-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        #health-container { bottom: 25px; left: 25px; width: 280px; }
+        #health-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 5px; margin-top: 10px; overflow: hidden; }
         #health-bar-fill { width: 100%; height: 100%; background: linear-gradient(90deg, #ff4444, #ffaa00, #ff4444); background-size: 200% 100%; animation: healthPulse 2s ease infinite; transition: width 0.2s; }
         @keyframes healthPulse { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 
-        #ammo-container { bottom: 25px; right: 25px; text-align: right; min-width: 150px; }
-        #ammo-text { font-size: 46px; font-weight: 900; line-height: 1; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        #ammo-container { bottom: 25px; right: 25px; text-align: right; min-width: 160px; }
+        #ammo-text { font-size: 52px; font-weight: 900; line-height: 1; text-shadow: 0 4px 15px rgba(0,0,0,0.6); }
 
-        #score-board { top: 25px; left: 25px; min-width: 170px; }
-        .score-val { font-size: 22px; font-weight: 900; color: #ffd700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        #score-board { top: 25px; left: 25px; min-width: 180px; }
+        .score-val { font-size: 26px; font-weight: 900; color: #ffd700; text-shadow: 0 4px 15px rgba(0,0,0,0.6); }
 
         #inventory {
             position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 10px;
+            display: flex; gap: 15px;
         }
         .slot {
-            width: 55px; height: 55px; 
-            background: rgba(20,20,35,0.5);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,215,0,0.25); 
-            border-radius: 15px;
+            width: 65px; height: 65px; 
+            background: rgba(20,20,40,0.6);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,215,0,0.3); 
+            border-radius: 20px;
             display: flex; align-items: center; justify-content: center;
-            color: white; transition: all 0.2s; pointer-events: auto;
+            color: white; transition: all 0.3s; pointer-events: auto;
             font-weight: bold;
-            font-size: 18px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            font-size: 22px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3), inset 0 0 15px rgba(255,215,0,0.1);
         }
         .slot.active { 
-            border: 2px solid #ffd700; 
-            background: rgba(255,215,0,0.15);
-            transform: translateY(-6px); 
-            box-shadow: 0 8px 24px rgba(255,215,0,0.2);
+            border: 3px solid #ffd700; 
+            background: rgba(255,215,0,0.2);
+            transform: translateY(-8px); 
+            box-shadow: 0 12px 30px rgba(255,215,0,0.3), inset 0 0 20px rgba(255,215,0,0.2);
         }
 
         #crosshair {
@@ -223,70 +376,70 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 4px;
-            height: 4px;
+            width: 6px;
+            height: 6px;
             background: rgba(255,255,255,0.95);
             border-radius: 50%;
-            box-shadow: 0 0 15px rgba(255,255,255,0.6);
+            box-shadow: 0 0 25px rgba(255,255,255,0.8);
             pointer-events: none;
             z-index: 100;
         }
         #crosshair::before {
             content: '';
             position: absolute;
-            top: -8px;
-            left: 1.5px;
-            width: 1.5px;
-            height: 5px;
-            background: rgba(255,255,255,0.8);
+            top: -12px;
+            left: 2.5px;
+            width: 2px;
+            height: 8px;
+            background: rgba(255,255,255,0.9);
         }
         #crosshair::after {
             content: '';
             position: absolute;
-            bottom: -8px;
-            left: 1.5px;
-            width: 1.5px;
-            height: 5px;
-            background: rgba(255,255,255,0.8);
+            bottom: -12px;
+            left: 2.5px;
+            width: 2px;
+            height: 8px;
+            background: rgba(255,255,255,0.9);
         }
         #crosshair .left {
             position: absolute;
-            top: 1.5px;
-            left: -8px;
-            width: 5px;
-            height: 1.5px;
-            background: rgba(255,255,255,0.8);
+            top: 2.5px;
+            left: -12px;
+            width: 8px;
+            height: 2px;
+            background: rgba(255,255,255,0.9);
         }
         #crosshair .right {
             position: absolute;
-            top: 1.5px;
-            right: -8px;
-            width: 5px;
-            height: 1.5px;
-            background: rgba(255,255,255,0.8);
+            top: 2.5px;
+            right: -12px;
+            width: 8px;
+            height: 2px;
+            background: rgba(255,255,255,0.9);
         }
 
         #damage-nums { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
         .dmg-popup {
-            position: absolute; color: #fff; font-weight: 900; font-size: 32px;
-            text-shadow: 0 0 20px rgba(255,200,0,0.8), 0 0 40px rgba(255,100,0,0.5); 
-            animation: dmgAnim 0.7s ease-out forwards;
+            position: absolute; color: #fff; font-weight: 900; font-size: 38px;
+            text-shadow: 0 0 30px rgba(255,200,0,0.9), 0 0 60px rgba(255,100,0,0.6); 
+            animation: dmgAnim 0.8s ease-out forwards;
         }
         .dmg-popup.headshot {
             color: #ffd700;
-            text-shadow: 0 0 30px #ffaa00, 0 0 60px #ff8800, 0 0 100px #ff4400;
-            font-size: 44px;
-            animation: headshotAnim 0.9s ease-out forwards;
+            text-shadow: 0 0 40px #ffaa00, 0 0 80px #ff8800, 0 0 120px #ff4400;
+            font-size: 52px;
+            animation: headshotAnim 1s ease-out forwards;
         }
         @keyframes dmgAnim {
-            0% { opacity: 0; transform: translateY(0) scale(0.4); }
-            20% { opacity: 1; transform: translateY(-35px) scale(1.2); }
-            100% { opacity: 0; transform: translateY(-120px) scale(1); }
+            0% { opacity: 0; transform: translateY(0) scale(0.3); }
+            20% { opacity: 1; transform: translateY(-40px) scale(1.3); }
+            100% { opacity: 0; transform: translateY(-140px) scale(1); }
         }
         @keyframes headshotAnim {
-            0% { opacity: 0; transform: translateY(0) scale(0.5) rotate(-8deg); }
-            15% { opacity: 1; transform: translateY(-45px) scale(1.6) rotate(4deg); }
-            100% { opacity: 0; transform: translateY(-160px) scale(1) rotate(0deg); }
+            0% { opacity: 0; transform: translateY(0) scale(0.4) rotate(-10deg); }
+            15% { opacity: 1; transform: translateY(-50px) scale(1.8) rotate(5deg); }
+            100% { opacity: 0; transform: translateY(-180px) scale(1) rotate(0deg); }
         }
 
         #sniper-scope {
@@ -295,19 +448,20 @@
             background: transparent; z-index: 50; pointer-events: none;
         }
         #scope-lens {
-            width: 80vh; height: 80vh; border: 4px solid rgba(0,0,0,0.8); border-radius: 50%;
+            width: 85vh; height: 85vh; border: 5px solid rgba(0,0,0,0.9); border-radius: 50%;
             position: relative; overflow: hidden;
-            box-shadow: 0 0 0 2000px #000, inset 0 0 40px rgba(0,0,0,0.9);
+            box-shadow: 0 0 0 2000px #000, inset 0 0 50px rgba(0,0,0,0.95);
         }
-        .scope-line-h { position: absolute; top: 50%; left: 0; width: 100%; height: 1.5px; background: rgba(255,255,255,0.9); box-shadow: 0 0 8px #fff; }
-        .scope-line-v { position: absolute; left: 50%; top: 0; width: 1.5px; height: 100%; background: rgba(255,255,255,0.9); box-shadow: 0 0 8px #fff; }
+        .scope-line-h { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: rgba(255,255,255,0.95); box-shadow: 0 0 12px #fff; }
+        .scope-line-v { position: absolute; left: 50%; top: 0; width: 2px; height: 100%; background: rgba(255,255,255,0.95); box-shadow: 0 0 12px #fff; }
 
         #level-up-notif {
             position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%);
-            color: #ffd700; font-size: 70px; font-weight: 900; letter-spacing: 12px;
+            color: #ffd700; font-size: 80px; font-weight: 900; letter-spacing: 15px;
             opacity: 0; pointer-events: none; 
-            text-shadow: 0 0 40px rgba(255,215,0,0.8), 0 0 80px rgba(255,165,0,0.5);
-            z-index: 150; transition: opacity 0.4s;
+            text-shadow: 0 0 60px rgba(255,215,0,0.9), 0 0 120px rgba(255,165,0,0.6);
+            z-index: 150; transition: opacity 0.5s;
+            text-align: center;
         }
 
         #stats-panel {
@@ -315,29 +469,29 @@
             top: 25px;
             right: 25px;
             color: #ffd700;
-            font-size: 13px;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(12px);
-            padding: 12px 18px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,215,0,0.2);
+            font-size: 14px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(15px);
+            padding: 15px 22px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,215,0,0.3);
             pointer-events: none;
             z-index: 200;
         }
 
         #zombie-counter {
             position: absolute;
-            top: 100px;
+            top: 110px;
             right: 25px;
             color: #ff4444;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
-            text-shadow: 0 0 20px rgba(255,0,0,0.6);
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(12px);
-            padding: 10px 16px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,0,0,0.2);
+            text-shadow: 0 0 30px rgba(255,0,0,0.7);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(15px);
+            padding: 12px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,0,0,0.3);
             pointer-events: none;
             z-index: 200;
         }
@@ -348,68 +502,118 @@
         
         .weapon-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            max-height: 400px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            max-height: 500px;
             overflow-y: auto;
-            padding: 15px;
+            padding: 20px;
             margin: 20px 0;
+            background: rgba(0,0,0,0.3);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .weapon-grid::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .weapon-grid::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        
+        .weapon-grid::-webkit-scrollbar-thumb {
+            background: rgba(255,215,0,0.3);
+            border-radius: 10px;
+        }
+        
+        .weapon-grid::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,215,0,0.5);
         }
         
         .weapon-card {
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,215,0,0.2);
-            border-radius: 15px;
-            padding: 12px;
+            background: rgba(10,5,20,0.6);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,215,0,0.2);
+            border-radius: 20px;
+            padding: 18px 12px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         
         .weapon-card:hover {
             background: rgba(255,215,0,0.15);
             border-color: #ffd700;
-            transform: scale(1.02);
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255,215,0,0.2);
         }
         
         .weapon-card.selected {
-            border: 2px solid #ffd700;
-            background: rgba(255,215,0,0.2);
+            border: 3px solid #ffd700;
+            background: rgba(255,215,0,0.25);
+            box-shadow: 0 0 30px rgba(255,215,0,0.3);
         }
         
         .weapon-name {
-            font-size: 13px;
+            font-size: 15px;
             font-weight: bold;
             color: #ffd700;
+            margin-bottom: 8px;
         }
         
         .weapon-stats {
-            font-size: 9px;
-            color: #ccc;
+            font-size: 11px;
+            color: #ddd;
+            line-height: 1.5;
         }
         
         .slot-selector {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
-            margin: 20px 0;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
         }
         
         .slot-btn {
-            width: 65px;
-            height: 65px;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,215,0,0.3);
-            border-radius: 15px;
+            width: 80px;
+            height: 80px;
+            background: rgba(10,5,20,0.7);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,215,0,0.3);
+            border-radius: 20px;
             color: white;
-            font-size: 22px;
+            font-size: 28px;
+            font-weight: bold;
             cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .slot-btn:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255,215,0,0.6);
+            box-shadow: 0 8px 20px rgba(255,215,0,0.2);
         }
         
         .slot-btn.active {
-            border: 2px solid #ffd700;
-            background: rgba(255,215,0,0.2);
+            border: 3px solid #ffd700;
+            background: rgba(255,215,0,0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(255,215,0,0.3);
+        }
+        
+        .customize-header {
+            margin-bottom: 20px;
+        }
+        
+        .customize-header h1 {
+            font-size: 60px;
+            letter-spacing: 10px;
         }
     </style>
     <script type="importmap">
@@ -447,7 +651,7 @@
         <div class="glory-panel">
             <h1>HUNTER TREX</h1>
             <div class="subtitle">ULTIMATE EDITION</div>
-            <div style="height: 2px; background: linear-gradient(to right, transparent, rgba(255,215,0,0.6), transparent); margin: 30px 0;"></div>
+            <div style="height: 3px; background: linear-gradient(to right, transparent, rgba(255,215,0,0.8), transparent); margin: 35px 0;"></div>
             <div class="feature-list">
                 <div class="feature">
                     <div class="feature-icon">🎯</div>
@@ -462,11 +666,11 @@
                     <div class="feature-text">ENDLESS</div>
                 </div>
             </div>
-            <p style="color: #ddd; font-size: 16px; letter-spacing: 3px; margin: 20px 0;">
-                <span style="color: #ffd700;">+2 DMG & +5 MAG PER LEVEL</span>
+            <p style="color: #ddd; font-size: 18px; letter-spacing: 4px; margin: 25px 0; text-shadow: 0 0 20px rgba(255,215,0,0.5);">
+                <span style="color: #ffd700; font-size: 22px; font-weight: bold;">+2 DMG & +5 MAG PER LEVEL</span>
             </p>
-            <div style="height: 2px; background: linear-gradient(to right, transparent, rgba(255,215,0,0.3), transparent); margin: 25px 0;"></div>
-            <div style="display: flex; gap: 25px; justify-content: center;">
+            <div style="height: 3px; background: linear-gradient(to right, transparent, rgba(255,215,0,0.5), transparent); margin: 30px 0;"></div>
+            <div style="display: flex; gap: 30px; justify-content: center;">
                 <button class="btn" id="play-btn">BEGIN HUNT</button>
                 <button class="btn" id="customize-btn">CUSTOMIZE</button>
             </div>
@@ -475,7 +679,9 @@
 
     <div id="customize-menu" class="menu">
         <div class="glory-panel">
-            <h1>CUSTOMIZE</h1>
+            <div class="customize-header">
+                <h1>CUSTOMIZE</h1>
+            </div>
             <div class="slot-selector">
                 <button class="slot-btn active" data-slot="0">1</button>
                 <button class="slot-btn" data-slot="1">2</button>
@@ -484,7 +690,7 @@
                 <button class="slot-btn" data-slot="4">5</button>
             </div>
             <div id="weapon-grid" class="weapon-grid"></div>
-            <div style="display: flex; gap: 20px; justify-content: center;">
+            <div style="display: flex; gap: 25px; justify-content: center; margin-top: 25px;">
                 <button class="btn save-btn" id="save-btn">SAVE LOADOUT</button>
                 <button class="btn" id="back-btn">BACK</button>
             </div>
@@ -494,7 +700,7 @@
     <div id="death-menu" class="menu" style="display: none;">
         <div class="glory-panel">
             <h1>FALLEN</h1>
-            <p id="final-stats" style="font-size: 18px; color: #ffd700;"></p>
+            <p id="final-stats" style="font-size: 22px; color: #ffd700; margin: 30px 0;"></p>
             <button class="btn" onclick="location.reload()">RISE AGAIN</button>
         </div>
     </div>
@@ -508,18 +714,18 @@
         </div>
 
         <div id="score-board" class="stat-box">
-            <div style="font-size: 9px; opacity: 0.6; letter-spacing: 1px;">LEVEL <span id="lvl-display">1</span></div>
+            <div style="font-size: 10px; opacity: 0.7; letter-spacing: 2px;">LEVEL <span id="lvl-display">1</span></div>
             <div class="score-val" id="score-display">00000</div>
         </div>
         
         <div id="health-container" class="stat-box">
-            <div style="font-size: 9px; letter-spacing: 2px; opacity: 0.6;">VITALITY</div>
-            <div id="health-text" style="font-size: 24px; font-weight: 900;">300</div>
+            <div style="font-size: 10px; letter-spacing: 3px; opacity: 0.7;">VITALITY</div>
+            <div id="health-text" style="font-size: 28px; font-weight: 900;">300</div>
             <div id="health-bar-bg"><div id="health-bar-fill"></div></div>
         </div>
 
         <div id="ammo-container" class="stat-box">
-            <div id="weapon-name" style="font-size: 9px; letter-spacing: 2px; opacity: 0.6;">ASSAULT RIFLE</div>
+            <div id="weapon-name" style="font-size: 10px; letter-spacing: 3px; opacity: 0.7;">ASSAULT RIFLE</div>
             <div id="ammo-text">35</div>
         </div>
 
@@ -582,7 +788,7 @@
             }
         }
 
-        // WEAPON DATABASE - Energy Rifle added
+        // WEAPON DATABASE - Energy Rifle updated with 110 body, 170 headshot, 5 mag
         const WEAPONS = {
             assaultRifle: { id: 'assaultRifle', name: 'Assault Rifle', mag: 35, rate: 133, reload: 1500, dmg: 45, dmgH: 80, zoom: 45, auto: true, sound: 'ar' },
             smg: { id: 'smg', name: 'SMG', mag: 65, rate: 58, reload: 1200, dmg: 20, dmgH: 45, zoom: 55, auto: true, sound: 'smg' },
@@ -597,7 +803,7 @@
             twinMagAR: { id: 'twinMagAR', name: 'Twin Mag AR', mag: 40, mag2: 30, rate: 88, reload: 1875, dmg: 35, dmgH: 60, zoom: 45, auto: true, twinMag: true, sound: 'ar' },
             semiSniper: { id: 'semiSniper', name: 'Semi-Auto Sniper', mag: 10, rate: 400, reload: 3000, dmg: 75, dmgH: 190, zoom: 12, auto: false, scope: true, sound: 'sniper' },
             hyperPistol: { id: 'hyperPistol', name: 'Hyper Pistol', mag: 30, rate: 40, reload: 600, dmg: 15, dmgH: 25, zoom: 50, auto: true, sound: 'pistol' },
-            energyRifle: { id: 'energyRifle', name: 'Energy Rifle', mag: 10, rate: 300, reload: 2200, dmg: 125, dmgH: 205, zoom: 50, auto: false, sound: 'energy' },
+            energyRifle: { id: 'energyRifle', name: 'Energy Rifle', mag: 5, rate: 300, reload: 2200, dmg: 110, dmgH: 170, zoom: 50, auto: false, sound: 'energy' },
             syringe: { id: 'syringe', name: 'Syringe', mag: 1, rate: 0, reload: 0, dmg: 0, dmgH: 0, zoom: 75, auto: false, heal: 50 }
         };
 
@@ -611,23 +817,114 @@
             queen: { hp: 500, speed: 1.2, damage: 1.5, color: 0xaa8800 }
         };
 
-        // 10 EXCEPTIONAL BACKDROPS
+        // 10 EXCEPTIONAL BACKDROPS with complete environment changes
         const BACKDROPS = [
-            { name: 'Forest', skyColor: 0x1a2a3a, groundColor: 0x2a3a25, fogColor: 0x1a2a3a, fogDensity: 0.0012 },
-            { name: 'Desert', skyColor: 0xccaa88, groundColor: 0xccaa77, fogColor: 0xccaa88, fogDensity: 0.0008 },
-            { name: 'Snow', skyColor: 0xaaccdd, groundColor: 0xdddddd, fogColor: 0xaaccdd, fogDensity: 0.0010 },
-            { name: 'Volcanic', skyColor: 0x442222, groundColor: 0x333333, fogColor: 0x442222, fogDensity: 0.0015 },
-            { name: 'Alien Planet', skyColor: 0x442266, groundColor: 0x553377, fogColor: 0x442266, fogDensity: 0.0013 },
-            { name: 'Cyberpunk City', skyColor: 0x111122, groundColor: 0x222233, fogColor: 0x111122, fogDensity: 0.0010 },
-            { name: 'Haunted Graveyard', skyColor: 0x1a1a22, groundColor: 0x2a2a33, fogColor: 0x1a1a22, fogDensity: 0.0018 },
-            { name: 'Tropical Beach', skyColor: 0x88aacc, groundColor: 0xddcc88, fogColor: 0x88aacc, fogDensity: 0.0009 },
-            { name: 'Candy Land', skyColor: 0xffaacc, groundColor: 0xffddcc, fogColor: 0xffaacc, fogDensity: 0.0011 },
-            { name: 'Underwater', skyColor: 0x224466, groundColor: 0x335577, fogColor: 0x224466, fogDensity: 0.0016 }
+            { 
+                name: 'Forest', 
+                skyColor: 0x1a2a3a, 
+                groundColor: 0x2a4a1a, 
+                fogColor: 0x1a3a2a, 
+                fogDensity: 0.0012,
+                buildingColor: 0x4a5a3a,
+                roadColor: 0x3a4a2a,
+                environment: 'forest'
+            },
+            { 
+                name: 'Desert', 
+                skyColor: 0xffcc88, 
+                groundColor: 0xddbb77, 
+                fogColor: 0xffcc88, 
+                fogDensity: 0.0008,
+                buildingColor: 0xccaa66,
+                roadColor: 0xbbaa77,
+                environment: 'desert'
+            },
+            { 
+                name: 'Snow', 
+                skyColor: 0xbbddee, 
+                groundColor: 0xeeeeee, 
+                fogColor: 0xbbddee, 
+                fogDensity: 0.0010,
+                buildingColor: 0xccdddd,
+                roadColor: 0xdddddd,
+                environment: 'snow'
+            },
+            { 
+                name: 'Volcanic', 
+                skyColor: 0x552222, 
+                groundColor: 0x443333, 
+                fogColor: 0x552222, 
+                fogDensity: 0.0015,
+                buildingColor: 0x664444,
+                roadColor: 0x554444,
+                environment: 'volcanic'
+            },
+            { 
+                name: 'Alien Planet', 
+                skyColor: 0x553377, 
+                groundColor: 0x664488, 
+                fogColor: 0x553377, 
+                fogDensity: 0.0013,
+                buildingColor: 0x775599,
+                roadColor: 0x665588,
+                environment: 'alien'
+            },
+            { 
+                name: 'Cyberpunk City', 
+                skyColor: 0x111133, 
+                groundColor: 0x222244, 
+                fogColor: 0x111133, 
+                fogDensity: 0.0010,
+                buildingColor: 0x334466,
+                roadColor: 0x223344,
+                environment: 'cyberpunk'
+            },
+            { 
+                name: 'Haunted Graveyard', 
+                skyColor: 0x1a1a2a, 
+                groundColor: 0x2a2a3a, 
+                fogColor: 0x1a1a2a, 
+                fogDensity: 0.0018,
+                buildingColor: 0x3a3a4a,
+                roadColor: 0x2a2a3a,
+                environment: 'haunted'
+            },
+            { 
+                name: 'Tropical Beach', 
+                skyColor: 0x88bbdd, 
+                groundColor: 0xeeddbb, 
+                fogColor: 0x88bbdd, 
+                fogDensity: 0.0009,
+                buildingColor: 0xddccaa,
+                roadColor: 0xccbb99,
+                environment: 'tropical'
+            },
+            { 
+                name: 'Candy Land', 
+                skyColor: 0xffbbdd, 
+                groundColor: 0xffdddd, 
+                fogColor: 0xffbbdd, 
+                fogDensity: 0.0011,
+                buildingColor: 0xffcccc,
+                roadColor: 0xeecccc,
+                environment: 'candy'
+            },
+            { 
+                name: 'Underwater', 
+                skyColor: 0x225577, 
+                groundColor: 0x336688, 
+                fogColor: 0x225577, 
+                fogDensity: 0.0016,
+                buildingColor: 0x447799,
+                roadColor: 0x336688,
+                environment: 'underwater'
+            }
         ];
 
         const CONFIG = {
             player: { health: 300, walkSpeed: 5, height: 1.8, gravity: 85.0, jumpForce: 30 },
-            worldSize: 400
+            worldSize: 200,
+            forceFieldRadius: 180
         };
 
         let scene, camera, renderer, controls, composer;
@@ -675,6 +972,13 @@
         let isReloadAnimating = false;
 
         const tempVec = new THREE.Vector3();
+        
+        // Environment objects for cleanup
+        let environmentObjects = [];
+        let policeCars = [];
+        let forceFieldMesh;
+        let muzzleFlashLight;
+        let muzzleFlashMesh;
         
         // Load saved loadout
         const savedLoadout = localStorage.getItem('trex_loadout');
@@ -739,6 +1043,15 @@
             scene.add(new THREE.AmbientLight(0x6080a0, 2.5));
             scene.add(new THREE.HemisphereLight(0x88aacc, 0x665544, 2.8));
 
+            // Create muzzle flash light
+            muzzleFlashLight = new THREE.PointLight(0xffaa00, 0, 10);
+            muzzleFlashLight.position.set(0, -0.3, -1.2);
+            camera.add(muzzleFlashLight);
+            
+            muzzleFlashMesh = new THREE.Mesh(new THREE.SphereGeometry(0.15, 8), new THREE.MeshBasicMaterial({ color: 0xffaa00, transparent: true, opacity: 0 }));
+            muzzleFlashMesh.position.set(0.25, -0.3, -1.0);
+            camera.add(muzzleFlashMesh);
+
             createWorld();
             initializeAmmo();
             spawnWave();
@@ -751,9 +1064,575 @@
         }
 
         function applyBackdrop(index) {
+            // Clean up old environment
+            environmentObjects.forEach(obj => scene.remove(obj));
+            policeCars.forEach(car => scene.remove(car));
+            environmentObjects = [];
+            policeCars = [];
+            
             const backdrop = BACKDROPS[index % BACKDROPS.length];
             scene.background = new THREE.Color(backdrop.skyColor);
             scene.fog = new THREE.FogExp2(backdrop.fogColor, backdrop.fogDensity);
+            
+            // Create force field boundary
+            if (forceFieldMesh) scene.remove(forceFieldMesh);
+            const forceFieldGeo = new THREE.CylinderGeometry(CONFIG.forceFieldRadius, CONFIG.forceFieldRadius, 50, 64);
+            const forceFieldMat = new THREE.MeshStandardMaterial({ 
+                color: 0x4488ff, 
+                transparent: true, 
+                opacity: 0.08,
+                wireframe: true,
+                emissive: new THREE.Color(0x224466),
+                emissiveIntensity: 0.3
+            });
+            forceFieldMesh = new THREE.Mesh(forceFieldGeo, forceFieldMat);
+            forceFieldMesh.position.y = 25;
+            scene.add(forceFieldMesh);
+            
+            // Add force field particles
+            const particleGeo = new THREE.BufferGeometry();
+            const particleCount = 2000;
+            const positions = new Float32Array(particleCount * 3);
+            for (let i = 0; i < particleCount; i++) {
+                const angle = (i / particleCount) * Math.PI * 2;
+                const radius = CONFIG.forceFieldRadius;
+                const y = (Math.random() - 0.5) * 40;
+                positions[i*3] = Math.cos(angle) * radius;
+                positions[i*3+1] = y;
+                positions[i*3+2] = Math.sin(angle) * radius;
+            }
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particleMat = new THREE.PointsMaterial({ color: 0x4488ff, size: 0.1, transparent: true, opacity: 0.3 });
+            const particles = new THREE.Points(particleGeo, particleMat);
+            scene.add(particles);
+            environmentObjects.push(particles);
+            
+            // Create environment-specific elements
+            createEnvironmentDetails(backdrop);
+        }
+        
+        function createEnvironmentDetails(backdrop) {
+            const env = backdrop.environment;
+            
+            // Create roads in a grid pattern
+            const roadMat = new THREE.MeshStandardMaterial({ color: backdrop.roadColor, roughness: 0.7 });
+            const roadWidth = 8;
+            const roadLength = CONFIG.forceFieldRadius * 2;
+            
+            // Main roads
+            const road1 = new THREE.Mesh(new THREE.PlaneGeometry(roadWidth, roadLength), roadMat);
+            road1.rotation.x = -Math.PI / 2;
+            road1.position.y = 0.05;
+            road1.receiveShadow = true;
+            scene.add(road1);
+            environmentObjects.push(road1);
+            
+            const road2 = new THREE.Mesh(new THREE.PlaneGeometry(roadLength, roadWidth), roadMat);
+            road2.rotation.x = -Math.PI / 2;
+            road2.position.y = 0.05;
+            road2.receiveShadow = true;
+            scene.add(road2);
+            environmentObjects.push(road2);
+            
+            // Road markings
+            const markingMat = new THREE.MeshStandardMaterial({ color: 0xffdd00, emissive: new THREE.Color(0x442200), emissiveIntensity: 0.2 });
+            for (let i = -CONFIG.forceFieldRadius + 20; i < CONFIG.forceFieldRadius; i += 15) {
+                const marking = new THREE.Mesh(new THREE.PlaneGeometry(2, 0.5), markingMat);
+                marking.rotation.x = -Math.PI / 2;
+                marking.position.set(i, 0.06, 0);
+                marking.receiveShadow = true;
+                scene.add(marking);
+                environmentObjects.push(marking);
+            }
+            for (let i = -CONFIG.forceFieldRadius + 20; i < CONFIG.forceFieldRadius; i += 15) {
+                const marking = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 2), markingMat);
+                marking.rotation.x = -Math.PI / 2;
+                marking.position.set(0, 0.06, i);
+                marking.receiveShadow = true;
+                scene.add(marking);
+                environmentObjects.push(marking);
+            }
+            
+            // Environment-specific buildings and details
+            if (env === 'forest') {
+                // Add many trees
+                for (let i = 0; i < 80; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 30 + Math.random() * 140;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    if (Math.abs(x) < 10 && Math.abs(z) < 10) continue;
+                    createDetailedTree(x, z, backdrop);
+                }
+                // Add some rocks
+                for (let i = 0; i < 30; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 40 + Math.random() * 130;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createRock(x, z, 0x666666);
+                }
+            } else if (env === 'desert') {
+                // Add cacti and sand dunes
+                for (let i = 0; i < 40; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 30 + Math.random() * 140;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createCactus(x, z);
+                }
+                // Add pyramids
+                for (let i = 0; i < 6; i++) {
+                    const angle = (i / 6) * Math.PI * 2;
+                    const radius = 120;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createPyramid(x, z);
+                }
+            } else if (env === 'snow') {
+                // Add snowmen and pine trees
+                for (let i = 0; i < 50; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 30 + Math.random() * 140;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createSnowTree(x, z);
+                }
+                for (let i = 0; i < 20; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 50 + Math.random() * 120;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createSnowman(x, z);
+                }
+            } else if (env === 'volcanic') {
+                // Add lava cracks and volcanoes
+                for (let i = 0; i < 30; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 40 + Math.random() * 130;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createLavaCrack(x, z);
+                }
+                // Add small volcanoes
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i / 8) * Math.PI * 2;
+                    const radius = 100;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createVolcano(x, z);
+                }
+            } else if (env === 'alien') {
+                // Add alien structures
+                for (let i = 0; i < 30; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 40 + Math.random() * 130;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createAlienStructure(x, z);
+                }
+            } else if (env === 'cyberpunk') {
+                // Add neon signs and buildings
+                for (let i = 0; i < 40; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 30 + Math.random() * 140;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createCyberBuilding(x, z);
+                }
+            } else if (env === 'haunted') {
+                // Add graves and haunted houses
+                for (let i = 0; i < 60; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 30 + Math.random() * 140;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createGrave(x, z);
+                }
+            } else if (env === 'tropical') {
+                // Add palm trees and beach items
+                for (let i = 0; i < 50; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 30 + Math.random() * 140;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createPalmTree(x, z);
+                }
+            } else if (env === 'candy') {
+                // Add candy structures
+                for (let i = 0; i < 40; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 30 + Math.random() * 140;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createCandyStructure(x, z);
+                }
+            } else if (env === 'underwater') {
+                // Add coral and seaweed
+                for (let i = 0; i < 50; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const radius = 30 + Math.random() * 140;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    createCoral(x, z);
+                }
+            }
+            
+            // Add police cars on roads
+            createPoliceCars();
+            
+            // Add regular buildings around
+            for (let i = 0; i < 20; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 50 + Math.random() * 120;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                if (Math.abs(x) < 15 && Math.abs(z) < 15) continue;
+                createDetailedBuilding(x, z, backdrop);
+            }
+        }
+        
+        function createPoliceCars() {
+            // Remove old police cars
+            policeCars.forEach(car => scene.remove(car));
+            policeCars = [];
+            
+            const carPositions = [
+                { x: -60, z: 0, rot: Math.PI/2 },
+                { x: 60, z: 0, rot: -Math.PI/2 },
+                { x: 0, z: -60, rot: 0 },
+                { x: 0, z: 60, rot: Math.PI },
+                { x: -40, z: -40, rot: Math.PI/4 },
+                { x: 40, z: 40, rot: -3*Math.PI/4 }
+            ];
+            
+            carPositions.forEach(pos => {
+                const carGroup = new THREE.Group();
+                
+                // Car body
+                const body = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 5), new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.3, metalness: 0.6 }));
+                body.position.y = 0.4;
+                body.castShadow = true;
+                body.receiveShadow = true;
+                carGroup.add(body);
+                
+                // Police lights
+                const lightBar = new THREE.Mesh(new THREE.BoxGeometry(1, 0.2, 0.5), new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: new THREE.Color(0xff0000), emissiveIntensity: 0.5 }));
+                lightBar.position.y = 0.9;
+                lightBar.position.x = 0;
+                lightBar.castShadow = true;
+                carGroup.add(lightBar);
+                
+                const blueLight = new THREE.Mesh(new THREE.SphereGeometry(0.15), new THREE.MeshStandardMaterial({ color: 0x0000ff, emissive: new THREE.Color(0x0000ff), emissiveIntensity: 0.5 }));
+                blueLight.position.set(0.3, 1.0, 0.8);
+                carGroup.add(blueLight);
+                
+                const redLight = new THREE.Mesh(new THREE.SphereGeometry(0.15), new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: new THREE.Color(0xff0000), emissiveIntensity: 0.5 }));
+                redLight.position.set(-0.3, 1.0, 0.8);
+                carGroup.add(redLight);
+                
+                // Wheels
+                const wheelGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 16);
+                const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 });
+                
+                const positions = [[-1, 0.3, 1.5], [1, 0.3, 1.5], [-1, 0.3, -1.5], [1, 0.3, -1.5]];
+                positions.forEach(([x, y, z]) => {
+                    const wheel = new THREE.Mesh(wheelGeo, wheelMat);
+                    wheel.rotation.z = Math.PI/2;
+                    wheel.position.set(x, y, z);
+                    wheel.castShadow = true;
+                    wheel.receiveShadow = true;
+                    carGroup.add(wheel);
+                });
+                
+                carGroup.position.set(pos.x, getH(pos.x, pos.z) + 0.4, pos.z);
+                carGroup.rotation.y = pos.rot;
+                scene.add(carGroup);
+                policeCars.push(carGroup);
+            });
+        }
+        
+        function createDetailedTree(x, z, backdrop) {
+            const group = new THREE.Group();
+            const trunkMat = new THREE.MeshStandardMaterial({ color: 0x5a4030, roughness: 0.9 });
+            const leafMat = new THREE.MeshStandardMaterial({ color: 0x1a5a1a, roughness: 0.5 });
+            
+            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 1.0, 8, 6), trunkMat);
+            trunk.position.y = 4;
+            trunk.castShadow = trunk.receiveShadow = true;
+            group.add(trunk);
+            
+            for (let i = 0; i < 4; i++) {
+                const leaves = new THREE.Mesh(new THREE.ConeGeometry(2.5 - i*0.3, 3, 8), leafMat);
+                leaves.position.y = 6 + i * 2;
+                leaves.castShadow = leaves.receiveShadow = true;
+                group.add(leaves);
+            }
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createRock(x, z, color) {
+            const rock = new THREE.Mesh(new THREE.DodecahedronGeometry(1 + Math.random()), new THREE.MeshStandardMaterial({ color: color, roughness: 0.8 }));
+            rock.position.set(x, getH(x,z) + 0.5, z);
+            rock.castShadow = true;
+            rock.receiveShadow = true;
+            scene.add(rock);
+            environmentObjects.push(rock);
+        }
+        
+        function createCactus(x, z) {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: 0x2a6a2a, roughness: 0.7 });
+            
+            const main = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.6, 4, 8), mat);
+            main.position.y = 2;
+            main.castShadow = main.receiveShadow = true;
+            group.add(main);
+            
+            const arm1 = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 2, 6), mat);
+            arm1.position.set(0.8, 2.5, 0);
+            arm1.rotation.z = 0.3;
+            arm1.castShadow = true;
+            group.add(arm1);
+            
+            const arm2 = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.3, 1.5, 6), mat);
+            arm2.position.set(-0.7, 3, 0);
+            arm2.rotation.z = -0.4;
+            arm2.castShadow = true;
+            group.add(arm2);
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createPyramid(x, z) {
+            const pyramid = new THREE.Mesh(new THREE.ConeGeometry(8, 10, 4), new THREE.MeshStandardMaterial({ color: 0xccaa66, roughness: 0.8 }));
+            pyramid.position.set(x, getH(x,z) + 5, z);
+            pyramid.rotation.y = Math.PI/4;
+            pyramid.castShadow = true;
+            pyramid.receiveShadow = true;
+            scene.add(pyramid);
+            environmentObjects.push(pyramid);
+        }
+        
+        function createSnowTree(x, z) {
+            const group = new THREE.Group();
+            const trunkMat = new THREE.MeshStandardMaterial({ color: 0x6a5040, roughness: 0.8 });
+            const leafMat = new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.4, emissive: new THREE.Color(0xaaaaaa), emissiveIntensity: 0.1 });
+            
+            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.9, 7, 6), trunkMat);
+            trunk.position.y = 3.5;
+            trunk.castShadow = trunk.receiveShadow = true;
+            group.add(trunk);
+            
+            for (let i = 0; i < 4; i++) {
+                const leaves = new THREE.Mesh(new THREE.ConeGeometry(2 - i*0.2, 2.5, 8), leafMat);
+                leaves.position.y = 5 + i * 2;
+                leaves.castShadow = leaves.receiveShadow = true;
+                group.add(leaves);
+            }
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createSnowman(x, z) {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 });
+            
+            const bottom = new THREE.Mesh(new THREE.SphereGeometry(1.2, 16), mat);
+            bottom.position.y = 1.2;
+            bottom.castShadow = bottom.receiveShadow = true;
+            group.add(bottom);
+            
+            const middle = new THREE.Mesh(new THREE.SphereGeometry(0.9, 16), mat);
+            middle.position.y = 2.5;
+            middle.castShadow = middle.receiveShadow = true;
+            group.add(middle);
+            
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.6, 16), mat);
+            head.position.y = 3.7;
+            head.castShadow = head.receiveShadow = true;
+            group.add(head);
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createLavaCrack(x, z) {
+            const crack = new THREE.Mesh(new THREE.PlaneGeometry(3, 1), new THREE.MeshStandardMaterial({ color: 0xff4400, emissive: new THREE.Color(0xff2200), emissiveIntensity: 0.8 }));
+            crack.rotation.x = -Math.PI/2;
+            crack.position.set(x, getH(x,z) + 0.1, z);
+            crack.receiveShadow = true;
+            scene.add(crack);
+            environmentObjects.push(crack);
+        }
+        
+        function createVolcano(x, z) {
+            const volcano = new THREE.Mesh(new THREE.ConeGeometry(6, 8, 16), new THREE.MeshStandardMaterial({ color: 0x553333, roughness: 0.9 }));
+            volcano.position.set(x, getH(x,z) + 4, z);
+            volcano.castShadow = true;
+            volcano.receiveShadow = true;
+            scene.add(volcano);
+            environmentObjects.push(volcano);
+            
+            const lava = new THREE.Mesh(new THREE.SphereGeometry(1), new THREE.MeshStandardMaterial({ color: 0xff4400, emissive: new THREE.Color(0xff2200), emissiveIntensity: 0.6 }));
+            lava.position.set(x, getH(x,z) + 7.5, z);
+            scene.add(lava);
+            environmentObjects.push(lava);
+        }
+        
+        function createAlienStructure(x, z) {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: 0x7755aa, roughness: 0.3, metalness: 0.4, emissive: new THREE.Color(0x331166), emissiveIntensity: 0.2 });
+            
+            const base = new THREE.Mesh(new THREE.CylinderGeometry(2, 2.5, 0.5, 8), mat);
+            base.position.y = 0.25;
+            base.castShadow = base.receiveShadow = true;
+            group.add(base);
+            
+            const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 4, 8), mat);
+            pillar.position.y = 2.25;
+            pillar.castShadow = pillar.receiveShadow = true;
+            group.add(pillar);
+            
+            const top = new THREE.Mesh(new THREE.SphereGeometry(1.2, 8), mat);
+            top.position.y = 4.5;
+            top.castShadow = top.receiveShadow = true;
+            group.add(top);
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createCyberBuilding(x, z) {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: 0x334466, roughness: 0.4, metalness: 0.3 });
+            
+            const building = new THREE.Mesh(new THREE.BoxGeometry(6, 12, 6), mat);
+            building.position.y = 6;
+            building.castShadow = building.receiveShadow = true;
+            group.add(building);
+            
+            // Neon signs
+            const neonMat = new THREE.MeshStandardMaterial({ color: 0xff00ff, emissive: new THREE.Color(0xff00ff), emissiveIntensity: 0.5 });
+            for (let i = 0; i < 4; i++) {
+                const sign = new THREE.Mesh(new THREE.BoxGeometry(1, 0.2, 0.2), neonMat);
+                sign.position.set(0, 3 + i * 2, 3.1);
+                group.add(sign);
+            }
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createGrave(x, z) {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: 0x666666, roughness: 0.8 });
+            
+            const stone = new THREE.Mesh(new THREE.BoxGeometry(1.5, 2, 0.2), mat);
+            stone.position.y = 1;
+            stone.castShadow = stone.receiveShadow = true;
+            group.add(stone);
+            
+            const top = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 0.8, 0.3, 8), mat);
+            top.position.y = 2.15;
+            top.castShadow = top.receiveShadow = true;
+            group.add(top);
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createPalmTree(x, z) {
+            const group = new THREE.Group();
+            const trunkMat = new THREE.MeshStandardMaterial({ color: 0x8B6B4D, roughness: 0.9 });
+            const leafMat = new THREE.MeshStandardMaterial({ color: 0x2a8a2a, roughness: 0.5 });
+            
+            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.8, 10, 8), trunkMat);
+            trunk.position.y = 5;
+            trunk.castShadow = trunk.receiveShadow = true;
+            group.add(trunk);
+            
+            for (let i = 0; i < 7; i++) {
+                const leaf = new THREE.Mesh(new THREE.ConeGeometry(2, 0.2, 4), leafMat);
+                leaf.rotation.z = i * 0.9;
+                leaf.rotation.x = 0.5;
+                leaf.position.y = 9;
+                leaf.position.x = Math.cos(i * 0.9) * 1.5;
+                leaf.position.z = Math.sin(i * 0.9) * 1.5;
+                leaf.castShadow = true;
+                group.add(leaf);
+            }
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createCandyStructure(x, z) {
+            const group = new THREE.Group();
+            const colors = [0xff6666, 0x66ff66, 0x6666ff, 0xffff66, 0xff66ff];
+            
+            for (let i = 0; i < 5; i++) {
+                const candy = new THREE.Mesh(new THREE.SphereGeometry(1.2 - i*0.1, 8), new THREE.MeshStandardMaterial({ color: colors[i], roughness: 0.2, emissive: new THREE.Color(colors[i]), emissiveIntensity: 0.1 }));
+                candy.position.y = i * 1.8 + 1;
+                candy.castShadow = true;
+                candy.receiveShadow = true;
+                group.add(candy);
+            }
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createCoral(x, z) {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: 0xff6688, roughness: 0.6 });
+            
+            for (let i = 0; i < 5; i++) {
+                const branch = new THREE.Mesh(new THREE.ConeGeometry(0.3, 1.5 + Math.random(), 6), mat);
+                branch.position.y = 0.75;
+                branch.position.x = (i - 2) * 0.5;
+                branch.rotation.z = i * 0.3;
+                branch.castShadow = true;
+                branch.receiveShadow = true;
+                group.add(branch);
+            }
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
+        }
+        
+        function createDetailedBuilding(x, z, backdrop) {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshStandardMaterial({ color: backdrop.buildingColor, roughness: 0.6 });
+            
+            const main = new THREE.Mesh(new THREE.BoxGeometry(8, 6, 8), mat);
+            main.position.y = 3;
+            main.castShadow = main.receiveShadow = true;
+            group.add(main);
+            
+            const roof = new THREE.Mesh(new THREE.ConeGeometry(6, 2, 4), new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.7 }));
+            roof.position.y = 7;
+            roof.rotation.y = Math.PI/4;
+            roof.castShadow = roof.receiveShadow = true;
+            group.add(roof);
+            
+            group.position.set(x, getH(x,z), z);
+            scene.add(group);
+            environmentObjects.push(group);
         }
 
         function setupUI() {
@@ -891,80 +1770,7 @@
             const ground = new THREE.Mesh(geo, mat);
             ground.receiveShadow = true;
             scene.add(ground);
-
-            const grassGeo = new THREE.PlaneGeometry(0.15, 0.5);
-            grassGeo.translate(0, 0.25, 0);
-            const grassMat = new THREE.MeshStandardMaterial({ color: 0x2a4a1a, side: THREE.DoubleSide, roughness: 0.4, metalness: 0.15, emissive: new THREE.Color(0x1a3a0a), emissiveIntensity: 0.3, envMapIntensity: 1.0 });
-            const instanced = new THREE.InstancedMesh(grassGeo, grassMat, 50000);
-            const dummy = new THREE.Object3D();
-            let instanceCount = 0;
-            for (let i = 0; i < 50000; i++) {
-                const x = (Math.random() - 0.5) * 760;
-                const z = (Math.random() - 0.5) * 760;
-                if (Math.abs(x) > 390 || Math.abs(z) > 390) continue;
-                dummy.position.set(x, getH(x,z), z);
-                dummy.rotation.y = Math.random() * Math.PI;
-                dummy.scale.setScalar(0.5 + Math.random() * 0.5);
-                dummy.updateMatrix();
-                instanced.setMatrixAt(instanceCount++, dummy.matrix);
-            }
-            instanced.count = instanceCount;
-            instanced.castShadow = true;
-            instanced.receiveShadow = true;
-            scene.add(instanced);
-
-            for(let i=0; i<10; i++) {
-                let x, z;
-                do { x = (Math.random() - 0.5) * 700; z = (Math.random() - 0.5) * 700; }
-                while (Math.abs(x) > 380 || Math.abs(z) > 380);
-                createHouse(x, z);
-            }
-            
-            for(let i=0; i<30; i++) {
-                let x, z;
-                do { x = (Math.random() - 0.5) * 750; z = (Math.random() - 0.5) * 750; }
-                while (Math.abs(x) > 380 || Math.abs(z) > 380);
-                createTree(x, z);
-            }
-        }
-
-        function createTree(x, z) {
-            const group = new THREE.Group();
-            const trunk = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.5, 10, 5), new THREE.MeshStandardMaterial({ color: 0x5a4530, roughness: 0.8 }));
-            trunk.position.y = 5;
-            trunk.castShadow = trunk.receiveShadow = true;
-            group.add(trunk);
-            
-            const leafMat = new THREE.MeshStandardMaterial({ color: 0x1a4a1a, roughness: 0.5 });
-            const leaves1 = new THREE.Mesh(new THREE.ConeGeometry(4, 7, 5), leafMat);
-            leaves1.position.y = 10;
-            leaves1.castShadow = leaves1.receiveShadow = true;
-            group.add(leaves1);
-            
-            const leaves2 = new THREE.Mesh(new THREE.ConeGeometry(3, 5, 5), leafMat);
-            leaves2.position.y = 14;
-            leaves2.castShadow = leaves2.receiveShadow = true;
-            group.add(leaves2);
-            
-            group.position.set(x, getH(x,z), z);
-            scene.add(group);
-        }
-
-        function createHouse(x, z) {
-            const h = new THREE.Group();
-            const body = new THREE.Mesh(new THREE.BoxGeometry(10, 8, 12), new THREE.MeshStandardMaterial({ color: 0x3a3a40, roughness: 0.6 }));
-            body.position.y = 4;
-            body.castShadow = body.receiveShadow = true;
-            
-            const roof = new THREE.Mesh(new THREE.ConeGeometry(10, 5, 4), new THREE.MeshStandardMaterial({ color: 0x2a2a2a, roughness: 0.8 }));
-            roof.position.y = 10.5;
-            roof.rotation.y = Math.PI/4;
-            roof.castShadow = roof.receiveShadow = true;
-            
-            h.add(body, roof);
-            h.position.set(x, getH(x,z), z);
-            h.castShadow = h.receiveShadow = true;
-            scene.add(h);
+            environmentObjects.push(ground);
         }
 
         function getH(x, z) {
@@ -972,14 +1778,27 @@
         }
 
         function initializeAmmo() {
+            // Reset all ammo properly
             loadout.forEach(id => {
                 const w = WEAPONS[id];
                 if (w) {
-                    ammo[id] = w.mag;
+                    if (w.heal) {
+                        ammo[id] = w.mag;
+                    } else {
+                        ammo[id] = w.mag + (w.scope ? 0 : magBonus);
+                    }
                     if (w.twinMag) twinMagState[id] = { activeMag: 1 };
                 }
             });
             usedHeals = { syringe: false, medkit: false };
+            
+            // Force correct magazine for all weapons
+            Object.keys(WEAPONS).forEach(id => {
+                const w = WEAPONS[id];
+                if (!w.heal && ammo[id] === undefined) {
+                    ammo[id] = w.mag + (w.scope ? 0 : magBonus);
+                }
+            });
         }
 
         function spawnWave() {
@@ -1001,7 +1820,7 @@
                 const type = types[Math.floor(Math.random() * types.length)];
                 const zData = ZOMBIE_TYPES[type];
                 const angle = Math.random() * Math.PI * 2;
-                const dist = 60 + Math.random() * 140;
+                const dist = 60 + Math.random() * 100;
                 const x = Math.cos(angle) * dist, z = Math.sin(angle) * dist;
                 
                 const zombie = createZombie(type, zData, x, z);
@@ -1208,7 +2027,6 @@
                 barrel.position.set(0.25, -0.28, -0.8);
                 gunGroup.add(barrel);
                 
-                // Unique scope for Scoped Revolver
                 const scopeBody = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.25, 8), new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.7 }));
                 scopeBody.rotation.z = Math.PI/2;
                 scopeBody.position.set(0.25, -0.16, -0.5);
@@ -1285,7 +2103,6 @@
                 gunGroup.add(stock);
                 
                 if (id === 'tripleSniper') {
-                    // Unique scope for Triple Action
                     const scope = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 0.3), new THREE.MeshStandardMaterial({ color: 0x222222, metalness: 0.8 }));
                     scope.position.set(0.3, -0.15, -0.55);
                     gunGroup.add(scope);
@@ -1393,6 +2210,15 @@
             
             if (weapon.sound) playSound(weapon.sound);
             
+            // Muzzle flash effect
+            muzzleFlashLight.intensity = 3;
+            muzzleFlashMesh.material.opacity = 0.9;
+            muzzleFlashMesh.scale.setScalar(1 + Math.random() * 0.5);
+            setTimeout(() => {
+                muzzleFlashLight.intensity = 0;
+                muzzleFlashMesh.material.opacity = 0;
+            }, 50);
+            
             gunGroup.position.z = 0.05;
             setTimeout(() => gunGroup.position.z = 0, 50);
 
@@ -1411,7 +2237,7 @@
                     score += 10;
                     popDmg(totalDmg, h.point, isHeadshot);
                     
-                    createBloodGoreEffect(h.point);
+                    createBloodGoreEffect(h.point, isHeadshot);
                     playSound('hit');
                     
                     if (zombieObj.hp <= 0) {
@@ -1448,20 +2274,80 @@
             }
         }
 
-        function createBloodGoreEffect(position) {
-            const blood = new THREE.Mesh(new THREE.CircleGeometry(0.3, 6), new THREE.MeshStandardMaterial({ color: 0xaa0000, transparent: true, opacity: 0.8 }));
-            blood.rotation.x = -Math.PI/2;
-            blood.position.set(position.x, getH(position.x, position.z) + 0.05, position.z);
-            scene.add(blood);
+        function createBloodGoreEffect(position, isHeadshot) {
+            // Enhanced blood and gore system
+            const bloodColor = 0xaa0000;
+            const goreColor = 0x880000;
             
-            for (let i = 0; i < 3; i++) {
-                const gore = new THREE.Mesh(new THREE.SphereGeometry(0.05 + Math.random()*0.05, 4), new THREE.MeshStandardMaterial({ color: 0x880000 }));
-                gore.position.set(position.x + (Math.random()-0.5)*0.5, getH(position.x, position.z) + 0.1 + Math.random()*0.3, position.z + (Math.random()-0.5)*0.5);
+            // Blood splatter on ground
+            const bloodSplatter = new THREE.Mesh(new THREE.CircleGeometry(0.8, 8), new THREE.MeshStandardMaterial({ 
+                color: bloodColor, 
+                transparent: true, 
+                opacity: 0.7,
+                side: THREE.DoubleSide
+            }));
+            bloodSplatter.rotation.x = -Math.PI / 2;
+            bloodSplatter.position.set(position.x, getH(position.x, position.z) + 0.05, position.z);
+            scene.add(bloodSplatter);
+            
+            // Blood particles flying
+            for (let i = 0; i < (isHeadshot ? 15 : 8); i++) {
+                const gore = new THREE.Mesh(new THREE.SphereGeometry(0.08 + Math.random() * 0.1, 4), new THREE.MeshStandardMaterial({ 
+                    color: i % 2 === 0 ? bloodColor : 0x660000,
+                    emissive: isHeadshot ? new THREE.Color(0x440000) : new THREE.Color(0x220000),
+                    emissiveIntensity: 0.3
+                }));
+                gore.position.set(
+                    position.x + (Math.random() - 0.5) * 1.5,
+                    getH(position.x, position.z) + 0.5 + Math.random() * 1.5,
+                    position.z + (Math.random() - 0.5) * 1.5
+                );
+                gore.castShadow = true;
                 scene.add(gore);
-                setTimeout(() => scene.remove(gore), 5000);
+                
+                // Animate gore falling
+                const startY = gore.position.y;
+                const fallSpeed = 0.01 + Math.random() * 0.02;
+                const goreInterval = setInterval(() => {
+                    gore.position.y -= fallSpeed;
+                    if (gore.position.y < getH(gore.position.x, gore.position.z) + 0.1) {
+                        clearInterval(goreInterval);
+                        setTimeout(() => scene.remove(gore), 3000);
+                    }
+                }, 16);
             }
             
-            setTimeout(() => scene.remove(blood), 120000);
+            // Blood spray effect
+            for (let i = 0; i < (isHeadshot ? 20 : 10); i++) {
+                const droplet = new THREE.Mesh(new THREE.SphereGeometry(0.03 + Math.random() * 0.04, 3), new THREE.MeshStandardMaterial({ 
+                    color: 0xcc0000,
+                    transparent: true,
+                    opacity: 0.8
+                }));
+                const angle = (i / (isHeadshot ? 20 : 10)) * Math.PI * 2;
+                const spread = 0.8;
+                droplet.position.set(
+                    position.x + Math.cos(angle) * spread,
+                    getH(position.x, position.z) + 0.8 + Math.random() * 0.8,
+                    position.z + Math.sin(angle) * spread
+                );
+                scene.add(droplet);
+                setTimeout(() => scene.remove(droplet), 2000);
+            }
+            
+            // Headshot special effect
+            if (isHeadshot) {
+                const brainMatter = new THREE.Mesh(new THREE.SphereGeometry(0.15), new THREE.MeshStandardMaterial({ 
+                    color: 0xffaaaa,
+                    emissive: new THREE.Color(0x552222),
+                    emissiveIntensity: 0.5
+                }));
+                brainMatter.position.set(position.x, getH(position.x, position.z) + 1.0, position.z);
+                scene.add(brainMatter);
+                setTimeout(() => scene.remove(brainMatter), 1500);
+            }
+            
+            setTimeout(() => scene.remove(bloodSplatter), 60000);
         }
 
         function ragdollDeath(z) {
@@ -1504,24 +2390,36 @@
                 magBonus += 5;
             }
             
-            // Change backdrop
+            // Change backdrop (cycles through 10)
             currentBackdrop++;
+            if (currentBackdrop >= BACKDROPS.length) {
+                currentBackdrop = 0;
+            }
             applyBackdrop(currentBackdrop);
             
             playSound('easround');
             
             hp = 300;
             
+            // Reset ammo with correct magazine sizes
             loadout.forEach(id => {
                 const w = WEAPONS[id];
                 if (w) {
                     if (w.heal) {
-                        ammo[id] = 1;
+                        ammo[id] = w.mag;
                         usedHeals[id] = false;
                     } else {
                         ammo[id] = w.mag + (w.scope ? 0 : magBonus);
                     }
                     if (w.twinMag) twinMagState[id] = { activeMag: 1 };
+                }
+            });
+            
+            // Ensure all weapons have correct ammo
+            Object.keys(WEAPONS).forEach(id => {
+                const w = WEAPONS[id];
+                if (!w.heal && ammo[id] === undefined) {
+                    ammo[id] = w.mag + (w.scope ? 0 : magBonus);
                 }
             });
             
@@ -1688,9 +2586,16 @@
                 controls.getObject().position.y += (velocity.y * dt);
 
                 const pos = controls.getObject().position;
-                const limit = 390;
-                if (Math.abs(pos.x) > limit) pos.x = Math.sign(pos.x) * limit;
-                if (Math.abs(pos.z) > limit) pos.z = Math.sign(pos.z) * limit;
+                
+                // Force field boundary
+                const distFromCenter = Math.sqrt(pos.x * pos.x + pos.z * pos.z);
+                if (distFromCenter > CONFIG.forceFieldRadius) {
+                    const angle = Math.atan2(pos.z, pos.x);
+                    pos.x = Math.cos(angle) * CONFIG.forceFieldRadius;
+                    pos.z = Math.sin(angle) * CONFIG.forceFieldRadius;
+                    velocity.x = 0;
+                    velocity.z = 0;
+                }
 
                 const groundY = getH(pos.x, pos.z) + CONFIG.player.height;
                 if (pos.y < groundY) {
@@ -1724,15 +2629,26 @@
                         
                         playSound('hit');
                         
-                        const bloodTrail = new THREE.Mesh(new THREE.CircleGeometry(0.2, 4), new THREE.MeshStandardMaterial({ color: 0xaa0000 }));
+                        // Blood effect when player is hit
+                        const bloodTrail = new THREE.Mesh(new THREE.CircleGeometry(0.3, 4), new THREE.MeshStandardMaterial({ color: 0xaa0000, transparent: true, opacity: 0.6 }));
                         bloodTrail.rotation.x = -Math.PI/2;
                         bloodTrail.position.set(pPos.x, getH(pPos.x, pPos.z) + 0.05, pPos.z);
                         scene.add(bloodTrail);
-                        setTimeout(() => scene.remove(bloodTrail), 120000);
+                        setTimeout(() => scene.remove(bloodTrail), 30000);
                         
                         updateUI();
                     }
                 }
+                
+                // Animate police car lights
+                policeCars.forEach((car, index) => {
+                    const time = Date.now() * 0.005;
+                    car.children.forEach(child => {
+                        if (child.isMesh && (child.material.color.getHex() === 0xff0000 || child.material.color.getHex() === 0x0000ff)) {
+                            child.material.emissiveIntensity = 0.3 + Math.sin(time + index) * 0.3;
+                        }
+                    });
+                });
 
                 const isMoving = Math.abs(velocity.x) > 0.1 || Math.abs(velocity.z) > 0.1;
                 if (isMoving && canJump) walkBob += dt * 6;
