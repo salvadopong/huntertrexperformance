@@ -647,7 +647,7 @@
         🧟 <span id="zombies-remaining">0</span> LEFT
     </div>
 
-    <div id="start-menu" class="menu">
+    <div id="start-menu" class="menu" style="display: flex;">
         <div class="glory-panel">
             <h1>HUNTER TREX</h1>
             <div class="subtitle">ULTIMATE EDITION</div>
@@ -743,13 +743,13 @@
     <audio id="sound-crowd" preload="auto" loop><source src="crowd.mp3" type="audio/mp3"></audio>
     <audio id="sound-police" preload="auto" loop><source src="police.mp3" type="audio/mp3"></audio>
     <audio id="sound-easround" preload="auto"><source src="easround.mp3" type="audio/mp3"></audio>
-    <audio id="sound-ar" preload="auto"><source src="ar.mp3" type="audio/mp3"></audio>
-    <audio id="sound-smg" preload="auto"><source src="smg.mp3" type="audio/mp3"></audio>
-    <audio id="sound-sniper" preload="auto"><source src="sniper.mp3" type="audio/mp3"></audio>
-    <audio id="sound-pistol" preload="auto"><source src="pistol.mp3" type="audio/mp3"></audio>
-    <audio id="sound-energy" preload="auto"><source src="energy.mp3" type="audio/mp3"></audio>
-    <audio id="sound-reload" preload="auto"><source src="reload.mp3" type="audio/mp3"></audio>
-    <audio id="sound-hit" preload="auto"><source src="hit.mp3" type="audio/mp3"></audio>
+    <audio id="sound-ar" preload="auto"><source src="ar.mp4" type="audio/mp4"></audio>
+    <audio id="sound-smg" preload="auto"><source src="smg.mp4" type="audio/mp4"></audio>
+    <audio id="sound-sniper" preload="auto"><source src="sniper.mp4" type="audio/mp4"></audio>
+    <audio id="sound-pistol" preload="auto"><source src="pistol.mp4" type="audio/mp4"></audio>
+    <audio id="sound-energy" preload="auto"><source src="energy.mp4" type="audio/mp4"></audio>
+    <audio id="sound-reload" preload="auto"><source src="reload.mp4" type="audio/mp4"></audio>
+    <audio id="sound-hit" preload="auto"><source src="hit.mp4" type="audio/mp4"></audio>
 
     <script type="module">
         import * as THREE from 'three';
@@ -1054,7 +1054,6 @@
 
             createWorld();
             initializeAmmo();
-            spawnWave();
             createGun(loadout[activeSlot]);
 
             setupUI();
@@ -1155,7 +1154,6 @@
             
             // Environment-specific buildings and details
             if (env === 'forest') {
-                // Add many trees
                 for (let i = 0; i < 80; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 30 + Math.random() * 140;
@@ -1164,7 +1162,6 @@
                     if (Math.abs(x) < 10 && Math.abs(z) < 10) continue;
                     createDetailedTree(x, z, backdrop);
                 }
-                // Add some rocks
                 for (let i = 0; i < 30; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 40 + Math.random() * 130;
@@ -1173,7 +1170,6 @@
                     createRock(x, z, 0x666666);
                 }
             } else if (env === 'desert') {
-                // Add cacti and sand dunes
                 for (let i = 0; i < 40; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 30 + Math.random() * 140;
@@ -1181,7 +1177,6 @@
                     const z = Math.sin(angle) * radius;
                     createCactus(x, z);
                 }
-                // Add pyramids
                 for (let i = 0; i < 6; i++) {
                     const angle = (i / 6) * Math.PI * 2;
                     const radius = 120;
@@ -1190,7 +1185,6 @@
                     createPyramid(x, z);
                 }
             } else if (env === 'snow') {
-                // Add snowmen and pine trees
                 for (let i = 0; i < 50; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 30 + Math.random() * 140;
@@ -1206,7 +1200,6 @@
                     createSnowman(x, z);
                 }
             } else if (env === 'volcanic') {
-                // Add lava cracks and volcanoes
                 for (let i = 0; i < 30; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 40 + Math.random() * 130;
@@ -1214,7 +1207,6 @@
                     const z = Math.sin(angle) * radius;
                     createLavaCrack(x, z);
                 }
-                // Add small volcanoes
                 for (let i = 0; i < 8; i++) {
                     const angle = (i / 8) * Math.PI * 2;
                     const radius = 100;
@@ -1223,7 +1215,6 @@
                     createVolcano(x, z);
                 }
             } else if (env === 'alien') {
-                // Add alien structures
                 for (let i = 0; i < 30; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 40 + Math.random() * 130;
@@ -1232,7 +1223,6 @@
                     createAlienStructure(x, z);
                 }
             } else if (env === 'cyberpunk') {
-                // Add neon signs and buildings
                 for (let i = 0; i < 40; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 30 + Math.random() * 140;
@@ -1241,7 +1231,6 @@
                     createCyberBuilding(x, z);
                 }
             } else if (env === 'haunted') {
-                // Add graves and haunted houses
                 for (let i = 0; i < 60; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 30 + Math.random() * 140;
@@ -1250,7 +1239,6 @@
                     createGrave(x, z);
                 }
             } else if (env === 'tropical') {
-                // Add palm trees and beach items
                 for (let i = 0; i < 50; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 30 + Math.random() * 140;
@@ -1259,7 +1247,6 @@
                     createPalmTree(x, z);
                 }
             } else if (env === 'candy') {
-                // Add candy structures
                 for (let i = 0; i < 40; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 30 + Math.random() * 140;
@@ -1268,7 +1255,6 @@
                     createCandyStructure(x, z);
                 }
             } else if (env === 'underwater') {
-                // Add coral and seaweed
                 for (let i = 0; i < 50; i++) {
                     const angle = Math.random() * Math.PI * 2;
                     const radius = 30 + Math.random() * 140;
@@ -1293,7 +1279,6 @@
         }
         
         function createPoliceCars() {
-            // Remove old police cars
             policeCars.forEach(car => scene.remove(car));
             policeCars = [];
             
@@ -1309,14 +1294,12 @@
             carPositions.forEach(pos => {
                 const carGroup = new THREE.Group();
                 
-                // Car body
                 const body = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.8, 5), new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.3, metalness: 0.6 }));
                 body.position.y = 0.4;
                 body.castShadow = true;
                 body.receiveShadow = true;
                 carGroup.add(body);
                 
-                // Police lights
                 const lightBar = new THREE.Mesh(new THREE.BoxGeometry(1, 0.2, 0.5), new THREE.MeshStandardMaterial({ color: 0xff0000, emissive: new THREE.Color(0xff0000), emissiveIntensity: 0.5 }));
                 lightBar.position.y = 0.9;
                 lightBar.position.x = 0;
@@ -1331,7 +1314,6 @@
                 redLight.position.set(-0.3, 1.0, 0.8);
                 carGroup.add(redLight);
                 
-                // Wheels
                 const wheelGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 16);
                 const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 });
                 
@@ -1521,7 +1503,6 @@
             building.castShadow = building.receiveShadow = true;
             group.add(building);
             
-            // Neon signs
             const neonMat = new THREE.MeshStandardMaterial({ color: 0xff00ff, emissive: new THREE.Color(0xff00ff), emissiveIntensity: 0.5 });
             for (let i = 0; i < 4; i++) {
                 const sign = new THREE.Mesh(new THREE.BoxGeometry(1, 0.2, 0.2), neonMat);
@@ -1638,6 +1619,9 @@
         function setupUI() {
             document.getElementById('play-btn').addEventListener('click', () => {
                 document.getElementById('start-menu').style.display = 'none';
+                
+                // Only spawn wave and start game when play is clicked
+                spawnWave();
                 
                 playSound('eas');
                 sounds.eas.onended = () => {
@@ -1778,7 +1762,6 @@
         }
 
         function initializeAmmo() {
-            // Reset all ammo properly
             loadout.forEach(id => {
                 const w = WEAPONS[id];
                 if (w) {
@@ -1792,7 +1775,6 @@
             });
             usedHeals = { syringe: false, medkit: false };
             
-            // Force correct magazine for all weapons
             Object.keys(WEAPONS).forEach(id => {
                 const w = WEAPONS[id];
                 if (!w.heal && ammo[id] === undefined) {
@@ -1865,7 +1847,6 @@
                 }
                 
                 if (type === 'queen') {
-                    // Enhanced 3D Crown
                     const crownBase = new THREE.Mesh(new THREE.TorusGeometry(0.35, 0.05, 8, 20), new THREE.MeshStandardMaterial({ color: 0xffd700, emissive: new THREE.Color(0x553300), emissiveIntensity: 0.3, metalness: 0.8, roughness: 0.3 }));
                     crownBase.rotation.x = Math.PI/2;
                     crownBase.position.y = 2.55;
@@ -2210,7 +2191,6 @@
             
             if (weapon.sound) playSound(weapon.sound);
             
-            // Muzzle flash effect
             muzzleFlashLight.intensity = 3;
             muzzleFlashMesh.material.opacity = 0.9;
             muzzleFlashMesh.scale.setScalar(1 + Math.random() * 0.5);
@@ -2275,11 +2255,9 @@
         }
 
         function createBloodGoreEffect(position, isHeadshot) {
-            // Enhanced blood and gore system
             const bloodColor = 0xaa0000;
             const goreColor = 0x880000;
             
-            // Blood splatter on ground
             const bloodSplatter = new THREE.Mesh(new THREE.CircleGeometry(0.8, 8), new THREE.MeshStandardMaterial({ 
                 color: bloodColor, 
                 transparent: true, 
@@ -2290,7 +2268,6 @@
             bloodSplatter.position.set(position.x, getH(position.x, position.z) + 0.05, position.z);
             scene.add(bloodSplatter);
             
-            // Blood particles flying
             for (let i = 0; i < (isHeadshot ? 15 : 8); i++) {
                 const gore = new THREE.Mesh(new THREE.SphereGeometry(0.08 + Math.random() * 0.1, 4), new THREE.MeshStandardMaterial({ 
                     color: i % 2 === 0 ? bloodColor : 0x660000,
@@ -2305,7 +2282,6 @@
                 gore.castShadow = true;
                 scene.add(gore);
                 
-                // Animate gore falling
                 const startY = gore.position.y;
                 const fallSpeed = 0.01 + Math.random() * 0.02;
                 const goreInterval = setInterval(() => {
@@ -2317,7 +2293,6 @@
                 }, 16);
             }
             
-            // Blood spray effect
             for (let i = 0; i < (isHeadshot ? 20 : 10); i++) {
                 const droplet = new THREE.Mesh(new THREE.SphereGeometry(0.03 + Math.random() * 0.04, 3), new THREE.MeshStandardMaterial({ 
                     color: 0xcc0000,
@@ -2335,7 +2310,6 @@
                 setTimeout(() => scene.remove(droplet), 2000);
             }
             
-            // Headshot special effect
             if (isHeadshot) {
                 const brainMatter = new THREE.Mesh(new THREE.SphereGeometry(0.15), new THREE.MeshStandardMaterial({ 
                     color: 0xffaaaa,
@@ -2390,7 +2364,6 @@
                 magBonus += 5;
             }
             
-            // Change backdrop (cycles through 10)
             currentBackdrop++;
             if (currentBackdrop >= BACKDROPS.length) {
                 currentBackdrop = 0;
@@ -2401,7 +2374,6 @@
             
             hp = 300;
             
-            // Reset ammo with correct magazine sizes
             loadout.forEach(id => {
                 const w = WEAPONS[id];
                 if (w) {
@@ -2415,7 +2387,6 @@
                 }
             });
             
-            // Ensure all weapons have correct ammo
             Object.keys(WEAPONS).forEach(id => {
                 const w = WEAPONS[id];
                 if (!w.heal && ammo[id] === undefined) {
@@ -2587,7 +2558,6 @@
 
                 const pos = controls.getObject().position;
                 
-                // Force field boundary
                 const distFromCenter = Math.sqrt(pos.x * pos.x + pos.z * pos.z);
                 if (distFromCenter > CONFIG.forceFieldRadius) {
                     const angle = Math.atan2(pos.z, pos.x);
@@ -2629,7 +2599,6 @@
                         
                         playSound('hit');
                         
-                        // Blood effect when player is hit
                         const bloodTrail = new THREE.Mesh(new THREE.CircleGeometry(0.3, 4), new THREE.MeshStandardMaterial({ color: 0xaa0000, transparent: true, opacity: 0.6 }));
                         bloodTrail.rotation.x = -Math.PI/2;
                         bloodTrail.position.set(pPos.x, getH(pPos.x, pPos.z) + 0.05, pPos.z);
@@ -2640,7 +2609,6 @@
                     }
                 }
                 
-                // Animate police car lights
                 policeCars.forEach((car, index) => {
                     const time = Date.now() * 0.005;
                     car.children.forEach(child => {
