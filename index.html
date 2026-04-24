@@ -484,34 +484,17 @@
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
         import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js';
 
-        // ============ AUDIO SYSTEM ============
-        const audioElements = {};
-        function initAudio() {
-            const audioIds = ['eas', 'crowd', 'police', 'easround', 'ar', 'smg', 'sniper', 'pistol', 'energy', 'reload', 'hit'];
-            audioIds.forEach(id => {
-                const el = document.createElement('audio');
-                el.id = `sound-${id}`;
-                el.preload = 'auto';
-                document.body.appendChild(el);
-                audioElements[id] = el;
-            });
-        }
-        initAudio();
-
-        function playSound(sound) {
-            const el = audioElements[sound];
-            if (el) {
-                el.currentTime = 0;
-                el.play().catch(() => {});
-            }
-        }
-        function stopSound(sound) {
-            const el = audioElements[sound];
-            if (el) {
-                el.pause();
-                el.currentTime = 0;
-            }
-        }
+<audio id="sound-eas" preload="auto"><source src="eas.mp3" type="audio/mp3"></audio>
+    <audio id="sound-crowd" preload="auto" loop><source src="crowd.mp3" type="audio/mp3"></audio>
+    <audio id="sound-police" preload="auto" loop><source src="police.mp3" type="audio/mp3"></audio>
+    <audio id="sound-easround" preload="auto"><source src="easround.mp3" type="audio/mp3"></audio>
+    <audio id="sound-ar" preload="auto"><source src="ar.mp3" type="audio/mp3"></audio>
+    <audio id="sound-smg" preload="auto"><source src="smg.mp3" type="audio/mp3"></audio>
+    <audio id="sound-sniper" preload="auto"><source src="sniper.mp3" type="audio/mp3"></audio>
+    <audio id="sound-pistol" preload="auto"><source src="pistol.mp3" type="audio/mp3"></audio>
+    <audio id="sound-energy" preload="auto"><source src="energy.mp3" type="audio/mp3"></audio>
+    <audio id="sound-reload" preload="auto"><source src="reload.mp3" type="audio/mp3"></audio>
+    <audio id="sound-hit" preload="auto"><source src="hit.mp3" type="audio/mp3"></audio>
 
         // ============ WEAPON DATABASE ============
         const WEAPONS = {
